@@ -17,6 +17,8 @@ const shell = readFileSync('src/shell.html', 'utf8');
 const html = shell.replace('<!--APP-->', () => `<script>${js}</script>`);
 mkdirSync('dist', { recursive: true });
 writeFileSync('dist/command-centre-v2.html', html);
+writeFileSync('dist/index.html', html);
+writeFileSync('dist/dark.html', html.replace('<body>', '<body class="dark">'));
 
 // dev variant with external script for faster iteration
 mkdirSync('dist', { recursive: true });

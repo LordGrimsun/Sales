@@ -1,6 +1,8 @@
 node_modules/
 dist/*
 !dist/command-centre-v2.html
+!dist/index.html
+!dist/dark.html
 data/
 office.config.local.json
 office.agents.local.json
