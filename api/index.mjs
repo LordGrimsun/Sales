@@ -76,8 +76,15 @@ export default async function handler(req, res) {
     return res.end();
   }
 
-  const url = new URL(req.url, `http://${req.headers.host || 'localhost'}`);
-  const pathname = url.pathname;
+  const host = req.headers.host || 'localhost';
+  const rawUrl = new URL(req.url, `http://${host}`);
+  const xMatched = req.headers['x-matched-path'] || req.headers['x-forwarded-uri'];
+  let pathname = xMatched ? new URL(xMatched, `http://${host}`).pathname : rawUrl.pathname;
+  if (pathname.includes('[...path]')) {
+    const sub = rawUrl.searchParams.get('...path') || rawUrl.searchParams.get('path');
+    if (sub) pathname = '/api/' + sub.replace(/^\/+/, '');
+  }
+  const url = rawUrl;
 
   try {
     // 1. Health
@@ -136,7 +143,7 @@ export default async function handler(req, res) {
         const bgPath = path.join(ROOT, 'src', 'braingraph.js');
         if (fs.existsSync(bgPath)) {
           const content = fs.readFileSync(bgPath, 'utf8');
-          const match = content.match(/export\s+default\s+(\{[\s\S]+\});/);
+          const match = content.match(/export\s+(?:default|const\s+BRAIN\s*=)\s*(\{[\s\S]+\});?/);
           if (match) braingraph = JSON.parse(match[1]);
         }
       } catch {}

@@ -3,7 +3,6 @@
   "outputDirectory": "dist",
   "cleanUrls": true,
   "rewrites": [
-    { "source": "/api/(.*)", "destination": "/api/index.mjs" },
     { "source": "/dark", "destination": "/dark.html" },
     { "source": "/command-centre-v2.html", "destination": "/command-centre-v2.html" }
   ]
