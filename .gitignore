@@ -11,3 +11,6 @@ brain/Agents Office/
 *.backup-*
 
 .vercel
+.env
+.env.*
+.env.local
