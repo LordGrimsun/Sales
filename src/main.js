@@ -595,12 +595,16 @@ const SCREEN_RIGHT = new THREE.Vector3(1, 0, -1).normalize();
 
 function ensureChat(id) {
   if (chatHist[id]) return;
-  const v = R[id].v1;
+  const isDemo = typeof location !== 'undefined' && (new URLSearchParams(location.search).has('demo') || new URLSearchParams(location.search).get('s') === 'check');
+  const a = R[id].a;
+  const greeting = isDemo
+    ? (R[id].v1?.greeting || `Hey! I'm ${a.name} (${a.role}).`)
+    : `Hey! I'm ${a.name}, ${a.role} in ${a.dept?.toUpperCase()}. ${a.does || ''} Ask me anything here, or type a task in the command bar.`;
   chatHist[id] = [
-    { who: 'agent', text: v.greeting },
+    { who: 'agent', text: greeting },
     { who: 'work', i: '⏺', text: 'session attached — live work stream below' },
   ];
-  if (FILE_GEN[id] && !(tasks && tasks.isLive())) chatHist[id].push({ who: 'file', ...FILE_GEN[id]() }); // demo-only sample file; a live office shows real deliverables
+  if (isDemo && FILE_GEN[id] && !(tasks && tasks.isLive())) chatHist[id].push({ who: 'file', ...FILE_GEN[id]() });
 }
 function chatPush(id, msg) {
   ensureChat(id);
@@ -699,6 +703,7 @@ function enterFocus(k, pendingAgentId) {
   const first = pendingAgentId || (AGENTS.find(x => x.dept === k && x.lead) || AGENTS.find(x => x.dept === k)).id;
   openAgentRail(first, pendingAgentId ? pendingTab : 'chat', false);
   document.getElementById('overviewBtn').classList.toggle('right', RAIL_SIDE[k] === 'left');
+  rail.classList.add('open');
   requestAnimationFrame(() => requestAnimationFrame(() => {
     rail.classList.add('open');
     flyBillboardIntoRail(k);
@@ -839,7 +844,8 @@ function sendChat(text) {
     if (rv && tasks.revise(id, rv[1].trim())) { chatPush(id, { who: 'agent', text: 'On it — revising now. It will land here when it is ready.' }); return; }
     const tr = tasks && tasks.handleChat(id, text); // "add task: …" / "what's on the board"
     if (tr) { chatPush(id, { who: 'agent', text: tr }); return; }
-    if (tasks && tasks.isLive()) { // LIVE: a real conversation with the agent, grounded in the brain
+    const isDemo = typeof location !== 'undefined' && (new URLSearchParams(location.search).has('demo') || new URLSearchParams(location.search).get('s') === 'check');
+    if ((tasks && tasks.isLive()) || !isDemo) { // LIVE: a real conversation with the agent, grounded in the brain
       chatPush(id, { who: 'work', i: '…', text: `${r.a.name} is thinking` });
       fetch('/api/chat', { method: 'POST', headers: { 'content-type': 'application/json' },
         body: JSON.stringify({ agent: id, text, history: chatHist[id].filter(m => m.who === 'user' || m.who === 'agent').slice(-8) }) })
@@ -851,7 +857,10 @@ function sendChat(text) {
           if (j.read) for (const n of j.read.slice(0, 2)) brain.readNote(id, n);
           if (j.tools && j.tools.length) mcp.onToolsUsed(id, j.tools);
         })
-        .catch(e => chatPush(id, { who: 'agent', text: `I couldn't reach Claude (${e.message}).` }));
+        .catch(e => {
+          const h = chatHist[id]; const k = h.findIndex(m => m.who === 'work' && m.text === `${r.a.name} is thinking`); if (k >= 0) h.splice(k, 1);
+          chatPush(id, { who: 'agent', text: `I couldn't reach the AI provider (${e.message}). Set ANTHROPIC_API_KEY, OPENAI_API_KEY, or GEMINI_API_KEY to enable live chat.` });
+        });
       return;
     }
     const hit = (r.v1.chat || []).find(c => c.k.some(k => low.includes(k)));

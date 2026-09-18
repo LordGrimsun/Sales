@@ -232,8 +232,9 @@ export function initTasks(ctx) {
     return t;
   }
 
-  /* ---------- seed a believable morning ---------- */
-  {
+  /* ---------- seed morning tasks (only in explicit demo/check mode) ---------- */
+  const isDemo = typeof location !== 'undefined' && (new URLSearchParams(location.search).has('demo') || new URLSearchParams(location.search).get('s') === 'check');
+  if (isDemo) {
     const now = performance.now(), wall = Date.now();
     for (const a of AGENTS) {
       const r = R[a.id];
@@ -447,6 +448,7 @@ export function initTasks(ctx) {
       const mdl = chosenModel(); t.modelUsed = mdl || officeModel; t.modelFrom = mdl ? 'task' : 'office'; const ef = effortUsedFor(t.modelUsed); t.effortUsed = ef.effort || ''; t.effortFrom = ef.from;
       resetModel(); resetTeam(); P_.input.value = ''; updateHint();
       say(`Added — <b>${agentOf(t.agent).name}</b> has it with ${esc(membersText(t))}.`); setTimeout(updateHint, 3200); P_.input.blur();
+      render(false);
       return;
     }
     const { agent: a } = route(dept, title);
@@ -456,6 +458,7 @@ export function initTasks(ctx) {
     P_.input.value = ''; updateHint();
     if (t) { say(`Added — <b>${a.name}</b> has it.`); setTimeout(updateHint, 2600); P_.input.blur(); }
     else say(`<b>${a.name}</b> already has five queued — let one finish first.`);
+    render(false);
   }
   /* ---------- V3.2 (16 Sep) demo teams: the same moves on a timer ---------- */
   function addTeamDemo(k, title) {
@@ -700,10 +703,22 @@ export function initTasks(ctx) {
   }
   // chips: filters with live counts
   const CHIPS = [['all', 'All'], ['sched', 'Scheduled'], ['next', 'Backlog'], ['doing', 'In progress'], ['waiting', 'Waiting'], ['done', 'Done']];
-  function chipsHTML() {
+  function updateChips() {
     const scope = scoped();
     const cnt = st => st === 'all' ? scope.length : st === 'sched' ? scopedRoutines().length + scope.filter(t => t.state === 'scheduled').length : scope.filter(t => t.state === st).length;
-    return CHIPS.map(([st, lab]) => `<button class="tp-chip${filter === st ? ' on' : ''}${st === 'waiting' ? ' w' : ''}" data-f="${st}">${lab}<b>${cnt(st)}</b></button>`).join('');
+    const existing = P_.chips.querySelectorAll('.tp-chip');
+    if (existing.length === CHIPS.length) {
+      existing.forEach(b => {
+        const st = b.dataset.f;
+        b.classList.toggle('on', filter === st);
+        b.classList.toggle('w', st === 'waiting');
+        const bEl = b.querySelector('b');
+        const val = String(cnt(st));
+        if (bEl && bEl.textContent !== val) bEl.textContent = val;
+      });
+    } else {
+      P_.chips.innerHTML = CHIPS.map(([st, lab]) => `<button class="tp-chip${filter === st ? ' on' : ''}${st === 'waiting' ? ' w' : ''}" data-f="${st}">${lab}<b>${cnt(st)}</b></button>`).join('');
+    }
   }
   P_.chips.addEventListener('click', (e) => { const b = e.target.closest('.tp-chip'); if (!b) return; filter = b.dataset.f; render(true); });
   function scoped() {
@@ -768,7 +783,7 @@ export function initTasks(ctx) {
   function render(structural) {
     const f = getFocused();
     P_.scope.textContent = (f && f !== 'brain') ? DEPTS[f].name : 'WHOLE OFFICE';
-    P_.chips.innerHTML = chipsHTML();
+    updateChips();
     const list = scoped().filter(t => filter === 'all' || t.state === filter)
       .sort((a, b) => b.changedAt - a.changedAt).slice(0, 60);
     const before = structural ? {} : rects();
@@ -959,8 +974,10 @@ export function initTasks(ctx) {
       } else {
         const nx = agentTasks(id, 'next').sort((a, b) => a.addedAt - b.addedAt)[0];
         if (nx) { start(nx, now); r.nextBrainAt = null; }
-        else if (!r.nextBrainAt) r.nextBrainAt = now + 6000 + Math.random() * 16000;
-        else if (now > r.nextBrainAt) { r.nextBrainAt = null; brainSend(id); }
+        else if (isDemo) {
+          if (!r.nextBrainAt) r.nextBrainAt = now + 6000 + Math.random() * 16000;
+          else if (now > r.nextBrainAt) { r.nextBrainAt = null; brainSend(id); }
+        }
       }
     }
     if (now - lastBadge > 400) { syncBadges(); lastBadge = now; }

@@ -52,6 +52,7 @@ import * as usage from './usage.mjs';
 import * as teams from './teams.mjs';
 import { normModel, modelFor, modelArgs, modelId, modelName, MODEL_KEYS, DEFAULT_MODEL, normEffort, effortFor, effortName, EFFORT_KEYS } from './src/models.js';
 import { parseWhen, describe, valid as validWhen, untilText } from './src/when.js';
+import { askLLM, detectProvider, getProviderInfo } from './llm.mjs';
 
 const cfg = loadConfig();
 const HTML = path.join(ROOT, 'dist', 'command-centre-v2.html'); // built by build.mjs; shipped so npm start works without a build
@@ -82,13 +83,7 @@ const refreshSkills = () => { reloadRoster(); const s = loadSkills(BRAIN, AGENTS
 const leadOf = dept => AGENTS.find(a => a.department === dept && a.lead) || AGENTS.find(a => a.department === dept);
 const setupMap = () => Object.fromEntries(DEPT_KEYS.map(k => [k, onboard.isSetUp(AGENTS, skills, k)]));
 
-let backend = 'claude-cli', sdk = null;
-if (process.env.ANTHROPIC_API_KEY) {
-  try {
-    const { default: Anthropic } = await import('@anthropic-ai/sdk');
-    sdk = new Anthropic(); backend = 'anthropic-sdk';
-  } catch (e) { console.warn('SDK not installed (npm install @anthropic-ai/sdk) — using the Claude CLI:', e.message.split('\n')[0]); }
-}
+let backend = detectProvider();
 
 /* ---------- storage ---------- */
 const load = () => { try { return JSON.parse(fs.readFileSync(FILE, 'utf8')); } catch { return []; } };
@@ -118,43 +113,17 @@ function ranOn(mu, want) {
   const fam = normModel(want) || cfg.model;
   return keys.find(k => k.includes(fam)) || keys.filter(k => !/haiku/.test(k)).sort((a, b) => (mu[b].outputTokens || 0) - (mu[a].outputTokens || 0))[0] || keys[0];
 }
-async function askX(system, user, { maxTokens = 4000, tools = true, timeout = RUN_TIMEOUT, model = cfg.model, effort = null } = {}) { // model: sonnet · opus · fable · effort: low…max or null = the model's own (src/models.js)
-  if (sdk) {
-    const res = await sdk.messages.create({ model: modelId(model), max_tokens: maxTokens, system, messages: [{ role: 'user', content: user }] });
-    if (res.stop_reason === 'refusal') throw new Error('Claude declined this request');
-    bumpUsage(res.usage);
-    return { text: res.content.filter(b => b.type === 'text').map(b => b.text).join('\n').trim(), tools: [], usage: res.usage, modelId: res.model };
-  }
-  fs.mkdirSync(CLI_CWD, { recursive: true });
+async function askX(system, user, { maxTokens = 4000, tools = true, timeout = RUN_TIMEOUT, model = cfg.model, effort = null } = {}) {
   const allowed = tools ? mcp.allowedTools() : [];
-  const args = ['-p', user, '--output-format', 'stream-json', '--verbose', '--no-session-persistence', '--system-prompt', system,
-    '--disallowedTools', 'Bash,Edit,Write,Read,Glob,Grep,Agent,NotebookEdit,Task' + (allowed.includes('WebFetch') ? '' : ',WebFetch,WebSearch')];
-  if (allowed.length) args.push('--allowedTools', allowed.join(','));
-  args.push(...(tools ? mcp.cliArgs() : ['--no-chrome'])); // V3.2 (16 Sep): the owner's Chrome, when tools.browser is on
-  args.push(...modelArgs(model, effort));
-  const env = { ...process.env }; delete env.CLAUDECODE; // the CLI refuses to nest inside another Claude Code session
-  return new Promise((resolve, reject) => {
-    const p = spawn('claude', args, { cwd: CLI_CWD, env, stdio: ['ignore', 'pipe', 'pipe'] });
-    let out = '', err = '', text = '', used = [], gotResult = false, usageOut = null, modelUsed = null;
-    const timer = setTimeout(() => { p.kill('SIGKILL'); reject(new Error(`Claude took longer than ${timeout / 1000} s`)); }, timeout);
-    const feed = line => {
-      if (!line.trim()) return;
-      let j; try { j = JSON.parse(line); } catch { return; }
-      if (j.type === 'system' && j.subtype === 'init') mcp.fromInit(j);
-      if (j.type === 'assistant' && j.message?.content) for (const b of j.message.content) if (b.type === 'tool_use' && b.name && !used.includes(b.name)) used.push(b.name);
-      if (j.type === 'result') { gotResult = true; text = String(j.result || '').trim(); if (j.is_error && !text) text = ''; usageOut = j.usage || null; modelUsed = ranOn(j.modelUsage, model); }
-    };
-    p.stdout.on('data', d => { out += d; let i; while ((i = out.indexOf('\n')) >= 0) { feed(out.slice(0, i)); out = out.slice(i + 1); } });
-    p.stderr.on('data', d => { err += d; });
-    p.on('error', e => { clearTimeout(timer); reject(new Error(e.code === 'ENOENT' ? 'Claude Code is not installed (claude not found on PATH)' : e.message)); });
-    p.on('close', code => {
-      clearTimeout(timer); feed(out);
-      if (code !== 0 && !gotResult) return reject(new Error(`claude exited ${code}${err ? ': ' + err.trim().slice(0, 300) : ''}`));
-      if (!gotResult) { try { text = String(JSON.parse(out).result || '').trim(); } catch { text = out.trim(); } }
-      bumpUsage(usageOut);
-      resolve({ text, tools: used, usage: usageOut, modelId: modelUsed });
-    });
+  const cliArgs = (tools ? mcp.cliArgs() : ['--no-chrome']).concat(modelArgs(model, effort));
+  const res = await askLLM(system, user, {
+    maxTokens,
+    model: modelId(model) || model,
+    mcpTools: allowed,
+    cliArgs,
   });
+  bumpUsage(res.usage);
+  return res;
 }
 const ask = async (system, user, opts) => (await askX(system, user, { tools: false, ...opts })).text;
 function parseJSON(text) {
