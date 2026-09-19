@@ -1,45 +1,114 @@
 
-<div class="sy-stories-wrap page-width">
-  <a href="#catalog" class="sy-story-item">
-    <div class="sy-story-ring">
-      <div class="sy-story-img">🔥</div>
-    </div>
-    <span class="sy-story-title">Hot Hits</span>
-  </a>
-  <a href="#catalog" class="sy-story-item">
-    <div class="sy-story-ring">
-      <div class="sy-story-img">🛏️</div>
-    </div>
-    <span class="sy-story-title">Deep Sleep</span>
-  </a>
-  <a href="#catalog" class="sy-story-item">
-    <div class="sy-story-ring">
-      <div class="sy-story-img">✨</div>
-    </div>
-    <span class="sy-story-title">Glass Skin</span>
-  </a>
-  <a href="#catalog" class="sy-story-item">
-    <div class="sy-story-ring">
-      <div class="sy-story-img">💎</div>
-    </div>
-    <span class="sy-story-title">Sonic Clean</span>
-  </a>
-  <a href="#catalog" class="sy-story-item">
-    <div class="sy-story-ring">
-      <div class="sy-story-img">🇺🇸</div>
-    </div>
-    <span class="sy-story-title">USPS Air</span>
-  </a>
-  <a href="#catalog" class="sy-story-item">
-    <div class="sy-story-ring">
-      <div class="sy-story-img">⭐</div>
-    </div>
-    <span class="sy-story-title">5-Star Reviews</span>
-  </a>
+<style>
+  .sunnyeora-bubbles-container {
+    width: 100%;
+    background: #FAF9F5;
+    padding: 24px 0;
+    border-bottom: 1px solid #E2E8F0;
+  }
+  .sunnyeora-bubbles-scroll {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 20px;
+    display: flex;
+    gap: 24px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+  .sunnyeora-bubbles-scroll::-webkit-scrollbar {
+    display: none;
+  }
+  .sunnyeora-bubble-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-decoration: none !important;
+    min-width: 86px;
+    cursor: pointer;
+    transition: transform 0.25s ease;
+  }
+  .sunnyeora-bubble-card:hover {
+    transform: translateY(-4px);
+  }
+  .sunnyeora-bubble-ring {
+    width: 76px;
+    height: 76px;
+    border-radius: 50%;
+    padding: 3px;
+    background: linear-gradient(135deg, #0D5C3A 0%, #34D399 50%, #D97706 100%);
+    box-shadow: 0 4px 12px rgba(13, 92, 58, 0.15);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .sunnyeora-bubble-inner {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background: #FFFFFF;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.8rem;
+    color: #0D5C3A;
+  }
+  .sunnyeora-bubble-text {
+    margin-top: 10px;
+    font-size: 0.8rem;
+    font-weight: 800;
+    color: #1E293B !important;
+    text-decoration: none !important;
+    white-space: nowrap;
+    letter-spacing: 0.2px;
+  }
+  .sunnyeora-bubble-card:hover .sunnyeora-bubble-text {
+    color: #0D5C3A !important;
+  }
+</style>
+
+<div class="sunnyeora-bubbles-container">
+  <div class="sunnyeora-bubbles-scroll">
+    <a href="/collections/all" class="sunnyeora-bubble-card">
+      <div class="sunnyeora-bubble-ring">
+        <div class="sunnyeora-bubble-inner">🔥</div>
+      </div>
+      <span class="sunnyeora-bubble-text">Hot Hits</span>
+    </a>
+
+    <a href="/collections/deep-sleep" class="sunnyeora-bubble-card">
+      <div class="sunnyeora-bubble-ring">
+        <div class="sunnyeora-bubble-inner">🛏️</div>
+      </div>
+      <span class="sunnyeora-bubble-text">Deep Sleep</span>
+    </a>
+
+    <a href="/collections/glass-skin" class="sunnyeora-bubble-card">
+      <div class="sunnyeora-bubble-ring">
+        <div class="sunnyeora-bubble-inner">✨</div>
+      </div>
+      <span class="sunnyeora-bubble-text">Glass Skin</span>
+    </a>
+
+    <a href="/collections/sonic-clean" class="sunnyeora-bubble-card">
+      <div class="sunnyeora-bubble-ring">
+        <div class="sunnyeora-bubble-inner">💎</div>
+      </div>
+      <span class="sunnyeora-bubble-text">Sonic Clean</span>
+    </a>
+
+    <a href="/pages/track-order" class="sunnyeora-bubble-card">
+      <div class="sunnyeora-bubble-ring">
+        <div class="sunnyeora-bubble-inner">🇺🇸</div>
+      </div>
+      <span class="sunnyeora-bubble-text">USPS Air</span>
+    </a>
+
+    <a href="/pages/reviews" class="sunnyeora-bubble-card">
+      <div class="sunnyeora-bubble-ring">
+        <div class="sunnyeora-bubble-inner">⭐</div>
+      </div>
+      <span class="sunnyeora-bubble-text">5-Star Reviews</span>
+    </a>
+  </div>
 </div>
-{% schema %}
-{
-  "name": "Category Story Bubbles",
-  "settings": []
-}
-{% endschema %}

@@ -1,0 +1,117 @@
+
+<style>
+  .sunnyeora-collection-page {
+    max-width: 1400px;
+    margin: 40px auto;
+    padding: 0 20px;
+  }
+  .sunnyeora-collection-header {
+    text-align: center;
+    margin-bottom: 40px;
+  }
+  .sunnyeora-collection-title {
+    font-size: 2.5rem;
+    font-weight: 900;
+    color: #1E293B;
+    margin: 12px 0 8px;
+  }
+  .sunnyeora-filter-pills {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-top: 20px;
+  }
+  .sunnyeora-filter-pill {
+    padding: 10px 20px;
+    border-radius: 30px;
+    background: #FAF9F5;
+    border: 1px solid #E2E8F0;
+    color: #1E293B;
+    font-weight: 700;
+    font-size: 0.9rem;
+    text-decoration: none;
+    transition: all 0.2s;
+  }
+  .sunnyeora-filter-pill.active, .sunnyeora-filter-pill:hover {
+    background: #0D5C3A;
+    color: #FFFFFF;
+    border-color: #0D5C3A;
+  }
+</style>
+
+<div class="sunnyeora-collection-page">
+  <div class="sunnyeora-collection-header">
+    <span style="background: #E8F3EE; color: #0D5C3A; padding: 6px 16px; border-radius: 20px; font-weight: 800; font-size: 0.85rem; letter-spacing: 1px;">🛍️ SUNNYEORA MARKETPLACE</span>
+    <h1 class="sunnyeora-collection-title">High-Demand Collection</h1>
+    <p style="color: #64748B; font-size: 1.05rem; max-width: 600px; margin: 0 auto;">
+      Bio-tested ergonomics, skincare phototherapy, and ultrasonic cleaning devices shipped directly with USPS Air Express.
+    </p>
+
+    <div class="sunnyeora-filter-pills">
+      <a href="/collections/all" class="sunnyeora-filter-pill active">🔥 All Products</a>
+      <a href="/collections/deep-sleep" class="sunnyeora-filter-pill">🛏️ Deep Sleep</a>
+      <a href="/collections/glass-skin" class="sunnyeora-filter-pill">✨ Glass Skin</a>
+      <a href="/collections/sonic-clean" class="sunnyeora-filter-pill">💎 Sonic Clean</a>
+    </div>
+  </div>
+
+  <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 24px;">
+    <!-- Product 1 -->
+    <div class="myntra-product-card">
+      <div class="myntra-card-image-wrap">
+        <img src="https://images.unsplash.com/photo-1584100936595-c0654b55a2e2?auto=format&fit=crop&w=600&q=80" alt="Deep-Sleep Cervical Pillow">
+        <span class="myntra-rating-chip">4.9 ★ | 12.8k</span>
+        <button class="myntra-wishlist-btn">❤️</button>
+      </div>
+      <div class="myntra-card-details">
+        <div class="myntra-brand-name">SUNNYEORA SLEEP</div>
+        <div class="myntra-product-title">Deep-Sleep™ Contour Cervical Memory Pillow</div>
+        <div class="myntra-price-row">
+          <span class="myntra-current-price">$49.99</span>
+          <span class="myntra-mrp-price">$89.99</span>
+          <span class="myntra-discount-tag">(45% OFF)</span>
+        </div>
+        <button class="myntra-add-bag-btn">🛍️ ADD TO BAG</button>
+      </div>
+    </div>
+
+    <!-- Product 2 -->
+    <div class="myntra-product-card">
+      <div class="myntra-card-image-wrap">
+        <img src="https://images.unsplash.com/photo-1598440947619-2c35fc9aa908?auto=format&fit=crop&w=600&q=80" alt="LuminaGlow Wand">
+        <span class="myntra-rating-chip">4.8 ★ | 9.4k</span>
+        <button class="myntra-wishlist-btn">❤️</button>
+      </div>
+      <div class="myntra-card-details">
+        <div class="myntra-brand-name">SUNNYEORA BEAUTY</div>
+        <div class="myntra-product-title">LuminaGlow™ 7-in-1 Red Light Therapy Wand</div>
+        <div class="myntra-price-row">
+          <span class="myntra-current-price">$59.99</span>
+          <span class="myntra-mrp-price">$99.99</span>
+          <span class="myntra-discount-tag">(40% OFF)</span>
+        </div>
+        <button class="myntra-add-bag-btn">🛍️ ADD TO BAG</button>
+      </div>
+    </div>
+
+    <!-- Product 3 -->
+    <div class="myntra-product-card">
+      <div class="myntra-card-image-wrap">
+        <img src="https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=600&q=80" alt="CrystalSonic Cleaner">
+        <span class="myntra-rating-chip">4.9 ★ | 15.2k</span>
+        <button class="myntra-wishlist-btn">❤️</button>
+      </div>
+      <div class="myntra-card-details">
+        <div class="myntra-brand-name">SUNNYEORA TECH</div>
+        <div class="myntra-product-title">CrystalSonic™ 45,000Hz Ultrasonic Cleaner</div>
+        <div class="myntra-price-row">
+          <span class="myntra-current-price">$39.99</span>
+          <span class="myntra-mrp-price">$69.99</span>
+          <span class="myntra-discount-tag">(43% OFF)</span>
+        </div>
+        <button class="myntra-add-bag-btn">🛍️ ADD TO BAG</button>
+      </div>
+    </div>
+  </div>
+</div>
