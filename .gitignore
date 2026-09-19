@@ -14,3 +14,5 @@ brain/Agents Office/
 .env
 .env.*
 .env.local
+
+.env*
