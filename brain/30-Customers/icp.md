@@ -1,9 +1,9 @@
 # Ideal customer
 
-Online shoppers in the United States, United Kingdom, Canada, Australia, and Western Europe, aged 24 to 58, browsing on mobile devices (iOS / Android) through Instagram, Facebook, and TikTok.
+Fashion-conscious online shoppers in the United States, United Kingdom, Canada, Australia, and Western Europe, aged 20 to 48, browsing on mobile devices (iOS / Android) through Instagram, TikTok, and Pinterest.
 Core buyer motivations:
-1. **Pain Relief & Ergonomics**: Adults experiencing neck/back stiffness, posture issues, or poor sleep looking for instant, non-invasive relief.
-2. **Aesthetic Home & Comfort**: Homeowners and apartment dwellers seeking warm, ambient, cozy lighting and smart organization gadgets.
-3. **Pet Parents**: Dedicated pet owners ready to spend money on anxious dogs/cats (calming beds, grooming tools).
-4. **Convenience & Hacks**: Tech-curious buyers who love "why didn't I buy this sooner?" life-improvement tools.
+1. **Chic, Versatile Everyday Wardrobe**: Women seeking elevated dresses, cozy knitted pullovers, and coordinated 2-piece sets that look like boutique designer wear at accessible prices.
+2. **Seasonal & Event Outfits**: Shoppers seeking evening cocktail dresses, bodycon gowns, winter knitwear, and holiday party wear.
+3. **Inclusive Sizing & Flattering Fits**: Shoppers looking for comfortable stretch, relaxed silhouettes (sizes S through 5XL/6XL), and reliable doorstep tracking.
+4. **Style Convenience**: Customers who love "complete the look" styling where tops and pants are already matched into effortless sets.
 Objections and answers in [[sales-playbook]].
