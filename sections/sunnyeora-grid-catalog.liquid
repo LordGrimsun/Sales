@@ -1,4 +1,3 @@
-
 <style>
   .sy-catalog-section {
     max-width: 1400px;
@@ -96,22 +95,6 @@
     transform: scale(1.15);
     background: #ffffff;
   }
-  .sy-rating-chip {
-    position: absolute;
-    bottom: 12px;
-    left: 12px;
-    background: rgba(255, 255, 255, 0.94);
-    backdrop-filter: blur(4px);
-    padding: 4px 10px;
-    border-radius: 20px;
-    font-size: 0.75rem;
-    font-weight: 800;
-    color: #1E293B;
-    display: flex;
-    align-items: center;
-    gap: 4px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-  }
   .sy-card-body {
     padding: 20px;
     display: flex;
@@ -132,12 +115,10 @@
     color: #1E293B;
     margin: 0 0 6px 0;
     line-height: 1.3;
-  }
-  .sy-prod-desc {
-    font-size: 0.85rem;
-    color: #64748B;
-    margin: 0 0 16px 0;
-    line-height: 1.5;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
   }
   .sy-price-block {
     display: flex;
@@ -155,15 +136,6 @@
     font-size: 0.95rem;
     color: #94A3B8;
     text-decoration: line-through;
-  }
-  .sy-save-tag {
-    font-size: 0.8rem;
-    font-weight: 800;
-    color: #D97706;
-    margin-left: auto;
-    background: #FEF3C7;
-    padding: 3px 8px;
-    border-radius: 6px;
   }
   .sy-buy-btn {
     width: 100%;
@@ -191,113 +163,66 @@
 <div class="sy-catalog-section" id="catalog">
   <div class="sy-catalog-header">
     <div>
-      <h2 class="sy-catalog-title">Trending Viral Collection</h2>
-      <div class="sy-catalog-subtitle">Verified Bio-Tech Winners • Shipped via USPS Air Express</div>
+      <h2 class="sy-catalog-title">Trending In Store</h2>
+      <div class="sy-catalog-subtitle">Verified Store Inventory &bull; Express Shipping</div>
     </div>
-    <div style="display: flex; gap: 8px; align-items: center;">
-      <span style="font-size: 0.8rem; font-weight: 700; color: #64748B;">SORT BY:</span>
-      <select style="background: #ffffff; border: 1px solid #CBD5E1; padding: 8px 14px; border-radius: 20px; font-size: 0.85rem; font-weight: 700; outline: none; cursor: pointer; color: #1E293B;">
-        <option>Popularity / Best Selling</option>
-        <option>Customer Rating (High to Low)</option>
-        <option>Price (Low to High)</option>
-      </select>
-    </div>
+    <a href="/collections/all" style="color: #0D5C3A; font-weight: 800; text-decoration: none; font-size: 0.95rem;">
+      VIEW ALL ({{ collections['all'].products.size }}) ➔
+    </a>
   </div>
 
   <div class="sy-catalog-grid">
-    <!-- Item 1: Cervical Contour Pillow -->
-    <div class="sy-card-wrap">
-      <a href="/products/deep-sleep-cervical-pillow" style="text-decoration:none; color:inherit; display:block;">
-        <div class="sy-card-img-box">
-          <span class="sy-discount-badge">-45% OFF</span>
-          <button class="sy-heart-btn" onclick="event.preventDefault(); event.stopPropagation(); window.toggleWishlist && window.toggleWishlist('deep-sleep-cervical-pillow', this);" title="Save to Wishlist" aria-label="Save to Wishlist"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#282c3f" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg></button>
-          <img src="https://images.unsplash.com/photo-1584100936595-c0654b55a2e2?auto=format&fit=crop&w=800&q=80" alt="Sunnyeora Deep-Sleep Cervical Pillow">
-          <span class="sy-rating-chip">★ 4.9 | 2,840 reviews</span>
-        </div>
-        <div class="sy-card-body">
-          <div class="sy-brand-tag">SUNNYEORA SLEEP CARE</div>
-          <h3 class="sy-prod-title">Deep-Sleep™ Orthopedic Cervical Pillow</h3>
-          <p class="sy-prod-desc">Slow-rebound memory foam de-compresses cervical vertebrae and eliminates neck pain.</p>
-          <div class="sy-price-block">
-            <span class="sy-curr-price">$49.99</span>
-            <span class="sy-mrp-price">$89.99</span>
-            <span class="sy-save-tag">SAVE $40</span>
+    {% for product in collections['all'].products offset: 4 limit: 12 %}
+      <div class="sy-card-wrap">
+        <a href="{{ product.url }}" style="text-decoration:none; color:inherit; display:block;">
+          <div class="sy-card-img-box">
+            {% if product.featured_image %}
+              <img src="{{ product.featured_image | image_url: width: 600 }}" alt="{{ product.title | escape }}" loading="lazy">
+            {% else %}
+              <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: #f1f5f9; color: #94a3b8;">No Image</div>
+            {% endif %}
+            {% if product.compare_at_price > product.price %}
+              {% assign discount_pct = product.compare_at_price | minus: product.price | times: 100.0 | divided_by: product.compare_at_price | round %}
+              <span class="sy-discount-badge">-{{ discount_pct }}% OFF</span>
+            {% endif %}
+            <button class="sy-heart-btn" onclick="event.preventDefault(); event.stopPropagation(); window.toggleWishlist && window.toggleWishlist('{{ product.handle }}', this);" title="Save to Wishlist" aria-label="Save to Wishlist">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#282c3f" stroke-width="2">
+                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+              </svg>
+            </button>
           </div>
-        </div>
-      </a>
-      <div style="padding: 0 16px 16px 16px;">
-        <button class="sy-buy-btn" onclick="event.preventDefault(); window.openCartDrawer('Sunnyeora Deep-Sleep™ Cervical Pillow', '49.99', 'https://images.unsplash.com/photo-1584100936595-c0654b55a2e2?auto=format&fit=crop&w=120&q=80')">
-          ADD TO BAG
-        </button>
-      </div>
-    </div>
-
-    <!-- Item 2: Red Light Therapy Wand -->
-    <div class="sy-card-wrap">
-      <a href="/products/luminaglow-red-light-wand" style="text-decoration:none; color:inherit; display:block;">
-        <div class="sy-card-img-box">
-          <span class="sy-discount-badge">-40% OFF</span>
-          <button class="sy-heart-btn" onclick="event.preventDefault(); event.stopPropagation(); window.toggleWishlist && window.toggleWishlist('luminaglow-red-light-wand', this);" title="Save to Wishlist" aria-label="Save to Wishlist"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#282c3f" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg></button>
-          <img src="https://images.unsplash.com/photo-1598440947619-2c35fc9aa908?auto=format&fit=crop&w=800&q=80" alt="Sunnyeora LuminaGlow Red Light Wand">
-          <span class="sy-rating-chip">★ 4.8 | 1,920 reviews</span>
-        </div>
-        <div class="sy-card-body">
-          <div class="sy-brand-tag">SUNNYEORA SKINCARE TECH</div>
-          <h3 class="sy-prod-title">LuminaGlow™ 7-in-1 Red Light Therapy Wand</h3>
-          <p class="sy-prod-desc">660nm clinical red light + microcurrent for collagen stimulation and glass skin radiance.</p>
-          <div class="sy-price-block">
-            <span class="sy-curr-price">$59.99</span>
-            <span class="sy-mrp-price">$99.99</span>
-            <span class="sy-save-tag">SAVE $40</span>
+          <div class="sy-card-body">
+            <div class="sy-brand-tag">{{ product.vendor | default: 'SUNNYEORA' }}</div>
+            <h3 class="sy-prod-title" title="{{ product.title | escape }}">{{ product.title }}</h3>
+            <div class="sy-price-block">
+              <span class="sy-curr-price">{{ product.price | money }}</span>
+              {% if product.compare_at_price > product.price %}
+                <span class="sy-mrp-price">{{ product.compare_at_price | money }}</span>
+              {% endif %}
+            </div>
           </div>
+        </a>
+        <div style="padding: 0 16px 16px 16px;">
+          <button class="sy-buy-btn" onclick="event.preventDefault(); if(window.openCartDrawer) { window.openCartDrawer('{{ product.title | escape }}', '{{ product.price | money_without_currency }}', '{% if product.featured_image %}{{ product.featured_image | image_url: width: 120 }}{% endif %}'); }">
+            ADD TO BAG
+          </button>
         </div>
-      </a>
-      <div style="padding: 0 16px 16px 16px;">
-        <button class="sy-buy-btn" onclick="event.preventDefault(); window.openCartDrawer('Sunnyeora LuminaGlow™ Red Light Wand', '59.99', 'https://images.unsplash.com/photo-1598440947619-2c35fc9aa908?auto=format&fit=crop&w=120&q=80')">
-          ADD TO BAG
-        </button>
       </div>
-    </div>
-
-    <!-- Item 3: Ultrasonic Cleaner -->
-    <div class="sy-card-wrap">
-      <a href="/products/crystal-sonic-cleaner" style="text-decoration:none; color:inherit; display:block;">
-        <div class="sy-card-img-box">
-          <span class="sy-discount-badge">-43% OFF</span>
-          <button class="sy-heart-btn" onclick="event.preventDefault(); event.stopPropagation(); window.toggleWishlist && window.toggleWishlist('crystal-sonic-cleaner', this);" title="Save to Wishlist" aria-label="Save to Wishlist"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#282c3f" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg></button>
-          <img src="https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=800&q=80" alt="Sunnyeora CrystalSonic Ultrasonic Cleaner">
-          <span class="sy-rating-chip">★ 4.9 | 3,410 reviews</span>
-        </div>
-        <div class="sy-card-body">
-          <div class="sy-brand-tag">SUNNYEORA SONIC TECH</div>
-          <h3 class="sy-prod-title">CrystalSonic™ 45,000Hz Ultrasonic Cleaner</h3>
-          <p class="sy-prod-desc">High-frequency cavitation bubbles restore jewelry, glasses, and retainers in 180 seconds.</p>
-          <div class="sy-price-block">
-            <span class="sy-curr-price">$39.99</span>
-            <span class="sy-mrp-price">$69.99</span>
-            <span class="sy-save-tag">SAVE $30</span>
-          </div>
-        </div>
-      </a>
-      <div style="padding: 0 16px 16px 16px;">
-        <button class="sy-buy-btn" onclick="event.preventDefault(); window.openCartDrawer('Sunnyeora CrystalSonic™ Ultrasonic Cleaner', '39.99', 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=120&q=80')">
-          ADD TO BAG
-        </button>
-      </div>
-    </div>
+    {% else %}
+      <p style="color: #64748b; grid-column: 1 / -1; text-align: center;">No additional products at this time.</p>
+    {% endfor %}
   </div>
-
 </div>
 
 {% schema %}
 {
-  "name": "Marketplace Grid Catalog",
+  "name": "Trending Catalog Grid",
   "tag": "section",
   "class": "section",
   "settings": [],
   "presets": [
     {
-      "name": "Marketplace Grid Catalog"
+      "name": "Trending Catalog Grid"
     }
   ]
 }
