@@ -279,6 +279,7 @@
     {% endstyle %}
 
     {{ 'base.css' | asset_url | stylesheet_tag }}
+    {{ 'genz-platform.css' | asset_url | stylesheet_tag }}
     {{ 'genz-custom.css' | asset_url | stylesheet_tag }}
     <link rel="stylesheet" href="{{ 'component-cart-items.css' | asset_url }}" media="print" onload="this.media='all'">
 
@@ -344,6 +345,7 @@
     </main>
 
     {% sections 'footer-group' %}
+    {% section 'sunnyeora-cart-drawer' %}
 
     <ul hidden>
       <li id="a11y-refresh-page-message">{{ 'accessibility.refresh_page' | t }}</li>

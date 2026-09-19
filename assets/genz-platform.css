@@ -1,0 +1,217 @@
+
+/* Sunnyeora Full-Fledged Gen-Z E-Commerce Platform (Amazon/Myntra Style) */
+:root {
+  --sy-purple: #7C3AED;
+  --sy-pink: #FF007A;
+  --sy-emerald: #00E676;
+  --sy-amber: #FFB800;
+  --sy-dark: #0F172A;
+  --sy-body-bg: #FAFAFD;
+  --sy-card-bg: #FFFFFF;
+  --sy-border: rgba(15, 23, 42, 0.08);
+  --sy-radius: 16px;
+}
+
+body {
+  background-color: var(--sy-body-bg) !important;
+  color: var(--sy-dark);
+  font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  overflow-x: hidden;
+  margin: 0;
+}
+
+/* Category Story Avatar Bubbles (Myntra Style) */
+.sy-stories-wrap {
+  display: flex;
+  gap: 20px;
+  overflow-x: auto;
+  padding: 16px 20px;
+  background: #ffffff;
+  border-bottom: 1px solid var(--sy-border);
+  scrollbar-width: none;
+}
+.sy-stories-wrap::-webkit-scrollbar { display: none; }
+.sy-story-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  flex-shrink: 0;
+  text-decoration: none;
+  color: var(--sy-dark);
+}
+.sy-story-ring {
+  width: 68px;
+  height: 68px;
+  border-radius: 50%;
+  padding: 3px;
+  background: linear-gradient(135deg, var(--sy-pink), var(--sy-purple), var(--sy-emerald));
+  transition: transform 0.25s ease;
+}
+.sy-story-ring:hover {
+  transform: scale(1.08);
+}
+.sy-story-img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: #f1f5f9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  border: 2px solid #ffffff;
+}
+.sy-story-title {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+/* Amazon Flash Deals Countdown Bar */
+.sy-flash-bar {
+  background: linear-gradient(90deg, #1E1B4B, #4C1D95, #831843);
+  color: #ffffff;
+  padding: 14px 20px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin: 20px 0;
+}
+.sy-timer-box {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.sy-timer-unit {
+  background: #ffffff;
+  color: #0F172A;
+  font-weight: 900;
+  font-size: 14px;
+  padding: 4px 8px;
+  border-radius: 6px;
+  min-width: 32px;
+  text-align: center;
+}
+
+/* Product Cards (Amazon / Myntra Style) */
+.sy-product-card {
+  background: #ffffff;
+  border: 1px solid var(--sy-border);
+  border-radius: var(--sy-radius);
+  overflow: hidden;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.sy-product-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 20px 40px rgba(124, 58, 237, 0.12);
+  border-color: rgba(124, 58, 237, 0.3);
+}
+.sy-badge-discount {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  background: var(--sy-pink);
+  color: #ffffff;
+  font-size: 11px;
+  font-weight: 800;
+  padding: 4px 10px;
+  border-radius: 999px;
+  letter-spacing: 0.04em;
+  z-index: 2;
+}
+.sy-wishlist-btn {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(4px);
+  border: 1px solid var(--sy-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 2;
+  transition: transform 0.2s ease;
+}
+.sy-wishlist-btn:hover {
+  transform: scale(1.15);
+}
+
+/* Add to Bag Button */
+.sy-add-bag-btn {
+  width: 100%;
+  background: var(--sy-dark);
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 13.5px;
+  letter-spacing: 0.03em;
+  padding: 12px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+.sy-add-bag-btn:hover {
+  background: var(--sy-purple);
+  transform: translateY(-1px);
+}
+
+/* Slide-Out Quick Cart Drawer */
+#syCartDrawer {
+  position: fixed;
+  top: 0;
+  right: -440px;
+  width: 420px;
+  max-width: 95vw;
+  height: 100vh;
+  background: #ffffff;
+  box-shadow: -15px 0 50px rgba(0, 0, 0, 0.25);
+  z-index: 999999;
+  display: flex;
+  flex-direction: column;
+  transition: right 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
+  font-family: inherit;
+}
+#syCartDrawer.open {
+  right: 0;
+}
+#syCartOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.6);
+  backdrop-filter: blur(4px);
+  z-index: 999998;
+  display: none;
+}
+#syCartOverlay.open {
+  display: block;
+}
+
+/* Free Shipping Bar */
+.sy-ship-progress {
+  background: rgba(124, 58, 237, 0.08);
+  border: 1px solid rgba(124, 58, 237, 0.2);
+  padding: 12px;
+  border-radius: 10px;
+  margin-bottom: 16px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--sy-purple);
+  text-align: center;
+}
