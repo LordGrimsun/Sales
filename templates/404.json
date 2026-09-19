@@ -2,9 +2,13 @@
   "sections": {
     "main": {
       "type": "main-404"
+    },
+    "catalog": {
+      "type": "sunnyeora-grid-catalog"
     }
   },
   "order": [
-    "main"
+    "main",
+    "catalog"
   ]
 }
