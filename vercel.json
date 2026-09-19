@@ -2,6 +2,11 @@
   "buildCommand": "node build.mjs",
   "outputDirectory": "dist",
   "cleanUrls": true,
+  "functions": {
+    "api/**/*.mjs": {
+      "maxDuration": 60
+    }
+  },
   "rewrites": [
     { "source": "/api/tasks/:id/:action", "destination": "/api/tasks/[...path]?id=:id&action=:action" },
     { "source": "/api/routines/:routineId", "destination": "/api/routines/[...path]?routineId=:routineId" },

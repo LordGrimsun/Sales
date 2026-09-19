@@ -33,7 +33,18 @@ function saveTasks(list) {
 
 const baseCfg = readJSON(path.join(ROOT, 'office.config.json'), { name: 'Sales', model: 'sonnet' });
 const baseAgents = readJSON(path.join(ROOT, 'office.agents.json'), { agents: [] });
-const AGENTS = baseAgents.agents || [];
+let AGENTS = baseAgents.agents || [];
+try {
+  const brainAgents = readJSON(path.join(ROOT, 'brain', 'Agents Office', 'agents.json'), {});
+  if (Array.isArray(brainAgents.agents)) {
+    for (const ba of brainAgents.agents) {
+      const idx = AGENTS.findIndex(a => a.id === ba.id);
+      if (idx >= 0) {
+        AGENTS[idx] = { ...AGENTS[idx], ...ba };
+      }
+    }
+  }
+} catch {}
 
 function json(res, code, body) {
   res.setHeader('content-type', 'application/json');
@@ -232,15 +243,15 @@ export default async function handler(req, res) {
         let chosenAgent = lead.id;
         let title = text.slice(0, 70);
         let why = `Assigned to ${lead.name} based on request.`;
-        let plan = ['Analyze requirements', 'Execute deliverable', 'Review against company notes'];
+        let plan = ['Analyze requirements', 'Execute deliverable', 'Review against brand standards'];
 
         try {
-          const sys = `You are the AI task router for ${baseCfg.name || 'Sales'}. Return ONLY valid JSON in format: {"agent":"<id>","title":"<clean title max 70 chars>","why":"<short rationale>","plan":["step 1","step 2"]}`;
+          const sys = `You are the AI task router for ${baseCfg.name || 'Sunnyeora'}. Return ONLY valid JSON in format: {"agent":"agent_id","title":"Concise Actionable Title","why":"short rationale","plan":["step 1","step 2"]}`;
           const userPrompt = `Department: ${dept}\nAgents:\n${pool.map(a => `${a.id} - ${a.name} (${a.role}): ${a.does}`).join('\n')}\n\nTask request: "${text}"`;
           const resp = await askLLM(sys, userPrompt, { maxTokens: 400 });
           const parsed = parseJSON(resp.text);
           if (parsed.agent && pool.some(a => a.id === parsed.agent)) chosenAgent = parsed.agent;
-          if (parsed.title) title = String(parsed.title).slice(0, 80);
+          if (parsed.title && !parsed.title.includes('<')) title = String(parsed.title).slice(0, 80);
           if (parsed.why) why = String(parsed.why);
           if (Array.isArray(parsed.plan)) plan = parsed.plan.slice(0, 4).map(String);
         } catch (e) {
@@ -281,13 +292,18 @@ export default async function handler(req, res) {
           id: taskId,
           dept: body.dept || 'sales',
           agent: body.agent || 'lexi',
-          title: body.title || body.text || 'Sales deliverable',
-          text: body.text || body.title || 'Execute sales deliverable',
+          title: body.title || body.text || 'Marketing & Sales deliverable',
+          text: body.text || body.title || 'Execute deliverable',
           state: 'next',
           addedAt: Date.now(),
           by: 'you',
         };
         list.push(task);
+      } else if (task && body.text) {
+        task.text = body.text;
+        if (body.title) task.title = body.title;
+        if (body.agent) task.agent = body.agent;
+        if (body.dept) task.dept = body.dept;
       }
 
       if (req.method === 'DELETE') {
@@ -304,9 +320,10 @@ export default async function handler(req, res) {
         saveTasks(list);
 
         try {
-          const sys = `You are ${agent.name}, ${agent.role} in the ${task.dept.toUpperCase()} department at ${baseCfg.name || 'Sales'}.\n` +
+          const sys = `You are ${agent.name}, ${agent.role} in the ${task.dept.toUpperCase()} department at ${baseCfg.name || 'Sunnyeora'} (eCommerce store: sunnyeora.myshopify.com).\n` +
             `${agent.does || ''}\n` +
-            `Produce the finished, professional deliverable directly in clean markdown. Be concise, actionable, and thorough. Output ONLY the deliverable content itself. Never output role recaps, persona bullet points, or thinking steps.`;
+            (agent.brief ? `Standing instructions: ${agent.brief}\n` : '') +
+            `Produce the finished, professional, publication-ready deliverable directly in clean markdown. Be concise, actionable, and thorough. Output ONLY the deliverable content itself. Never output role recaps, persona bullet points, or thinking steps.`;
           const userPrompt = `Task: ${task.title}\nRequest details: ${task.text}` +
             (feedback ? `\n\nOwner requested revision: "${feedback}"\nPrevious version:\n${task.result || ''}` : '');
 
@@ -353,14 +370,80 @@ export default async function handler(req, res) {
 
     // 10. Routines GET / POST
     if (pathname === '/api/routines') {
-      return json(res, 200, []);
+      if (req.method === 'GET') {
+        const routinesData = readJSON(path.join(ROOT, 'brain', 'Agents Office', 'routines.json'), { routines: [] });
+        return json(res, 200, {
+          routines: routinesData.routines || [
+            {
+              id: 'abandoned-cart-revival',
+              dept: 'sales',
+              agent: 'folo',
+              title: 'Review stalled checkouts and generate recovery outreach',
+              text: 'Review recent abandoned checkouts and shopping bags. Draft helpful, stylish follow-up recovery emails offering customer sizing help and the 10% discount code SUNNY10.',
+              when: { kind: 'daily', at: '10:00' },
+              needsOk: true,
+              paused: false
+            },
+            {
+              id: 'weekly-sales-review',
+              dept: 'sales',
+              agent: 'lexi',
+              title: 'Weekly conversion and sales performance summary',
+              text: 'Review weekly store order trends, best-selling product categories (dresses, knitwear, suits), average order value, and plan conversion targets for the coming week.',
+              when: { kind: 'weekly', days: [1], at: '09:00' },
+              needsOk: true,
+              paused: false
+            }
+          ],
+          depts: ['emails', 'fin', 'sales'],
+          path: 'brain/Agents Office/routines.json',
+          problems: []
+        });
+      }
+      if (req.method === 'POST') {
+        const b = await getBody(req);
+        if (b.dept === 'marketing' || b.dept === 'ops' || b.dept === 'delivery') {
+          return json(res, 400, { error: `Routines come to ${b.dept} in a later release. This release: Emails, Accounting and Sales.` });
+        }
+        return json(res, 200, { ok: true, routine: b });
+      }
     }
 
     // 11. Winning Products Catalog (GET)
     if (pathname === '/api/products' && req.method === 'GET') {
+      const storeUrl = (process.env.SHOPIFY_STORE_URL || process.env.SHOPIFY_SHOP_DOMAIN || 'sunnyeora.myshopify.com')
+        .replace(/^https?:\/\//, '').replace(/\/+$/, '');
+      try {
+        const r = await fetch(`https://${storeUrl}/products.json?limit=50`);
+        if (r.ok) {
+          const d = await r.json();
+          if (d && Array.isArray(d.products) && d.products.length > 0) {
+            return json(res, 200, {
+              ok: true,
+              store: storeUrl,
+              total: d.products.length,
+              products: d.products.map(p => ({
+                id: String(p.id),
+                name: p.title,
+                shortName: p.title.length > 35 ? p.title.slice(0, 35) + '...' : p.title,
+                handle: p.handle,
+                category: p.product_type || 'Fashion & Apparel',
+                retailPrice: p.variants?.[0]?.price || '0',
+                compareAtPrice: p.variants?.[0]?.compare_at_price || '',
+                vendor: p.vendor || 'Sunnyeora',
+                images: p.images?.map(i => i.src) || [],
+                url: `https://${storeUrl}/products/${p.handle}`
+              }))
+            });
+          }
+        }
+      } catch (e) {
+        console.warn('Dynamic fetch products fallback:', e.message);
+      }
       return json(res, 200, {
         ok: true,
-        store: process.env.SHOPIFY_STORE_URL || 'sunnyeora.myshopify.com',
+        store: storeUrl,
+        total: WINNING_PRODUCTS.length,
         products: WINNING_PRODUCTS,
       });
     }
@@ -388,7 +471,7 @@ export default async function handler(req, res) {
                 body_html: prod.shopifyHtml,
                 vendor: 'Sunnyeora',
                 product_type: prod.category,
-                tags: `dropshipping, winning-product, ${prod.categorySlug}`,
+                tags: `dropshipping, fashion, authentic, ${prod.categorySlug}`,
                 variants: [
                   {
                     price: String(prod.retailPrice),
@@ -451,58 +534,76 @@ export default async function handler(req, res) {
 
 const WINNING_PRODUCTS = [
   {
-    id: 'sunnyeora-cervical-pillow',
-    name: 'Sunnyeora Deep-Sleep™ Orthopedic Cervical Contour Pillow',
-    shortName: 'Cervical Contour Pillow',
-    category: 'Health & Ergonomics',
-    categorySlug: 'wellness',
-    tag: '#1 VIRAL PAIN SOLVER',
-    retailPrice: 49.99,
+    id: '9039031304389',
+    name: "Women's Thick Knitted Pullover Sweater Loose Fit Round Neck Casual Top",
+    shortName: 'Thick Knitted Pullover',
+    category: 'Sweaters & Knits',
+    categorySlug: 'knitwear',
+    tag: '#1 BESTSELLER KNIT',
+    retailPrice: 48.99,
     compareAtPrice: 89.99,
-    cogsPrice: 11.80,
-    estCac: 15.00,
-    stripeFee: 1.75,
-    netProfit: 21.44,
-    netMargin: '42.9%',
-    cjUrl: 'https://www.cjdropshipping.com/list?search=cervical%20contour%20pillow',
+    cogsPrice: 13.20,
+    estCac: 14.00,
+    stripeFee: 1.72,
+    netProfit: 20.07,
+    netMargin: '41.0%',
+    supplierUrl: 'https://sunnyeora.myshopify.com/products/womens-thick-knitted-pullover-sweater-loose-fit-round-neck-casual-all-match-top-for-autumn-winter',
     rating: 4.9,
-    shopifyHtml: `<h2>Wake Up Rejuvenated and Pain-Free with Sunnyeora Deep-Sleep™</h2>\n<p>Do you wake up feeling like your neck is locked up, with nagging shoulder tension or morning headaches? Traditional flat pillows fail to support your neck's natural curvature, pinching cervical nerves for 8 hours every night.</p>\n<p>The <b>Sunnyeora Deep-Sleep™ Orthopedic Cervical Contour Pillow</b> is scientifically sculpted to cradle your head, decompress your spine, and relieve pressure points in any sleeping posture.</p>\n<h3>Key Benefits:</h3>\n<ul>\n  <li><b>Ergonomic Cervical Groove:</b> Gently aligns the cervical spine to relieve nerve compression.</li>\n  <li><b>High-Density Memory Foam:</b> Premium slow-rebound core never flattens out.</li>\n  <li><b>Dual Contour Heights:</b> 4.3" and 3.5" wings tailored for back and side sleepers.</li>\n  <li><b>Ice-Silk Cooling Cover:</b> Removable, hypoallergenic, and machine-washable.</li>\n</ul>\n<h3>The Sunnyeora 30-Night Guarantee:</h3>\n<p>Try it in your bed for 30 nights. If you don't wake up with zero neck stiffness, contact support@sunnyeora.com for a 100% refund. Ships via USPS Priority Air with tracking (7–10 days).</p>`
+    shopifyHtml: `<h2>The Ultimate Coziest Winter Pullover</h2>\n<p>Stay effortlessly warm and stylish with the <b>Sunnyeora Thick Knitted Pullover Sweater</b>. Sculpted with a relaxed drop-shoulder cut, breathable thermal knit, and ultra-soft feel that never scratches.</p>\n<h3>Key Highlights:</h3>\n<ul>\n  <li><b>Cloud-Soft Thermal Knit:</b> Luxurious warmth without heaviness.</li>\n  <li><b>Drop-Shoulder Silhouette:</b> Flattering, relaxed drape for any body shape.</li>\n  <li><b>All-Match Versatility:</b> Pairs effortlessly with trousers, leggings, or skirts.</li>\n</ul>\n<p>Ships via tracked air mail (7–10 days). 30-day satisfaction guarantee.</p>`
   },
   {
-    id: 'sunnyeora-red-light-wand',
-    name: 'Sunnyeora LuminaGlow™ 7-in-1 Red Light Facial Therapy Wand',
-    shortName: 'LuminaGlow™ Red Light Wand',
-    category: 'Viral Skincare & Beauty',
-    categorySlug: 'beauty',
-    tag: 'VIRAL BEAUTY GLOW TREND',
-    retailPrice: 59.99,
-    compareAtPrice: 99.99,
-    cogsPrice: 13.50,
+    id: '9039031763141',
+    name: "Ruffled Solid Color Pleated Lapel Blazer Women's Casual Suit Jacket",
+    shortName: 'Ruffled Pleated Lapel Blazer',
+    category: 'Jackets & Outerwear',
+    categorySlug: 'jackets',
+    tag: 'ELEVATED LUXURY CHIC',
+    retailPrice: 64.99,
+    compareAtPrice: 119.99,
+    cogsPrice: 18.50,
     estCac: 18.00,
-    stripeFee: 2.10,
-    netProfit: 26.39,
-    netMargin: '44.0%',
-    cjUrl: 'https://www.cjdropshipping.com/list?search=red%20light%20wand',
-    rating: 4.8,
-    shopifyHtml: `<h2>The 5-Minute At-Home Skincare Secret for Luminous, Lifted Skin</h2>\n<p>Why pay $150+ per clinical facial session when you can achieve professional dermatological results from your bathroom vanity? The <b>Sunnyeora LuminaGlow™ 7-in-1 Red Light Therapy Wand</b> combines 4 clinically proven technologies into one handheld wand.</p>\n<h3>4 Clinical Technologies:</h3>\n<ul>\n  <li><b>660nm Red Light Phototherapy:</b> Stimulates collagen and diminishes fine lines.</li>\n  <li><b>Microcurrent Muscle Toning:</b> Sculpts cheekbones and tightens jawline.</li>\n  <li><b>104°F Warming Massage:</b> Opens pores and boosts serum absorption by 300%.</li>\n  <li><b>Sonic Vibration:</b> De-puffs and aids lymphatic drainage.</li>\n</ul>\n<h3>30-Day Glowing Skin Guarantee:</h3>\n<p>Experience visible skin radiance within 30 days or return for a 100% refund. Fast USPS shipping included.</p>`
+    stripeFee: 2.25,
+    netProfit: 26.24,
+    netMargin: '40.4%',
+    supplierUrl: 'https://sunnyeora.myshopify.com/products/ruffled-jacket-solid-color-pleated-lapel-blazer-womens-fashion-casual-printed-suit-jacket-office-wear-clothing',
+    rating: 4.9,
+    shopifyHtml: `<h2>Sophistication Meets Modern Office & Evening Wear</h2>\n<p>Make a bold, elegant statement with the <b>Sunnyeora Ruffled Pleated Lapel Blazer</b>. Featuring unique architectural ruffled lapel detailing and a tailored waistline that flatters effortlessly.</p>\n<h3>Features:</h3>\n<ul>\n  <li><b>Architectural Lapel Design:</b> Unique pleated pleats add couture flair.</li>\n  <li><b>Premium Structured Fabric:</b> Wrinkle-resistant with structured shoulders.</li>\n  <li><b>Day-to-Night Chic:</b> Elevates denim for brunch or trousers for formal meetings.</li>\n</ul>\n<p>Tracked worldwide delivery. Hassle-free exchanges.</p>`
   },
   {
-    id: 'sunnyeora-ultrasonic-cleaner',
-    name: 'Sunnyeora CrystalSonic™ Ultrasonic Multi-Purpose Cleaner',
-    shortName: 'CrystalSonic™ Cleaner',
-    category: 'Smart Home & Everyday Luxury',
-    categorySlug: 'home',
-    tag: 'ODDLY SATISFYING HIGH-CONVERSION',
-    retailPrice: 39.99,
-    compareAtPrice: 69.99,
-    cogsPrice: 8.90,
-    estCac: 12.00,
-    stripeFee: 1.40,
-    netProfit: 17.69,
-    netMargin: '44.2%',
-    cjUrl: 'https://www.cjdropshipping.com/list?search=ultrasonic%20cleaner',
+    id: '9039031075013',
+    name: "2pcs Long-Sleeved Suits Loose V-Neck Top & High Waist Wide Leg Pants",
+    shortName: '2pcs Wide Leg Suit Set',
+    category: 'Suits & Coordinates',
+    categorySlug: 'suits',
+    tag: 'VIRAL 2-PIECE SET',
+    retailPrice: 54.99,
+    compareAtPrice: 98.00,
+    cogsPrice: 15.80,
+    estCac: 15.00,
+    stripeFee: 1.89,
+    netProfit: 22.30,
+    netMargin: '40.6%',
+    supplierUrl: 'https://sunnyeora.myshopify.com/products/2pcs-long-sleeved-suits-loose-v-neck-long-top-and-high-waist-wide-leg-pants-with-pockets-womens-clothing',
     rating: 4.9,
-    shopifyHtml: `<h2>Restore Showroom Brilliance in 180 Seconds — Without Harsh Chemicals</h2>\n<p>The <b>Sunnyeora CrystalSonic™ Ultrasonic Cleaner</b> harnesses 45,000Hz acoustic sound waves to generate microscopic cavitation bubbles that dislodge trapped dirt, makeup, and oil without scratching delicate surfaces.</p>\n<h3>Perfect For:</h3>\n<ul>\n  <li><b>Jewelry:</b> Rings, necklaces, earrings (gold, silver, diamonds).</li>\n  <li><b>Eyewear:</b> Prescription glasses, sunglasses.</li>\n  <li><b>Dental:</b> Retainers, Invisalign aligners, nightguards.</li>\n  <li><b>Watches:</b> Waterproof straps and bands.</li>\n</ul>\n<h3>The Sunnyeora 30-Day Promise:</h3>\n<p>Showroom sparkle on your first 3-minute clean or 100% refund. USPS express air delivery included.</p>`
+    shopifyHtml: `<h2>Effortless Elegance in One Matching Set</h2>\n<p>Say goodbye to morning outfit stress. The <b>Sunnyeora 2-Piece Loose V-Neck Set</b> delivers effortless chic with high-waist pleated wide leg pants (with deep pockets!) and a flowing draped top.</p>\n<h3>Highlights:</h3>\n<ul>\n  <li><b>Functional Deep Pockets:</b> Securely holds smartphone and essentials.</li>\n  <li><b>High-Elastic Comfort Waist:</b> Sits comfortably without digging in.</li>\n  <li><b>Draped Breathable Fabric:</b> Liquid movement that elongates legs.</li>\n</ul>\n<p>Fast tracked air shipping included.</p>`
+  },
+  {
+    id: '9039031697605',
+    name: "Chic Split Knitted Dress With Buttons Design Winter V-Neck Fleece Maxi Dress",
+    shortName: 'Chic Split Knitted Maxi Dress',
+    category: 'Dresses & Gowns',
+    categorySlug: 'dresses',
+    tag: 'COZY WINTER GLAMOUR',
+    retailPrice: 69.99,
+    compareAtPrice: 129.99,
+    cogsPrice: 19.50,
+    estCac: 19.00,
+    stripeFee: 2.38,
+    netProfit: 29.11,
+    netMargin: '41.6%',
+    supplierUrl: 'https://sunnyeora.myshopify.com/products/chic-split-knitted-dress-with-buttons-design-winter-v-neck-fleece-maxi-dresses-evening-party-club-fashion-womens-clothing',
+    rating: 4.8,
+    shopifyHtml: `<h2>Warmth Meets Siren Silhouette</h2>\n<p>Turn heads without freezing. The <b>Sunnyeora Chic Split Knitted Dress</b> combines warm fleece lining with elegant button accents and a graceful leg split.</p>\n<p>Fast tracked shipping (7-10 days).</p>`
   }
 ];
 

@@ -1,0 +1,137 @@
+{
+  "_about": "Sunnyeora Custom Marketing & Sales agents. Configured for authentic Shopify store operations.",
+  "agents": [
+    {
+      "id": "mlead",
+      "department": "marketing",
+      "lead": true,
+      "name": "MARKETING LEAD",
+      "role": "Fashion Marketing Lead",
+      "does": "Drives top-of-funnel customer acquisition and multi-channel campaign strategy for Sunnyeora across Meta, Instagram, and TikTok.",
+      "tools": [
+        "meta",
+        "clarity",
+        "notion"
+      ],
+      "brief": "Plan and execute high-converting promotional campaigns for Sunnyeora's curated apparel collections (dresses, knitwear, 2-piece sets). Target ROAS >= 2.5x. Ground every creative angle in our real store catalog at sunnyeora.myshopify.com."
+    },
+    {
+      "id": "ada",
+      "department": "marketing",
+      "lead": false,
+      "name": "META ADS",
+      "role": "Meta & Instagram Ads Specialist",
+      "does": "Builds and monitors Advantage+ Shopping Campaigns (ASC) on Meta and Instagram Ads targeting US/UK/CA buyers.",
+      "tools": [
+        "meta",
+        "clarity"
+      ],
+      "brief": "Create compelling ad copy and targeting structures for Meta & IG. Focus on high-converting hooks: accessible luxury pricing, flattering silhouettes, and seasonal transitions. Monitor CPC and ROAS."
+    },
+    {
+      "id": "iggy",
+      "department": "marketing",
+      "lead": false,
+      "name": "INSTAGRAM ORGANIC",
+      "role": "Instagram & TikTok Content Creator",
+      "does": "Creates viral reel scripts, fashion lookbook carousels, and GRWM styling hooks for Sunnyeora's organic social channels.",
+      "tools": [
+        "canva",
+        "clarity"
+      ],
+      "brief": "Write aesthetic Instagram caption copy, carousel slide text, and viral Reel concepts highlighting Sunnyeora pieces. Every post links to /collections/all or the specific product handle."
+    },
+    {
+      "id": "vid",
+      "department": "marketing",
+      "lead": false,
+      "name": "VIDEO EDITOR",
+      "role": "Fashion Video Creative Specialist",
+      "does": "Storyboards and cuts viral short-form video ads and TikTok styling demonstrations for our best-selling collections.",
+      "tools": [
+        "hyperframes",
+        "canva"
+      ],
+      "brief": "Structure 15-30 second viral video ad storyboards: 3-second visual hook, product try-on/styling showcase, customer benefits, and clear CTA to shop at sunnyeora.com."
+    },
+    {
+      "id": "newt",
+      "department": "marketing",
+      "lead": false,
+      "name": "NEWSLETTER",
+      "role": "Email Marketing & Retention Specialist",
+      "does": "Writes weekly style drops, VIP launch announcements, and promotional campaign emails that convert subscribers into repeat buyers.",
+      "tools": [
+        "loops",
+        "beehiiv"
+      ],
+      "brief": "Draft engaging, clean lifestyle emails. Subject lines under 45 characters. Feature 3-4 hero pieces from sunnyeora.myshopify.com with direct shop buttons. Clear, elegant brand voice."
+    },
+    {
+      "id": "lexi",
+      "department": "sales",
+      "lead": true,
+      "name": "SALES LEAD",
+      "role": "E-commerce Sales & Conversion Lead",
+      "does": "Owns conversion rate optimization, checkout completion, average order value (AOV), and promotional partnership deals.",
+      "tools": [
+        "notion",
+        "gmail"
+      ],
+      "brief": "Drive store conversion and revenue per visitor. Coordinate abandoned cart recovery with Folo and creator partnership outreach with Piper and Prospector."
+    },
+    {
+      "id": "folo",
+      "department": "sales",
+      "lead": false,
+      "name": "FOLLOW UPS",
+      "role": "Abandoned Cart & Retention Agent",
+      "does": "Recovers stalled checkouts and abandoned shopping bags via high-converting email and SMS revival sequences.",
+      "tools": [
+        "gmail",
+        "imessage"
+      ],
+      "brief": "Craft automated abandoned bag recovery emails (1hr, 24hr, 48hr). Tone must be helpful and stylish, offering sizing help and progressive incentives (e.g. 10% off code SUNNY10)."
+    },
+    {
+      "id": "ilm",
+      "department": "sales",
+      "lead": false,
+      "name": "INBOUND LEADS MANAGER",
+      "role": "Customer Sizing & Style Consultant",
+      "does": "Answers customer questions about sizing, fabric care, shipping times, and styling pairings to convert browsers into buyers.",
+      "tools": [
+        "gmail",
+        "imessage",
+        "fullenrich"
+      ],
+      "brief": "Provide warm, fast, expert sizing advice and reassurance on delivery timeframes (7-10 business days via tracked air mail). Guide customers to complementary accessories and outfits."
+    },
+    {
+      "id": "pros",
+      "department": "sales",
+      "lead": false,
+      "name": "PROSPECTOR",
+      "role": "Influencer & Creator Scout",
+      "does": "Identifies micro-influencers and fashion creators on Instagram and TikTok for product gifting and affiliate partnerships.",
+      "tools": [
+        "apollo",
+        "gmail"
+      ],
+      "brief": "Find nano and micro creators (10k-80k followers) in US/UK/CA in the fashion, GRWM, and lifestyle niches who match Sunnyeora's chic aesthetic."
+    },
+    {
+      "id": "piper",
+      "department": "sales",
+      "lead": false,
+      "name": "PROPOSALS",
+      "role": "Creator Collaboration Pitch Agent",
+      "does": "Drafts personalized collaboration pitches, affiliate deals, and gifting invitations to fashion influencers.",
+      "tools": [
+        "notion",
+        "gmail"
+      ],
+      "brief": "Write short, personalized outreach DMs and emails to creators. Offer a free complimentary outfit from sunnyeora.myshopify.com plus 15% affiliate commission on tracked sales."
+    }
+  ]
+}
