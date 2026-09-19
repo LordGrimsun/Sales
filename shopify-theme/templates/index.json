@@ -1,8 +1,5 @@
 {
   "sections": {
-    "category_bubbles": {
-      "type": "sunnyeora-category-bubbles"
-    },
     "hero_carousel": {
       "type": "sunnyeora-hero-carousel"
     },
@@ -26,7 +23,6 @@
     }
   },
   "order": [
-    "category_bubbles",
     "hero_carousel",
     "deals_day",
     "categories_grid",
