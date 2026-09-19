@@ -859,7 +859,7 @@ export function initTasks(ctx) {
             <span class="tp-sc-val">USPS 7-10d</span>
           </div>
           <div class="tp-sc-item">
-            <span class="tp-sc-lbl">AVG MARGIN</span>
+            <span class="tp-sc-lbl">TARGET MARGIN</span>
             <span class="tp-sc-val">41.5% Net</span>
           </div>
           <div class="tp-sc-item">

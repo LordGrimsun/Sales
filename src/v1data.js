@@ -789,7 +789,7 @@ export const V1 = [
   chips:['What did you deliver?','Status of the mockup?','How busy are you?'] },
 
 ];
-export const STATS = { emailsSent:28, drafts:9, reports:14, projects:14, onTrack:14, chats:11, insMkt:3, insOps:5, cpa:41.0, spencer:14, arwin:31, jack:16, managers:5, autoOnb:17, billsPaid:14, recCarts:8, storeOrders:31 };
+export const STATS = { emailsSent:0, drafts:0, reports:0, projects:0, onTrack:0, chats:0, insMkt:0, insOps:0, cpa:0, spencer:0, arwin:0, jack:0, managers:0, autoOnb:0, billsPaid:0, recCarts:0, storeOrders:0 };
 export const FILE_GEN = {
   pros: ()=>({ icon:'⛏', name:'outbound-batch-'+clockStr().replace(':','')+'.csv', meta:'verified prospects · handed to the Sales Lead · click to view',
     content:`company,city,headcount,contact,title,mobile,icp_score\n${rnd(P.co)},${rnd(P.city)},${ri(8,60)},${person()},${rnd(['Head of Sales','Sales Manager','GM','Founder'])},verified ✓,${ri(70,94)}\n${rnd(P.co)},${rnd(P.city)},${ri(8,60)},${person()},${rnd(['Sales Manager','Director','Founder'])},verified ✓,${ri(70,94)}\n${rnd(P.co)},${rnd(P.city)},${ri(8,60)},${person()},${rnd(['GM','Head of Sales'])},verified ✓,${ri(70,94)}\n…${ri(24,38)} rows · dupes stripped · existing customers excluded` }),

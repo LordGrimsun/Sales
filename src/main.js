@@ -324,24 +324,24 @@ const kv = id => KPIS.find(k => k.id === id).val;
 let brainNotes = brain.state.notes;
 const BB_ROWS = profileRows() || {
   emails: [
-    ['INQUIRIES TRIAGED', () => STATS.emailsSent + ' emails'],
-    ['RESPONSE SPEED', () => '< 15 mins']],
+    ['INQUIRIES TRIAGED', () => STATS.emailsSent > 0 ? STATS.emailsSent + ' emails' : '0 (Standing By)'],
+    ['CUSTOMER CARE', () => 'Gmail Pod Ready']],
   delivery: [
     ['SUPPLIER LOGISTICS', () => 'CJ Dropshipping'],
-    ['US TRANSIT TIME', () => 'USPS 7–10d']],
+    ['ORDERS IN TRANSIT', () => STATS.reports > 0 ? STATS.reports + ' in transit' : '0 Orders']],
   sales: [
     ['LIVE STORE CATALOG', () => '31 Live SKUs'],
-    ['AVG NET MARGIN', () => '41.5% Net'],
-    ['ABANDONED RECOVERY', () => (STATS.recCarts || 8) + ' orders']],
+    ['STORE ORDERS', () => STATS.storeOrders > 0 ? STATS.storeOrders + ' orders' : '0 Orders'],
+    ['ABANDONED RECOVERY', () => STATS.recCarts > 0 ? STATS.recCarts + ' recovered' : '0 Carts']],
   marketing: [
-    ['CAMPAIGN CHANNELS', () => 'Meta & TikTok'],
-    ['TARGET ROAS', () => '2.8x Target']],
+    ['CAMPAIGN CHANNELS', () => 'Meta & TikTok Ready'],
+    ['AD SPEND TODAY', () => '$0.00 (No Ads Live)']],
   ops: [
     ['ORDER SYNC SLA', () => '24h Auto-Sync'],
     ['BUYER POLICY', () => '14-Day Return']],
   fin: [
-    ['PAYOUT ROUTE', () => 'Stripe USD ➔ INR'],
-    ['UNIT MARGIN', () => '41.5% Profit']],
+    ['PAYOUT CHANNEL', () => 'Stripe USD ➔ INR'],
+    ['TOTAL REVENUE', () => '$0.00 USD']],
   brain: [
     ['STORE BRIEFS', () => brainNotes.toLocaleString('en-NZ') + ' Notes']],
 };
@@ -1048,21 +1048,8 @@ function fireAgentEvent(seedTs) {
     }
     if (chatHist[r.a.id]) chatPush(r.a.id, { who: 'work', i: ev.i, text });
     if (ev.kpi) { const k = KPIS.find(x => x.id === ev.kpi.id); if (k) k.val += ev.kpi.n; }
-    const d = r.a.dept, roll = Math.random();
-    profileTickKpi(d, roll); // INDUSTRY PROFILE: the pod's first number ticks up
-    if (d === 'emails') { if (roll < 0.45) STATS.emailsSent++; else if (roll < 0.7) STATS.drafts++; }
-    else if (d === 'delivery' && roll < 0.2) STATS.reports++;
-    else if (d === 'sales') {
-      if (roll < 0.4) STATS[rnd(['spencer', 'arwin', 'jack'])]++;
-      else if (roll < 0.5) STATS.autoOnb++;
-      else if (roll < 0.56) STATS.managers++;
-    }
-    else if (d === 'marketing') {
-      if (roll < 0.18) STATS.insMkt++;
-      else if (roll < 0.5) STATS.cpa = Math.max(25, STATS.cpa + (Math.random() - 0.55) * 1.2);
-    }
-    else if (d === 'ops' && roll < 0.22) STATS.insOps++;
-    else if (d === 'fin' && roll < 0.3) STATS.billsPaid++;
+    const d = r.a.dept;
+    // Ambient ticks do not increment fake orders or revenue
     if (ev.brain || Math.random() < 0.12) { brainNotes++; brain.read(r.a.id); } // the Brain shows the read
     updateBillboards();
     if (modalOpen === r.a.id && modalTab === 'activity') renderActivity(r.a.id);
