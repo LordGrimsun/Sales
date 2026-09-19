@@ -1,41 +1,38 @@
 {
   "sections": {
-    "sunnyeora_marquee": {
-      "type": "sunnyeora-marquee",
-      "settings": {}
+    "category_bubbles": {
+      "type": "sunnyeora-category-bubbles"
     },
-    "sunnyeora_bubbles": {
-      "type": "sunnyeora-category-bubbles",
-      "settings": {}
+    "hero_carousel": {
+      "type": "sunnyeora-hero-carousel"
     },
-    "sunnyeora_hero": {
-      "type": "sunnyeora-hero",
-      "settings": {}
+    "deals_day": {
+      "type": "sunnyeora-deals-day"
     },
-    "sunnyeora_flash": {
-      "type": "sunnyeora-flash-deals",
-      "settings": {}
+    "categories_grid": {
+      "type": "sunnyeora-categories-grid"
     },
-    "sunnyeora_grid": {
-      "type": "sunnyeora-grid-catalog",
-      "settings": {}
+    "grid_catalog": {
+      "type": "sunnyeora-grid-catalog"
     },
-    "sunnyeora_comparison": {
-      "type": "sunnyeora-comparison",
-      "settings": {}
+    "comparison": {
+      "type": "sunnyeora-comparison"
     },
-    "sunnyeora_ugc": {
-      "type": "sunnyeora-ugc",
-      "settings": {}
+    "ugc": {
+      "type": "sunnyeora-ugc"
+    },
+    "marquee": {
+      "type": "sunnyeora-marquee"
     }
   },
   "order": [
-    "sunnyeora_marquee",
-    "sunnyeora_bubbles",
-    "sunnyeora_hero",
-    "sunnyeora_flash",
-    "sunnyeora_grid",
-    "sunnyeora_comparison",
-    "sunnyeora_ugc"
+    "category_bubbles",
+    "hero_carousel",
+    "deals_day",
+    "categories_grid",
+    "grid_catalog",
+    "comparison",
+    "ugc",
+    "marquee"
   ]
 }
