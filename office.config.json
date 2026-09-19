@@ -1,5 +1,6 @@
 {
   "name": "Sunnyeora",
+  "store": "sunnyeora.myshopify.com",
   "brain": "./brain",
   "port": 4520,
   "model": "sonnet",

@@ -111,6 +111,7 @@ export default async function handler(req, res) {
         providerConfigured: pInfo.isConfigured,
         composioConfigured: hasComposio,
         shopifyConfigured: hasShopify,
+        shopifyStore: process.env.SHOPIFY_STORE_URL || process.env.SHOPIFY_SHOP_DOMAIN || baseCfg.store || 'sunnyeora.myshopify.com',
         model: baseCfg.model || 'sonnet',
         modelName: modelName(baseCfg.model || 'sonnet'),
         models: MODEL_KEYS,
