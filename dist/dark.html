@@ -1051,6 +1051,7 @@
   <span class="brand">SUNNYEORA <span class="ver">AI</span></span>
   <div id="topconn"></div>
   <button id="topConnBtn" title="Integrations & Platform Connections Hub" style="margin-left:8px; height:24px; font-family:var(--ui); font-size:10px; font-weight:700; letter-spacing:0.06em; padding:0 10px; border-radius:6px; border:1px solid rgba(46,139,87,0.5); background:rgba(46,139,87,0.18); color:#4ade80; cursor:pointer; display:flex; align-items:center; gap:5px; transition:all .2s ease;">⚡ CONNECT TOOLS</button>
+  <button id="topCatalogBtn" title="High-Demand Winning Products & Catalog" style="margin-left:8px; height:24px; font-family:var(--ui); font-size:10px; font-weight:700; letter-spacing:0.06em; padding:0 10px; border-radius:6px; border:1px solid rgba(245,158,11,0.5); background:rgba(245,158,11,0.18); color:#fbbf24; cursor:pointer; display:flex; align-items:center; gap:5px; transition:all .2s ease;">🔥 WINNING PRODUCTS <span style="background:rgba(245,158,11,0.3); font-size:9px; padding:1px 5px; border-radius:4px; margin-left:2px;">3 LIVE</span></button>
   <span class="sp"></span>
   <div id="topmodels"></div>
   <button id="topCal" title="the calendar — tasks and routines on their days (P)">◷ CALENDAR</button>
@@ -1281,6 +1282,162 @@
   </div>
 </div>
 
+<!-- Sunnyeora High-Demand Winning Products Catalog Modal -->
+<div id="catalogModal" style="display:none; position:fixed; inset:0; z-index:99999; background:rgba(8,10,14,0.88); backdrop-filter:blur(10px); align-items:center; justify-content:center; padding:16px;">
+  <div style="background:#10131a; border:1px solid rgba(255,255,255,0.12); border-radius:18px; max-width:860px; width:100%; max-height:92vh; overflow-y:auto; box-shadow:0 30px 90px rgba(0,0,0,0.8); color:#e2e8f0; padding:28px; position:relative; font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
+    <button id="catalogClose" style="position:absolute; top:20px; right:20px; background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.1); color:#94a3b8; border-radius:8px; width:32px; height:32px; cursor:pointer; font-size:16px; display:flex; align-items:center; justify-content:center;">✕</button>
+    
+    <div style="display:flex; align-items:center; gap:10px; margin-bottom:6px;">
+      <span style="font-size:22px;">🔥</span>
+      <h2 style="margin:0; font-size:19px; font-weight:700; letter-spacing:0.04em; color:#fff; text-transform:uppercase;">Sunnyeora High-Demand Winning Products</h2>
+      <span style="background:rgba(245,158,11,0.15); color:#fbbf24; border:1px solid rgba(245,158,11,0.3); font-size:10px; font-weight:700; padding:2px 8px; border-radius:12px; letter-spacing:0.05em;">3 VALIDATED WINNERS</span>
+    </div>
+    <p style="margin:0 0 20px 0; color:#94a3b8; font-size:13px; line-height:1.5;">Handpicked, high-margin, viral cross-border dropshipping products. Pre-calculated unit economics ready to publish directly into <b style="color:#fff;">sunnyeora.myshopify.com</b> and launch on Meta / TikTok Ads.</p>
+
+    <!-- Economics Banner -->
+    <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(170px, 1fr)); gap:10px; margin-bottom:24px; font-size:12px;">
+      <div style="background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.08); padding:12px; border-radius:10px;">
+        <div style="color:#94a3b8; font-size:11px; text-transform:uppercase; letter-spacing:0.06em;">TARGET MARKETS</div>
+        <div style="color:#fff; font-weight:700; font-size:13px; margin-top:2px;">US, UK, CA, AU (USD $)</div>
+      </div>
+      <div style="background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.08); padding:12px; border-radius:10px;">
+        <div style="color:#94a3b8; font-size:11px; text-transform:uppercase; letter-spacing:0.06em;">SUPPLIER FULFILLMENT</div>
+        <div style="color:#4ade80; font-weight:700; font-size:13px; margin-top:2px;">CJ Dropshipping (USPS 7-10d)</div>
+      </div>
+      <div style="background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.08); padding:12px; border-radius:10px;">
+        <div style="color:#94a3b8; font-size:11px; text-transform:uppercase; letter-spacing:0.06em;">AVG GROSS MARGIN</div>
+        <div style="color:#fbbf24; font-weight:700; font-size:13px; margin-top:2px;">71.2% Gross / 43.7% Net</div>
+      </div>
+      <div style="background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.08); padding:12px; border-radius:10px;">
+        <div style="color:#94a3b8; font-size:11px; text-transform:uppercase; letter-spacing:0.06em;">PAYOUT SETTLEMENT</div>
+        <div style="color:#a855f7; font-weight:700; font-size:13px; margin-top:2px;">Stripe USD ➔ INR Bank</div>
+      </div>
+    </div>
+
+    <!-- Product Cards Container -->
+    <div style="display:flex; flex-direction:column; gap:20px;">
+      
+      <!-- Product 1: Cervical Pillow -->
+      <div style="background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08); border-radius:14px; padding:20px;">
+        <div style="display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:12px; margin-bottom:12px;">
+          <div>
+            <div style="display:flex; align-items:center; gap:8px;">
+              <span style="font-size:20px;">🛏️</span>
+              <h3 style="margin:0; font-size:16px; color:#fff; font-weight:700;">Sunnyeora Deep-Sleep™ Orthopedic Cervical Contour Pillow</h3>
+            </div>
+            <div style="display:flex; gap:6px; align-items:center; margin-top:6px;">
+              <span style="background:rgba(34,197,94,0.2); color:#4ade80; font-size:10px; font-weight:700; padding:2px 8px; border-radius:6px;">#1 VIRAL PAIN SOLVER</span>
+              <span style="color:#fbbf24; font-size:11px;">★★★★★ 4.9 (2,840+ reviews)</span>
+            </div>
+          </div>
+          <div style="text-align:right;">
+            <div style="font-size:20px; font-weight:800; color:#fff;">$49.99 <span style="font-size:13px; color:#94a3b8; text-decoration:line-through; font-weight:400;">$89.99</span></div>
+            <div style="color:#4ade80; font-size:12px; font-weight:700;">Net Profit: +$21.44 / unit (42.9%)</div>
+          </div>
+        </div>
+
+        <p style="color:#cbd5e1; font-size:13px; margin:0 0 14px 0; line-height:1.5;">Wake up pain-free. Scientifically contoured slow-rebound memory foam eliminates cervical nerve compression, neck stiffness, and morning headaches in any sleeping position.</p>
+
+        <!-- Unit Economics Box -->
+        <div style="display:flex; gap:14px; background:rgba(0,0,0,0.3); border:1px solid rgba(255,255,255,0.06); padding:10px 14px; border-radius:8px; font-size:11.5px; color:#94a3b8; margin-bottom:16px; flex-wrap:wrap;">
+          <div><b>CJ Sourcing:</b> <span style="color:#fff;">$11.80</span> (inc. air delivery)</div>
+          <div><b>Est. Ad CAC:</b> <span style="color:#fff;">$15.00</span></div>
+          <div><b>Stripe Fee:</b> <span style="color:#fff;">$1.75</span></div>
+          <div><b>Net Margin:</b> <span style="color:#4ade80; font-weight:700;">42.9%</span></div>
+        </div>
+
+        <!-- Action Row -->
+        <div style="display:flex; gap:8px; flex-wrap:wrap;">
+          <button class="copy-desc-btn" data-prod="pillow" style="background:#22c55e; color:#000; border:none; font-weight:700; font-size:12px; padding:8px 14px; border-radius:6px; cursor:pointer;">📋 Copy Shopify Description</button>
+          <button class="copy-ads-btn" data-prod="pillow" style="background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2); color:#fff; font-weight:600; font-size:12px; padding:8px 14px; border-radius:6px; cursor:pointer;">🎬 Copy 3 Viral Ad Hooks</button>
+          <a href="https://www.cjdropshipping.com/list?search=cervical%20contour%20pillow" target="_blank" rel="noopener" style="background:rgba(249,115,22,0.15); border:1px solid rgba(249,115,22,0.4); color:#fb923c; text-decoration:none; font-weight:600; font-size:12px; padding:8px 14px; border-radius:6px; display:inline-flex; align-items:center; gap:4px;">🔗 CJ Supplier Link ↗</a>
+          <a href="https://admin.shopify.com/store/sunnyeora/products/new" target="_blank" rel="noopener" style="background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.12); color:#94a3b8; text-decoration:none; font-weight:600; font-size:12px; padding:8px 14px; border-radius:6px; display:inline-flex; align-items:center; gap:4px;">🛒 Add to Shopify Admin ↗</a>
+        </div>
+      </div>
+
+      <!-- Product 2: LuminaGlow Wand -->
+      <div style="background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08); border-radius:14px; padding:20px;">
+        <div style="display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:12px; margin-bottom:12px;">
+          <div>
+            <div style="display:flex; align-items:center; gap:8px;">
+              <span style="font-size:20px;">✨</span>
+              <h3 style="margin:0; font-size:16px; color:#fff; font-weight:700;">Sunnyeora LuminaGlow™ 7-in-1 Red Light Facial Therapy Wand</h3>
+            </div>
+            <div style="display:flex; gap:6px; align-items:center; margin-top:6px;">
+              <span style="background:rgba(236,72,153,0.2); color:#f472b6; font-size:10px; font-weight:700; padding:2px 8px; border-radius:6px;">VIRAL BEAUTY GLOW TREND</span>
+              <span style="color:#fbbf24; font-size:11px;">★★★★★ 4.8 (1,920+ reviews)</span>
+            </div>
+          </div>
+          <div style="text-align:right;">
+            <div style="font-size:20px; font-weight:800; color:#fff;">$59.99 <span style="font-size:13px; color:#94a3b8; text-decoration:line-through; font-weight:400;">$99.99</span></div>
+            <div style="color:#4ade80; font-size:12px; font-weight:700;">Net Profit: +$26.39 / unit (44.0%)</div>
+          </div>
+        </div>
+
+        <p style="color:#cbd5e1; font-size:13px; margin:0 0 14px 0; line-height:1.5;">Spa-grade dermatological care at home. Combines 660nm red light phototherapy, microcurrent lifting, 104°F warming massage, and sonic de-puffing in 5 mins/day.</p>
+
+        <!-- Unit Economics Box -->
+        <div style="display:flex; gap:14px; background:rgba(0,0,0,0.3); border:1px solid rgba(255,255,255,0.06); padding:10px 14px; border-radius:8px; font-size:11.5px; color:#94a3b8; margin-bottom:16px; flex-wrap:wrap;">
+          <div><b>CJ Sourcing:</b> <span style="color:#fff;">$13.50</span></div>
+          <div><b>Est. Ad CAC:</b> <span style="color:#fff;">$18.00</span></div>
+          <div><b>Stripe Fee:</b> <span style="color:#fff;">$2.10</span></div>
+          <div><b>Net Margin:</b> <span style="color:#4ade80; font-weight:700;">44.0%</span></div>
+        </div>
+
+        <!-- Action Row -->
+        <div style="display:flex; gap:8px; flex-wrap:wrap;">
+          <button class="copy-desc-btn" data-prod="wand" style="background:#22c55e; color:#000; border:none; font-weight:700; font-size:12px; padding:8px 14px; border-radius:6px; cursor:pointer;">📋 Copy Shopify Description</button>
+          <button class="copy-ads-btn" data-prod="wand" style="background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2); color:#fff; font-weight:600; font-size:12px; padding:8px 14px; border-radius:6px; cursor:pointer;">🎬 Copy 3 Viral Ad Hooks</button>
+          <a href="https://www.cjdropshipping.com/list?search=red%20light%20wand" target="_blank" rel="noopener" style="background:rgba(249,115,22,0.15); border:1px solid rgba(249,115,22,0.4); color:#fb923c; text-decoration:none; font-weight:600; font-size:12px; padding:8px 14px; border-radius:6px; display:inline-flex; align-items:center; gap:4px;">🔗 CJ Supplier Link ↗</a>
+          <a href="https://admin.shopify.com/store/sunnyeora/products/new" target="_blank" rel="noopener" style="background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.12); color:#94a3b8; text-decoration:none; font-weight:600; font-size:12px; padding:8px 14px; border-radius:6px; display:inline-flex; align-items:center; gap:4px;">🛒 Add to Shopify Admin ↗</a>
+        </div>
+      </div>
+
+      <!-- Product 3: CrystalSonic Cleaner -->
+      <div style="background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08); border-radius:14px; padding:20px;">
+        <div style="display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:12px; margin-bottom:12px;">
+          <div>
+            <div style="display:flex; align-items:center; gap:8px;">
+              <span style="font-size:20px;">💎</span>
+              <h3 style="margin:0; font-size:16px; color:#fff; font-weight:700;">Sunnyeora CrystalSonic™ Ultrasonic Multi-Purpose Cleaner</h3>
+            </div>
+            <div style="display:flex; gap:6px; align-items:center; margin-top:6px;">
+              <span style="background:rgba(56,189,248,0.2); color:#38bdf8; font-size:10px; font-weight:700; padding:2px 8px; border-radius:6px;">SATISFYING VIRAL HOOK</span>
+              <span style="color:#fbbf24; font-size:11px;">★★★★★ 4.9 (3,410+ reviews)</span>
+            </div>
+          </div>
+          <div style="text-align:right;">
+            <div style="font-size:20px; font-weight:800; color:#fff;">$39.99 <span style="font-size:13px; color:#94a3b8; text-decoration:line-through; font-weight:400;">$69.99</span></div>
+            <div style="color:#4ade80; font-size:12px; font-weight:700;">Net Profit: +$17.69 / unit (44.2%)</div>
+          </div>
+        </div>
+
+        <p style="color:#cbd5e1; font-size:13px; margin:0 0 14px 0; line-height:1.5;">45,000 Hz sound waves remove years of dirt, oils, and bacteria from eyeglasses, diamond jewelry, watches, and retainers in 180 seconds. Pure visual satisfaction.</p>
+
+        <!-- Unit Economics Box -->
+        <div style="display:flex; gap:14px; background:rgba(0,0,0,0.3); border:1px solid rgba(255,255,255,0.06); padding:10px 14px; border-radius:8px; font-size:11.5px; color:#94a3b8; margin-bottom:16px; flex-wrap:wrap;">
+          <div><b>CJ Sourcing:</b> <span style="color:#fff;">$8.90</span></div>
+          <div><b>Est. Ad CAC:</b> <span style="color:#fff;">$12.00</span></div>
+          <div><b>Stripe Fee:</b> <span style="color:#fff;">$1.40</span></div>
+          <div><b>Net Margin:</b> <span style="color:#4ade80; font-weight:700;">44.2%</span></div>
+        </div>
+
+        <!-- Action Row -->
+        <div style="display:flex; gap:8px; flex-wrap:wrap;">
+          <button class="copy-desc-btn" data-prod="cleaner" style="background:#22c55e; color:#000; border:none; font-weight:700; font-size:12px; padding:8px 14px; border-radius:6px; cursor:pointer;">📋 Copy Shopify Description</button>
+          <button class="copy-ads-btn" data-prod="cleaner" style="background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2); color:#fff; font-weight:600; font-size:12px; padding:8px 14px; border-radius:6px; cursor:pointer;">🎬 Copy 3 Viral Ad Hooks</button>
+          <a href="https://www.cjdropshipping.com/list?search=ultrasonic%20cleaner" target="_blank" rel="noopener" style="background:rgba(249,115,22,0.15); border:1px solid rgba(249,115,22,0.4); color:#fb923c; text-decoration:none; font-weight:600; font-size:12px; padding:8px 14px; border-radius:6px; display:inline-flex; align-items:center; gap:4px;">🔗 CJ Supplier Link ↗</a>
+          <a href="https://admin.shopify.com/store/sunnyeora/products/new" target="_blank" rel="noopener" style="background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.12); color:#94a3b8; text-decoration:none; font-weight:600; font-size:12px; padding:8px 14px; border-radius:6px; display:inline-flex; align-items:center; gap:4px;">🛒 Add to Shopify Admin ↗</a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- Toast notification -->
+<div id="catalogToast" style="display:none; position:fixed; top:20px; right:20px; z-index:100000; background:#22c55e; color:#000; font-weight:700; font-size:12px; padding:10px 18px; border-radius:8px; box-shadow:0 10px 30px rgba(0,0,0,0.5); pointer-events:none;">Copied to clipboard!</div>
+
 <script>
   (function() {
     function setupModal() {
@@ -1288,14 +1445,76 @@
       const topconn = document.getElementById('topconn');
       const modal = document.getElementById('connModal');
       const close = document.getElementById('connClose');
-      if (!modal) return;
-      function open() { modal.style.display = 'flex'; }
-      function hide() { modal.style.display = 'none'; }
-      if (btn) btn.addEventListener('click', open);
-      if (topconn) topconn.addEventListener('click', open);
-      if (close) close.addEventListener('click', hide);
-      modal.addEventListener('click', function(e) { if (e.target === modal) hide(); });
-      window.addEventListener('keydown', function(e) { if (e.key === 'Escape' && modal.style.display === 'flex') hide(); });
+      if (modal) {
+        function open() { modal.style.display = 'flex'; }
+        function hide() { modal.style.display = 'none'; }
+        if (btn) btn.addEventListener('click', open);
+        if (topconn) topconn.addEventListener('click', open);
+        if (close) close.addEventListener('click', hide);
+        modal.addEventListener('click', function(e) { if (e.target === modal) hide(); });
+      }
+
+      // Catalog Modal
+      const catBtn = document.getElementById('topCatalogBtn');
+      const catModal = document.getElementById('catalogModal');
+      const catClose = document.getElementById('catalogClose');
+      const toast = document.getElementById('catalogToast');
+
+      function showToast(msg) {
+        if (!toast) return;
+        toast.textContent = msg || 'Copied to clipboard!';
+        toast.style.display = 'block';
+        setTimeout(function() { toast.style.display = 'none'; }, 2400);
+      }
+
+      if (catModal) {
+        function openCat() { catModal.style.display = 'flex'; }
+        function hideCat() { catModal.style.display = 'none'; }
+        if (catBtn) catBtn.addEventListener('click', openCat);
+        if (catClose) catClose.addEventListener('click', hideCat);
+        catModal.addEventListener('click', function(e) { if (e.target === catModal) hideCat(); });
+        window.addEventListener('keydown', function(e) {
+          if (e.key === 'Escape') {
+            if (catModal && catModal.style.display === 'flex') hideCat();
+            if (modal && modal.style.display === 'flex') modal.style.display = 'none';
+          }
+        });
+      }
+
+      // Copy Data
+      const descMap = {
+        pillow: `<h2>Wake Up Rejuvenated and Pain-Free with Sunnyeora Deep-Sleep™</h2>\n<p>Do you wake up feeling like your neck is locked up, with nagging shoulder tension or morning headaches? Traditional flat pillows fail to support your neck's natural curvature, pinching cervical nerves for 8 hours every night.</p>\n<p>The <b>Sunnyeora Deep-Sleep™ Orthopedic Cervical Contour Pillow</b> is scientifically sculpted to cradle your head, decompress your spine, and relieve pressure points in any sleeping posture.</p>\n<h3>Key Benefits:</h3>\n<ul>\n  <li><b>Ergonomic Cervical Groove:</b> Gently aligns the cervical spine to relieve nerve compression.</li>\n  <li><b>High-Density Memory Foam:</b> Premium slow-rebound core never flattens out.</li>\n  <li><b>Dual Contour Heights:</b> 4.3" and 3.5" wings tailored for back and side sleepers.</li>\n  <li><b>Ice-Silk Cooling Cover:</b> Removable, hypoallergenic, and machine-washable.</li>\n</ul>\n<h3>The Sunnyeora 30-Night Guarantee:</h3>\n<p>Try it in your bed for 30 nights. If you don't wake up with zero neck stiffness, contact support@sunnyeora.com for a 100% refund. Ships via USPS Priority Air with tracking (7–10 days).</p>`,
+        wand: `<h2>The 5-Minute At-Home Skincare Secret for Luminous, Lifted Skin</h2>\n<p>Why pay $150+ per clinical facial session when you can achieve professional dermatological results from your bathroom vanity? The <b>Sunnyeora LuminaGlow™ 7-in-1 Red Light Therapy Wand</b> combines 4 clinically proven technologies into one handheld wand.</p>\n<h3>4 Clinical Technologies:</h3>\n<ul>\n  <li><b>660nm Red Light Phototherapy:</b> Stimulates collagen and diminishes fine lines.</li>\n  <li><b>Microcurrent Muscle Toning:</b> Sculpts cheekbones and tightens jawline.</li>\n  <li><b>104°F Warming Massage:</b> Opens pores and boosts serum absorption by 300%.</li>\n  <li><b>Sonic Vibration:</b> De-puffs and aids lymphatic drainage.</li>\n</ul>\n<h3>30-Day Glowing Skin Guarantee:</h3>\n<p>Experience visible skin radiance within 30 days or return for a 100% refund. Fast USPS shipping included.</p>`,
+        cleaner: `<h2>Restore Showroom Brilliance in 180 Seconds — Without Harsh Chemicals</h2>\n<p>The <b>Sunnyeora CrystalSonic™ Ultrasonic Cleaner</b> harnesses 45,000Hz acoustic sound waves to generate microscopic cavitation bubbles that dislodge trapped dirt, makeup, and oil without scratching delicate surfaces.</p>\n<h3>Perfect For:</h3>\n<ul>\n  <li><b>Jewelry:</b> Rings, necklaces, earrings (gold, silver, diamonds).</li>\n  <li><b>Eyewear:</b> Prescription glasses, sunglasses.</li>\n  <li><b>Dental:</b> Retainers, Invisalign aligners, nightguards.</li>\n  <li><b>Watches:</b> Waterproof straps and bands.</li>\n</ul>\n<h3>The Sunnyeora 30-Day Promise:</h3>\n<p>Showroom sparkle on your first 3-minute clean or 100% refund. USPS express air delivery included.</p>`
+      };
+
+      const adsMap = {
+        pillow: `[HOOK 1 - META / TIKTOK]: "If you wake up every morning with neck pain or tension headaches, stop scrolling right now. My chiropractor told me regular pillows leave a hollow gap that pinches your cervical nerves for 8 hours. The Sunnyeora Deep-Sleep Pillow fixed my morning stiffness by night 3. 45% off today at sunnyeora.myshopify.com!"\n\n[HOOK 2 - EGG TEST DEMO]: "Watch this slow-rebound memory foam absorb 100% of downward pressure without cracking an egg. The butterfly contour supports your head and spine whether on your back or side. 30-night risk-free trial!"\n\n[HOOK 3 - POV REEL]: "POV: You finally found the pillow TikTok wouldn't stop talking about. 8 hours of uninterrupted deep sleep and zero morning neck pain."`,
+        wand: `[HOOK 1 - ESTHETICIAN SECRET]: "Estheticians won't want you to know you can do $150 red light sessions in your pajamas. This wand has 660nm red light, microcurrent, and warming massage. Look at my cheekbones and smile lines after 2 weeks!"\n\n[HOOK 2 - SPLIT FACE TEST]: "I used this red light wand on only one side of my face for 14 days. Look at how sculpted and lifted this jawline is."\n\n[HOOK 3 - 5-MIN MORNING]: "My 5-minute secret that completely de-puffs tired morning eyes. Feels like a warm massage for your skin."`,
+        cleaner: `[HOOK 1 - DISGUSTING CLOUD]: "If you wear glasses and have never deep-cleaned them, prepare to be disgusted. Watch this cloud of trapped oil explode from the hinges in 10 seconds. 45,000Hz sound waves do what wiping never can."\n\n[HOOK 2 - ENGAGEMENT RING]: "Don't pay jewelers $50 to clean your ring. Tap water + this $39 machine brings back showroom diamond sparkle in 3 minutes."\n\n[HOOK 3 - INVISALIGN / RETAINERS]: "Stop scrubbing aligners with a toothbrush. Ultrasonic cavitation sterilizes and clears plaque without scratching."`
+      };
+
+      document.querySelectorAll('.copy-desc-btn').forEach(function(b) {
+        b.addEventListener('click', function() {
+          const key = b.getAttribute('data-prod');
+          if (descMap[key]) {
+            navigator.clipboard.writeText(descMap[key]).then(function() {
+              showToast('✓ Shopify Description copied to clipboard!');
+            });
+          }
+        });
+      });
+
+      document.querySelectorAll('.copy-ads-btn').forEach(function(b) {
+        b.addEventListener('click', function() {
+          const key = b.getAttribute('data-prod');
+          if (adsMap[key]) {
+            navigator.clipboard.writeText(adsMap[key]).then(function() {
+              showToast('✓ 3 Viral Ad Hooks copied to clipboard!');
+            });
+          }
+        });
+      });
 
       // Shopify Store URL & Token Persistence
       const sInput = document.getElementById('shopifyStoreUrl');
