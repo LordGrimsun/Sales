@@ -1,109 +1,344 @@
 
-<div id="syCartOverlay"></div>
+<style>
+  #syCartOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.55);
+    backdrop-filter: blur(4px);
+    z-index: 999998;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+  }
+  #syCartOverlay.open {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  #syCartDrawer {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 100%;
+    max-width: 420px;
+    height: 100vh;
+    background: #ffffff;
+    box-shadow: -5px 0 30px rgba(0, 0, 0, 0.18);
+    z-index: 999999;
+    transform: translateX(100%);
+    transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    display: flex;
+    flex-direction: column;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  }
+  #syCartDrawer.open {
+    transform: translateX(0);
+  }
+
+  .sy-drawer-header {
+    padding: 20px 24px;
+    border-bottom: 1px solid #eaeaec;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #ffffff;
+  }
+  .sy-drawer-title-box {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .sy-drawer-title {
+    margin: 0;
+    font-size: 1.1rem;
+    font-weight: 800;
+    color: #282c3f;
+  }
+  .sy-drawer-badge {
+    background: #0D5C3A;
+    color: #ffffff;
+    font-size: 0.7rem;
+    font-weight: 800;
+    padding: 3px 8px;
+    border-radius: 12px;
+  }
+  .sy-drawer-close-btn {
+    background: none;
+    border: none;
+    font-size: 1.3rem;
+    cursor: pointer;
+    color: #696e79;
+    line-height: 1;
+    padding: 4px;
+    transition: color 0.2s;
+  }
+  .sy-drawer-close-btn:hover {
+    color: #ff3f6c;
+  }
+
+  .sy-progress-strip {
+    padding: 12px 24px;
+    background: #E8F3EE;
+    border-bottom: 1px solid #D1E7DD;
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: #0D5C3A;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .sy-items-container {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .sy-item-card {
+    display: flex;
+    gap: 14px;
+    padding: 14px;
+    background: #FAF9F5;
+    border: 1px solid #E2E8F0;
+    border-radius: 14px;
+  }
+  .sy-item-icon {
+    font-size: 2rem;
+    background: #ffffff;
+    border-radius: 10px;
+    width: 56px;
+    height: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #E2E8F0;
+    flex-shrink: 0;
+  }
+  .sy-item-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  .sy-item-name {
+    font-weight: 800;
+    font-size: 0.9rem;
+    color: #1E293B;
+    line-height: 1.3;
+  }
+  .sy-item-meta {
+    font-size: 0.78rem;
+    color: #64748B;
+    margin-top: 2px;
+  }
+  .sy-qty-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 10px;
+  }
+  .sy-qty-ctrl {
+    display: flex;
+    align-items: center;
+    border: 1px solid #CBD5E1;
+    background: #ffffff;
+    border-radius: 6px;
+    overflow: hidden;
+  }
+  .sy-qty-btn {
+    border: none;
+    background: none;
+    font-size: 0.9rem;
+    cursor: pointer;
+    font-weight: 700;
+    padding: 3px 10px;
+    color: #1E293B;
+  }
+  .sy-qty-val {
+    font-size: 0.82rem;
+    font-weight: 800;
+    padding: 0 6px;
+    color: #1E293B;
+  }
+  .sy-item-price {
+    font-weight: 900;
+    font-size: 1rem;
+    color: #0D5C3A;
+  }
+
+  .sy-drawer-footer {
+    padding: 20px 24px;
+    border-top: 1px solid #eaeaec;
+    background: #ffffff;
+  }
+  .sy-cost-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+    font-size: 0.88rem;
+    color: #64748B;
+  }
+  .sy-checkout-btn {
+    display: block;
+    width: 100%;
+    border-radius: 30px;
+    padding: 16px;
+    font-size: 0.95rem;
+    font-weight: 900;
+    text-align: center;
+    color: #ffffff;
+    text-decoration: none;
+    background: #0D5C3A;
+    box-shadow: 0 4px 15px rgba(13, 92, 58, 0.25);
+    cursor: pointer;
+    transition: background 0.2s, transform 0.15s;
+    margin-top: 14px;
+  }
+  .sy-checkout-btn:hover {
+    background: #092B1C;
+    transform: translateY(-2px);
+  }
+</style>
+
+<div id="syCartOverlay" onclick="window.closeCartDrawer()"></div>
+
 <div id="syCartDrawer">
-  <!-- Drawer Header -->
-  <div style="padding: 20px; border-bottom: 1px solid var(--sy-border); display: flex; align-items: center; justify-content: space-between;">
-    <div style="display: flex; align-items: center; gap: 8px;">
-      <span style="font-size: 20px;">🛍️</span>
-      <h3 style="margin: 0; font-size: 17px; font-weight: 800;">Your Shopping Bag</h3>
-      <span id="syCartBadgeCount" style="background: var(--sy-purple); color: #fff; font-size: 11px; font-weight: 800; padding: 2px 8px; border-radius: 10px;">1 ITEM</span>
+  <!-- Header -->
+  <div class="sy-drawer-header">
+    <div class="sy-drawer-title-box">
+      <span style="font-size: 1.25rem;">🛍️</span>
+      <h3 class="sy-drawer-title">Your Shopping Bag</h3>
+      <span id="syCartBadgeCount" class="sy-drawer-badge">1 ITEM</span>
     </div>
-    <button id="syCartClose" style="background: none; border: none; font-size: 20px; cursor: pointer; color: #64748B;">✕</button>
+    <button class="sy-drawer-close-btn" onclick="window.closeCartDrawer()">✕</button>
   </div>
 
-  <!-- Progress Bar -->
-  <div style="padding: 16px 20px 0 20px;">
-    <div class="sy-ship-progress">
-      🎉 You unlocked <b>FREE USPS Air Express Shipping</b> (US & UK)!
-    </div>
+  <!-- Free Shipping Notification -->
+  <div class="sy-progress-strip">
+    <span>🎉</span>
+    <span>You unlocked <b>FREE USPS Air Express Shipping</b> (US & UK)!</span>
   </div>
 
-  <!-- Drawer Items List -->
-  <div id="syCartItemList" style="flex: 1; overflow-y: auto; padding: 0 20px 20px 20px;">
-    <div style="display: flex; gap: 14px; padding: 14px; background: #F8FAFC; border: 1px solid var(--sy-border); border-radius: 12px; margin-top: 10px;">
-      <div id="syCartItemIcon" style="font-size: 36px; background: #fff; border-radius: 8px; width: 54px; height: 54px; display: flex; align-items: center; justify-content: center;">🛏️</div>
-      <div style="flex: 1;">
-        <div id="syCartItemTitle" style="font-weight: 800; font-size: 13.5px; color: #0F172A;">Sunnyeora Deep-Sleep™ Cervical Pillow</div>
-        <div style="font-size: 12px; color: #64748B; margin-top: 2px;">Color: Ice-Silk White | Size: Universal</div>
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 8px;">
-          <div style="display: flex; align-items: center; border: 1px solid var(--sy-border); background: #fff; border-radius: 6px; padding: 2px 6px;">
-            <button style="border:none; background:none; font-size:14px; cursor:pointer; font-weight:700;">-</button>
-            <span style="font-size: 12px; font-weight: 800; padding: 0 8px;">1</span>
-            <button style="border:none; background:none; font-size:14px; cursor:pointer; font-weight:700;">+</button>
+  <!-- Items List -->
+  <div class="sy-items-container" id="syCartItemList">
+    <div class="sy-item-card">
+      <div class="sy-item-icon" id="syCartItemIcon">🛏️</div>
+      <div class="sy-item-info">
+        <div class="sy-item-name" id="syCartItemTitle">Sunnyeora Deep-Sleep™ Cervical Pillow</div>
+        <div class="sy-item-meta">Color: Ice-Silk White | Size: Universal</div>
+        <div class="sy-qty-row">
+          <div class="sy-qty-ctrl">
+            <button class="sy-qty-btn" onclick="modifyQty(-1)">-</button>
+            <span class="sy-qty-val" id="syCartItemQty">1</span>
+            <button class="sy-qty-btn" onclick="modifyQty(1)">+</button>
           </div>
-          <div id="syCartItemPrice" style="font-weight: 900; font-size: 15px; color: #00E676;">$49.99</div>
+          <div class="sy-item-price" id="syCartItemPrice">$49.99</div>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- Drawer Footer -->
-  <div style="padding: 20px; border-top: 1px solid var(--sy-border); background: #ffffff;">
-    <div style="display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 13px; color: #64748B;">
+  <!-- Summary & Checkout Footer -->
+  <div class="sy-drawer-footer">
+    <div class="sy-cost-row">
       <span>Subtotal</span>
-      <span id="syCartSubtotal" style="font-weight: 800; color: #0F172A;">$49.99</span>
+      <span id="syCartSubtotal" style="font-weight: 800; color: #1E293B;">$49.99</span>
     </div>
-    <div style="display: flex; justify-content: space-between; margin-bottom: 16px; font-size: 13px; color: #64748B;">
+    <div class="sy-cost-row">
       <span>Shipping (USPS Air)</span>
-      <span style="font-weight: 800; color: #00E676;">FREE</span>
+      <span style="font-weight: 800; color: #0D5C3A;">FREE</span>
     </div>
 
-    <a href="/checkout" class="sy-btn-primary" style="width: 100%; border-radius: 12px; padding: 16px; font-size: 16px; font-weight: 900; background: linear-gradient(135deg, #0D5C3A, #00E676);">
+    <a href="/checkout" class="sy-checkout-btn">
       PROCEED TO SECURE CHECKOUT ➔
     </a>
 
-    <div style="display: flex; justify-content: center; gap: 12px; margin-top: 14px; opacity: 0.7; font-size: 11px; color: #64748B;">
+    <div style="display: flex; justify-content: center; gap: 10px; margin-top: 14px; font-size: 0.72rem; color: #64748B;">
+      <span>🔒 SSL 256-Bit</span>
       <span>💳 Stripe</span>
       <span>💳 Visa</span>
-      <span>💳 Mastercard</span>
       <span>🍎 Apple Pay</span>
     </div>
   </div>
 </div>
 
 <script>
-  (function() {
-    const drawer = document.getElementById('syCartDrawer');
-    const overlay = document.getElementById('syCartOverlay');
-    const closeBtn = document.getElementById('syCartClose');
-
-    function openCart(title, price, icon) {
-      if (title) {
-        let tEl = document.getElementById('syCartItemTitle');
-        let pEl = document.getElementById('syCartItemPrice');
-        let iEl = document.getElementById('syCartItemIcon');
-        let sub = document.getElementById('syCartSubtotal');
-        if (tEl) tEl.textContent = title;
-        if (pEl) pEl.textContent = '$' + price;
-        if (iEl && icon) iEl.textContent = icon;
-        if (sub) sub.textContent = '$' + price;
-      }
-      if (drawer) drawer.classList.add('open');
-      if (overlay) overlay.classList.add('open');
+  window.openCartDrawer = function(title, price, icon) {
+    if (title) {
+      const tEl = document.getElementById('syCartItemTitle');
+      const pEl = document.getElementById('syCartItemPrice');
+      const iEl = document.getElementById('syCartItemIcon');
+      const sub = document.getElementById('syCartSubtotal');
+      if (tEl) tEl.textContent = title;
+      if (pEl) pEl.textContent = '$' + price;
+      if (iEl && icon) iEl.textContent = icon;
+      if (sub) sub.textContent = '$' + price;
     }
+    const d = document.getElementById('syCartDrawer');
+    const o = document.getElementById('syCartOverlay');
+    if (d) d.classList.add('open');
+    if (o) o.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  };
 
-    function closeCart() {
-      if (drawer) drawer.classList.remove('open');
-      if (overlay) overlay.classList.remove('open');
+  window.closeCartDrawer = function() {
+    const d = document.getElementById('syCartDrawer');
+    const o = document.getElementById('syCartOverlay');
+    if (d) d.classList.remove('open');
+    if (o) o.classList.remove('open');
+    document.body.style.overflow = '';
+  };
+
+  function modifyQty(change) {
+    const qEl = document.getElementById('syCartItemQty');
+    if (qEl) {
+      let q = parseInt(qEl.textContent) || 1;
+      q += change;
+      if (q < 1) q = 1;
+      qEl.textContent = q;
     }
+  }
 
-    if (closeBtn) closeBtn.addEventListener('click', closeCart);
-    if (overlay) overlay.addEventListener('click', closeCart);
-
-    document.querySelectorAll('.sy-trigger-cart').forEach(function(b) {
-      b.addEventListener('click', function() {
-        const title = b.getAttribute('data-title');
-        const price = b.getAttribute('data-price');
-        const icon = b.getAttribute('data-icon');
-        openCart(title, price, icon);
+  // Connect click listeners to all ADD TO BAG buttons across the site
+  document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.myntra-add-bag-btn, .sy-trigger-cart').forEach(function(btn) {
+      btn.addEventListener('click', function(e) {
+        e.preventDefault();
+        const card = btn.closest('.myntra-product-card');
+        if (card) {
+          const title = card.querySelector('.myntra-product-title')?.textContent?.trim();
+          const priceStr = card.querySelector('.myntra-current-price')?.textContent?.replace('$', '')?.trim();
+          window.openCartDrawer(title, priceStr, '🛍️');
+        } else {
+          window.openCartDrawer();
+        }
       });
     });
-  })();
+
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') {
+        window.closeCartDrawer();
+      }
+    });
+  });
 </script>
 
 {% schema %}
 {
-  "name": "Cart Drawer Component",
-  "settings": []
+  "name": "Cart Drawer",
+  "tag": "aside",
+  "class": "cart-drawer-section",
+  "settings": [],
+  "presets": [
+    {
+      "name": "Cart Drawer"
+    }
+  ]
 }
 {% endschema %}
