@@ -4,6 +4,7 @@
     max-width: 1400px;
     margin: 40px auto;
     padding: 0 20px;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   }
   .sunnyeora-collection-header {
     text-align: center;
@@ -30,6 +31,7 @@
     color: #1E293B;
     font-weight: 700;
     font-size: 0.9rem;
+    cursor: pointer;
     text-decoration: none;
     transition: all 0.2s;
   }
@@ -37,6 +39,11 @@
     background: #0D5C3A;
     color: #FFFFFF;
     border-color: #0D5C3A;
+  }
+  .sy-card-link {
+    text-decoration: none;
+    color: inherit;
+    display: block;
   }
 </style>
 
@@ -49,72 +56,120 @@
     </p>
 
     <div class="sunnyeora-filter-pills">
-      <a href="/collections/all" class="sunnyeora-filter-pill active">All Products</a>
-      <a href="/collections/deep-sleep" class="sunnyeora-filter-pill">Deep Sleep</a>
-      <a href="/collections/glass-skin" class="sunnyeora-filter-pill">Glass Skin</a>
-      <a href="/collections/sonic-clean" class="sunnyeora-filter-pill">Sonic Clean</a>
+      <button class="sunnyeora-filter-pill active" onclick="filterCategory('all', this)">All Products (3)</button>
+      <button class="sunnyeora-filter-pill" onclick="filterCategory('sleep', this)">Deep Sleep</button>
+      <button class="sunnyeora-filter-pill" onclick="filterCategory('beauty', this)">Glass Skin</button>
+      <button class="sunnyeora-filter-pill" onclick="filterCategory('tech', this)">Sonic Clean</button>
     </div>
   </div>
 
-  <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 24px;">
+  <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 24px;" id="collectionGrid">
     <!-- Product 1 -->
-    <div class="myntra-product-card">
-      <div class="myntra-card-image-wrap">
-        <img src="https://images.unsplash.com/photo-1584100936595-c0654b55a2e2?auto=format&fit=crop&w=600&q=80" alt="Deep-Sleep Cervical Pillow">
-        <span class="myntra-rating-chip">4.9 ★ | 12.8k</span>
-        <button class="myntra-wishlist-btn" aria-label="Save to Wishlist"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#282c3f" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg></button>
-      </div>
-      <div class="myntra-card-details">
-        <div class="myntra-brand-name">SUNNYEORA SLEEP</div>
-        <div class="myntra-product-title">Deep-Sleep™ Contour Cervical Memory Pillow</div>
-        <div class="myntra-price-row">
-          <span class="myntra-current-price">$49.99</span>
-          <span class="myntra-mrp-price">$89.99</span>
-          <span class="myntra-discount-tag">(45% OFF)</span>
+    <div class="myntra-product-card" data-category="sleep">
+      <a href="/products/deep-sleep-cervical-pillow" class="sy-card-link">
+        <div class="myntra-card-image-wrap">
+          <img src="https://images.unsplash.com/photo-1584100936595-c0654b55a2e2?auto=format&fit=crop&w=600&q=80" alt="Deep-Sleep Cervical Pillow">
+          <span class="myntra-rating-chip">4.9 ★ | 12.8k</span>
+          <button class="myntra-wishlist-btn" onclick="event.preventDefault(); event.stopPropagation(); toggleWishlist('deep-sleep-cervical-pillow', this);" aria-label="Save to Wishlist"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#282c3f" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg></button>
         </div>
-        <button class="myntra-add-bag-btn"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" style="margin-right: 4px;"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>ADD TO BAG</button>
+        <div class="myntra-card-details">
+          <div class="myntra-brand-name">SUNNYEORA SLEEP CARE</div>
+          <div class="myntra-product-title">Deep-Sleep™ Contour Cervical Memory Pillow</div>
+          <div class="myntra-price-row">
+            <span class="myntra-current-price">$49.99</span>
+            <span class="myntra-mrp-price">$89.99</span>
+            <span class="myntra-discount-tag">(45% OFF)</span>
+          </div>
+        </div>
+      </a>
+      <div style="padding: 0 16px 16px 16px;">
+        <button class="myntra-add-bag-btn" onclick="event.preventDefault(); window.openCartDrawer('Sunnyeora Deep-Sleep™ Cervical Pillow', '49.99', 'https://images.unsplash.com/photo-1584100936595-c0654b55a2e2?auto=format&fit=crop&w=120&q=80')">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" style="margin-right: 4px;"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>ADD TO BAG
+        </button>
       </div>
     </div>
 
     <!-- Product 2 -->
-    <div class="myntra-product-card">
-      <div class="myntra-card-image-wrap">
-        <img src="https://images.unsplash.com/photo-1598440947619-2c35fc9aa908?auto=format&fit=crop&w=600&q=80" alt="LuminaGlow Wand">
-        <span class="myntra-rating-chip">4.8 ★ | 9.4k</span>
-        <button class="myntra-wishlist-btn" aria-label="Save to Wishlist"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#282c3f" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg></button>
-      </div>
-      <div class="myntra-card-details">
-        <div class="myntra-brand-name">SUNNYEORA BEAUTY</div>
-        <div class="myntra-product-title">LuminaGlow™ 7-in-1 Red Light Therapy Wand</div>
-        <div class="myntra-price-row">
-          <span class="myntra-current-price">$59.99</span>
-          <span class="myntra-mrp-price">$99.99</span>
-          <span class="myntra-discount-tag">(40% OFF)</span>
+    <div class="myntra-product-card" data-category="beauty">
+      <a href="/products/luminaglow-red-light-wand" class="sy-card-link">
+        <div class="myntra-card-image-wrap">
+          <img src="https://images.unsplash.com/photo-1598440947619-2c35fc9aa908?auto=format&fit=crop&w=600&q=80" alt="LuminaGlow Wand">
+          <span class="myntra-rating-chip">4.8 ★ | 9.4k</span>
+          <button class="myntra-wishlist-btn" onclick="event.preventDefault(); event.stopPropagation(); toggleWishlist('luminaglow-red-light-wand', this);" aria-label="Save to Wishlist"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#282c3f" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg></button>
         </div>
-        <button class="myntra-add-bag-btn"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" style="margin-right: 4px;"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>ADD TO BAG</button>
+        <div class="myntra-card-details">
+          <div class="myntra-brand-name">SUNNYEORA BEAUTY TECH</div>
+          <div class="myntra-product-title">LuminaGlow™ 7-in-1 Red Light Therapy Wand</div>
+          <div class="myntra-price-row">
+            <span class="myntra-current-price">$59.99</span>
+            <span class="myntra-mrp-price">$99.99</span>
+            <span class="myntra-discount-tag">(40% OFF)</span>
+          </div>
+        </div>
+      </a>
+      <div style="padding: 0 16px 16px 16px;">
+        <button class="myntra-add-bag-btn" onclick="event.preventDefault(); window.openCartDrawer('Sunnyeora LuminaGlow™ Red Light Wand', '59.99', 'https://images.unsplash.com/photo-1598440947619-2c35fc9aa908?auto=format&fit=crop&w=120&q=80')">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" style="margin-right: 4px;"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>ADD TO BAG
+        </button>
       </div>
     </div>
 
     <!-- Product 3 -->
-    <div class="myntra-product-card">
-      <div class="myntra-card-image-wrap">
-        <img src="https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=600&q=80" alt="CrystalSonic Cleaner">
-        <span class="myntra-rating-chip">4.9 ★ | 15.2k</span>
-        <button class="myntra-wishlist-btn" aria-label="Save to Wishlist"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#282c3f" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg></button>
-      </div>
-      <div class="myntra-card-details">
-        <div class="myntra-brand-name">SUNNYEORA TECH</div>
-        <div class="myntra-product-title">CrystalSonic™ 45,000Hz Ultrasonic Cleaner</div>
-        <div class="myntra-price-row">
-          <span class="myntra-current-price">$39.99</span>
-          <span class="myntra-mrp-price">$69.99</span>
-          <span class="myntra-discount-tag">(43% OFF)</span>
+    <div class="myntra-product-card" data-category="tech">
+      <a href="/products/crystal-sonic-cleaner" class="sy-card-link">
+        <div class="myntra-card-image-wrap">
+          <img src="https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=600&q=80" alt="CrystalSonic Cleaner">
+          <span class="myntra-rating-chip">4.9 ★ | 15.2k</span>
+          <button class="myntra-wishlist-btn" onclick="event.preventDefault(); event.stopPropagation(); toggleWishlist('crystal-sonic-cleaner', this);" aria-label="Save to Wishlist"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#282c3f" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg></button>
         </div>
-        <button class="myntra-add-bag-btn"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" style="margin-right: 4px;"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>ADD TO BAG</button>
+        <div class="myntra-card-details">
+          <div class="myntra-brand-name">SUNNYEORA SONIC TECH</div>
+          <div class="myntra-product-title">CrystalSonic™ 45,000Hz Ultrasonic Cleaner</div>
+          <div class="myntra-price-row">
+            <span class="myntra-current-price">$39.99</span>
+            <span class="myntra-mrp-price">$69.99</span>
+            <span class="myntra-discount-tag">(43% OFF)</span>
+          </div>
+        </div>
+      </a>
+      <div style="padding: 0 16px 16px 16px;">
+        <button class="myntra-add-bag-btn" onclick="event.preventDefault(); window.openCartDrawer('Sunnyeora CrystalSonic™ Ultrasonic Cleaner', '39.99', 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=120&q=80')">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" style="margin-right: 4px;"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>ADD TO BAG
+        </button>
       </div>
     </div>
   </div>
 </div>
+
+<script>
+  window.filterCategory = function(cat, btn) {
+    document.querySelectorAll('.sunnyeora-filter-pill').forEach(b => b.classList.remove('active'));
+    if (btn) btn.classList.add('active');
+    document.querySelectorAll('#collectionGrid .myntra-product-card').forEach(card => {
+      if (cat === 'all' || card.dataset.category === cat) {
+        card.style.display = 'block';
+      } else {
+        card.style.display = 'none';
+      }
+    });
+  };
+
+  window.toggleWishlist = function(handle, btn) {
+    let wishlist = JSON.parse(localStorage.getItem('sy_wishlist') || '[]');
+    const idx = wishlist.indexOf(handle);
+    const svg = btn.querySelector('svg');
+    if (idx === -1) {
+      wishlist.push(handle);
+      if (svg) svg.style.fill = '#ff3f6c';
+      if (svg) svg.style.stroke = '#ff3f6c';
+    } else {
+      wishlist.splice(idx, 1);
+      if (svg) svg.style.fill = 'none';
+      if (svg) svg.style.stroke = '#282c3f';
+    }
+    localStorage.setItem('sy_wishlist', JSON.stringify(wishlist));
+  };
+</script>
 
 {% schema %}
 {
