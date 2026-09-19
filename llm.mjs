@@ -140,43 +140,45 @@ export async function askLLM(system, user, opts = {}) {
     };
   }
 
-  // 3. Gemini API (via OpenAI compatible endpoint)
+  // 3. Gemini API (Native REST generateContent with dynamic model discovery)
   if (process.env.GEMINI_API_KEY) {
+    const key = process.env.GEMINI_API_KEY.trim();
     const candidateModels = [
       process.env.GEMINI_MODEL,
-      'gemini-2.5-flash',
       'gemini-1.5-flash',
-      'gemini-2.5-pro',
+      'gemini-1.5-flash-latest',
       'gemini-1.5-pro',
+      'gemini-2.0-flash-exp',
     ].filter(Boolean);
 
     let lastError = null;
-    for (const chosenModel of candidateModels) {
+
+    // Try candidates first
+    for (const m of candidateModels) {
       try {
-        const res = await fetch('https://generativelanguage.googleapis.com/v1beta/openai/chat/completions', {
+        const url = `https://generativelanguage.googleapis.com/v1beta/models/${m}:generateContent?key=${key}`;
+        const res = await fetch(url, {
           method: 'POST',
-          headers: {
-            'Authorization': `Bearer ${process.env.GEMINI_API_KEY}`,
-            'Content-Type': 'application/json',
-          },
+          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
-            model: chosenModel,
-            max_tokens: maxTokens,
-            messages: [
-              { role: 'system', content: system },
-              { role: 'user', content: user },
+            contents: [
+              { role: 'user', parts: [{ text: `${system}\n\n${user}` }] },
             ],
+            generationConfig: {
+              maxOutputTokens: maxTokens,
+              temperature: 0.7,
+            },
           }),
         });
 
         if (res.ok) {
           const data = await res.json();
-          const text = data.choices?.[0]?.message?.content?.trim() || '';
+          const text = data.candidates?.[0]?.content?.parts?.[0]?.text?.trim() || '';
           return {
             text,
             tools: [],
-            usage: data.usage || null,
-            modelId: data.model || chosenModel,
+            usage: data.usageMetadata || null,
+            modelId: m,
           };
         } else {
           const err = await res.text();
@@ -186,6 +188,37 @@ export async function askLLM(system, user, opts = {}) {
         lastError = e;
       }
     }
+
+    // Dynamic discovery: ask Google what models are valid for this key
+    try {
+      const listRes = await fetch(`https://generativelanguage.googleapis.com/v1beta/models?key=${key}`);
+      if (listRes.ok) {
+        const listData = await listRes.json();
+        const available = (listData.models || [])
+          .filter(mod => (mod.supportedGenerationMethods || []).includes('generateContent'))
+          .map(mod => mod.name.replace(/^models\//, ''));
+
+        for (const m of available) {
+          try {
+            const url = `https://generativelanguage.googleapis.com/v1beta/models/${m}:generateContent?key=${key}`;
+            const res = await fetch(url, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                contents: [{ role: 'user', parts: [{ text: `${system}\n\n${user}` }] }],
+                generationConfig: { maxOutputTokens: maxTokens, temperature: 0.7 },
+              }),
+            });
+            if (res.ok) {
+              const data = await res.json();
+              const text = data.candidates?.[0]?.content?.parts?.[0]?.text?.trim() || '';
+              return { text, tools: [], usage: data.usageMetadata || null, modelId: m };
+            }
+          } catch {}
+        }
+      }
+    } catch {}
+
     throw lastError || new Error('Gemini API call failed');
   }
 
