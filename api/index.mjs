@@ -103,12 +103,14 @@ export default async function handler(req, res) {
     if (pathname === '/api/health') {
       const pInfo = getProviderInfo();
       const hasComposio = !!(process.env.COMPOSIO_API_KEY && process.env.COMPOSIO_API_KEY.length > 5);
+      const hasShopify = !!(process.env.SHOPIFY_ACCESS_TOKEN && process.env.SHOPIFY_ACCESS_TOKEN.length > 5);
       return json(res, 200, {
         ok: true,
         version: '3.2.1-sales-pro',
         backend: pInfo.provider,
         providerConfigured: pInfo.isConfigured,
         composioConfigured: hasComposio,
+        shopifyConfigured: hasShopify,
         model: baseCfg.model || 'sonnet',
         modelName: modelName(baseCfg.model || 'sonnet'),
         models: MODEL_KEYS,
