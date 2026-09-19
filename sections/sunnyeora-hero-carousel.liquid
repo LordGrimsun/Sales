@@ -1,37 +1,141 @@
 
-<div class="sunnyeora-hero-carousel" style="width: 100%; margin-bottom: 30px; background: #FAF9F5;">
-  <div style="max-width: 1400px; margin: 0 auto; padding: 20px; position: relative;">
-    <div style="background: linear-gradient(135deg, #0D5C3A 0%, #083823 60%, #1E293B 100%); border-radius: 24px; padding: 50px 40px; color: #fff; display: flex; align-items: center; justify-content: space-between; gap: 40px; flex-wrap: wrap; box-shadow: 0 15px 40px rgba(13,92,58,0.18);">
-      <div style="flex: 1; min-width: 300px;">
-        <span style="background: rgba(52, 211, 153, 0.2); color: #34D399; border: 1px solid rgba(52, 211, 153, 0.4); padding: 6px 16px; border-radius: 20px; font-weight: 800; font-size: 0.85rem; letter-spacing: 1px; text-transform: uppercase;">🌿 PREMIUM BIO-TESTED WELLNESS</span>
-        <h1 style="font-size: 3rem; font-weight: 900; margin: 16px 0; line-height: 1.15; color: #fff;">FEEL RESTED, REJUVENATED & CONFIDENT</h1>
-        <p style="font-size: 1.15rem; color: #D1FAE5; margin-bottom: 24px; max-width: 550px; line-height: 1.6;">Comfort-crafted cervical sleep pillows, therapeutic red light wands, and sonic cleaners designed to transform your daily routine.</p>
+<style>
+  .sy-hero-carousel-wrap {
+    width: 100%;
+    margin-bottom: 30px;
+    background: #FAF9F5;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  }
+  .sy-hero-carousel-box {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 20px;
+    position: relative;
+  }
+  .sy-hero-gradient-card {
+    background: linear-gradient(135deg, #0D5C3A 0%, #083823 60%, #1E293B 100%);
+    border-radius: 24px;
+    padding: 50px 44px;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 40px;
+    flex-wrap: wrap;
+    box-shadow: 0 15px 40px rgba(13,92,58,0.18);
+  }
+  .sy-hero-text-col {
+    flex: 1;
+    min-width: 300px;
+  }
+  .sy-hero-tag {
+    background: rgba(52, 211, 153, 0.2);
+    color: #34D399;
+    border: 1px solid rgba(52, 211, 153, 0.4);
+    padding: 6px 16px;
+    border-radius: 20px;
+    font-weight: 800;
+    font-size: 0.85rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    display: inline-block;
+  }
+  .sy-hero-title {
+    font-size: clamp(2.2rem, 4vw, 3.2rem);
+    font-weight: 900;
+    margin: 16px 0;
+    line-height: 1.15;
+    color: #fff;
+  }
+  .sy-hero-desc {
+    font-size: 1.15rem;
+    color: #D1FAE5;
+    margin-bottom: 24px;
+    max-width: 550px;
+    line-height: 1.6;
+  }
+  .sy-hero-btn {
+    background: #34D399;
+    color: #092B1C;
+    text-decoration: none;
+    padding: 16px 36px;
+    border-radius: 30px;
+    font-size: 1.05rem;
+    font-weight: 900;
+    display: inline-block;
+    box-shadow: 0 6px 20px rgba(52,211,153,0.3);
+    transition: transform 0.2s, background 0.2s;
+  }
+  .sy-hero-btn:hover {
+    transform: translateY(-2px);
+    background: #6EE7B7;
+  }
+  /* Right Hero Image Card with real studio photography */
+  .sy-hero-visual-col {
+    position: relative;
+    width: 440px;
+    max-width: 100%;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+    background: #ffffff;
+  }
+  .sy-hero-visual-col img {
+    width: 100%;
+    height: 320px;
+    object-fit: cover;
+    display: block;
+  }
+  .sy-hero-img-badge {
+    position: absolute;
+    top: 14px;
+    left: 14px;
+    background: #0D5C3A;
+    color: #ffffff;
+    font-size: 0.78rem;
+    font-weight: 800;
+    padding: 5px 12px;
+    border-radius: 20px;
+  }
+  .sy-hero-img-caption {
+    padding: 16px 20px;
+    background: #ffffff;
+    color: #1E293B;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+</style>
+
+<div class="sy-hero-carousel-wrap">
+  <div class="sy-hero-carousel-box">
+    <div class="sy-hero-gradient-card">
+      <div class="sy-hero-text-col">
+        <span class="sy-hero-tag">🌿 PREMIUM BIO-TESTED WELLNESS</span>
+        <h1 class="sy-hero-title">FEEL RESTED, REJUVENATED & CONFIDENT</h1>
+        <p class="sy-hero-desc">Comfort-crafted cervical sleep pillows, therapeutic red light wands, and sonic cleaners designed to transform your daily routine.</p>
         
         <div style="display: flex; align-items: center; gap: 16px; flex-wrap: wrap;">
-          <a href="/collections/all" style="background: #34D399; color: #092B1C; text-decoration: none; padding: 16px 36px; border-radius: 30px; font-size: 1.05rem; font-weight: 900; display: inline-block; box-shadow: 0 6px 20px rgba(52,211,153,0.3); transition: transform 0.2s;">
+          <a href="/collections/all" class="sy-hero-btn">
             SHOP ALL CATEGORIES ➔
           </a>
           <span style="font-size: 0.95rem; color: #A7F3D0; font-weight: 700;">🇺🇸 Free USPS Air Express Delivery</span>
         </div>
       </div>
 
-      <div style="display: flex; gap: 16px; flex-wrap: wrap;">
-        <div style="background: rgba(255,255,255,0.08); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.15); border-radius: 20px; padding: 20px; text-align: center; width: 140px;">
-          <div style="font-size: 2.2rem;">🛏️</div>
-          <div style="font-weight: 800; font-size: 0.9rem; margin-top: 8px;">Cervical Sleep</div>
-          <div style="color: #FCD34D; font-weight: 900; font-size: 0.85rem; margin-top: 4px;">UP TO 45% OFF</div>
-        </div>
-
-        <div style="background: rgba(255,255,255,0.08); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.15); border-radius: 20px; padding: 20px; text-align: center; width: 140px;">
-          <div style="font-size: 2.2rem;">✨</div>
-          <div style="font-weight: 800; font-size: 0.9rem; margin-top: 8px;">Skincare Tech</div>
-          <div style="color: #FCD34D; font-weight: 900; font-size: 0.85rem; margin-top: 4px;">SAVE $40</div>
-        </div>
-
-        <div style="background: rgba(255,255,255,0.08); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.15); border-radius: 20px; padding: 20px; text-align: center; width: 140px;">
-          <div style="font-size: 2.2rem;">💎</div>
-          <div style="font-weight: 800; font-size: 0.9rem; margin-top: 8px;">Sonic Clean</div>
-          <div style="color: #FCD34D; font-weight: 900; font-size: 0.85rem; margin-top: 4px;">TOP RATED</div>
+      <!-- Right Visual Card with real photography -->
+      <div class="sy-hero-visual-col">
+        <span class="sy-hero-img-badge">🔥 TOP VIRAL HIT</span>
+        <img src="https://images.unsplash.com/photo-1584100936595-c0654b55a2e2?auto=format&fit=crop&w=800&q=80" alt="Sunnyeora Deep-Sleep Ergonomic Pillow">
+        <div class="sy-hero-img-caption">
+          <div>
+            <div style="font-weight: 800; font-size: 0.95rem;">Sunnyeora Deep-Sleep™</div>
+            <div style="font-size: 0.8rem; color: #64748B;">Orthopedic Cervical Contour Memory Foam</div>
+          </div>
+          <div style="text-align: right;">
+            <div style="font-weight: 900; font-size: 1.15rem; color: #0D5C3A;">$49.99</div>
+            <div style="font-size: 0.75rem; color: #D97706; font-weight: 800;">SAVE $40</div>
+          </div>
         </div>
       </div>
     </div>
