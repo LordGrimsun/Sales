@@ -324,26 +324,26 @@ const kv = id => KPIS.find(k => k.id === id).val;
 let brainNotes = brain.state.notes;
 const BB_ROWS = profileRows() || {
   emails: [
-    ['EMAILS SENT', () => STATS.emailsSent],
-    ['REPLIES DRAFTED', () => STATS.drafts]],
+    ['INQUIRIES TRIAGED', () => STATS.emailsSent + ' emails'],
+    ['RESPONSE SPEED', () => '< 15 mins']],
   delivery: [
-    ['REPORTS SENT', () => STATS.reports],
-    ['ON TRACK', () => STATS.onTrack + ' / ' + STATS.projects]],
+    ['SUPPLIER LOGISTICS', () => 'CJ Dropshipping'],
+    ['US TRANSIT TIME', () => 'USPS 7–10d']],
   sales: [
-    ['CALLS S·A·J', () => STATS.spencer + '·' + STATS.arwin + '·' + STATS.jack],
-    ['NEW MANAGERS', () => STATS.managers],
-    ['AUTO-ONBOARDED', () => STATS.autoOnb]],
+    ['LIVE STORE CATALOG', () => '31 Live SKUs'],
+    ['AVG NET MARGIN', () => '41.5% Net'],
+    ['ABANDONED RECOVERY', () => (STATS.recCarts || 8) + ' orders']],
   marketing: [
-    ['NEW INSIGHTS', () => STATS.insMkt],
-    ['COST PER USER', () => '$' + Math.round(STATS.cpa)]],
+    ['CAMPAIGN CHANNELS', () => 'Meta & TikTok'],
+    ['TARGET ROAS', () => '2.8x Target']],
   ops: [
-    ['PROPOSALS MADE', () => Math.round(kv('proposals'))],
-    ['NEW INSIGHTS', () => STATS.insOps]],
+    ['ORDER SYNC SLA', () => '24h Auto-Sync'],
+    ['BUYER POLICY', () => '14-Day Return']],
   fin: [
-    ['INVOICES ISSUED', () => Math.round(kv('invoices'))],
-    ['BILLS PAID', () => STATS.billsPaid]],
+    ['PAYOUT ROUTE', () => 'Stripe USD ➔ INR'],
+    ['UNIT MARGIN', () => '41.5% Profit']],
   brain: [
-    ['NOTES INDEXED', () => brainNotes.toLocaleString('en-NZ')]],
+    ['STORE BRIEFS', () => brainNotes.toLocaleString('en-NZ') + ' Notes']],
 };
 if (PROFILE && !BB_ROWS.brain) BB_ROWS.brain = [['NOTES INDEXED', () => brainNotes.toLocaleString('en-NZ')]];
 for (const k of [...DEPT_KEYS, 'brain']) {
@@ -598,9 +598,11 @@ function ensureChat(id) {
   if (chatHist[id]) return;
   const isDemo = typeof location !== 'undefined' && (new URLSearchParams(location.search).has('demo') || new URLSearchParams(location.search).get('s') === 'check');
   const a = R[id].a;
+  const roleName = a.role || R[id].v1?.role || 'Lead Specialist';
+  const doesDesc = a.does || R[id].v1?.tagline || '';
   const greeting = isDemo
-    ? (R[id].v1?.greeting || `Hey! I'm ${a.name} (${a.role}).`)
-    : `Hey! I'm ${a.name}, ${a.role} in ${a.dept?.toUpperCase()}. ${a.does || ''} Ask me anything here, or type a task in the command bar.`;
+    ? (R[id].v1?.greeting || `Hey! I'm ${a.name} (${roleName}).`)
+    : `Hey! I'm ${a.name}, ${roleName} in ${a.dept?.toUpperCase()}.${doesDesc ? ' ' + doesDesc : ''} Ask me anything here, or type a task in the command bar.`;
   chatHist[id] = [
     { who: 'agent', text: greeting },
     { who: 'work', i: '⏺', text: 'session attached — live work stream below' },
@@ -631,7 +633,7 @@ function renderChat(id) {
         ${m.mock ? `<div class="a-mock">${m.mock}</div>` : ''}
         ${m.pending
           ? '<div class="a-btns"><button class="a-yes">APPROVE</button><button class="a-no">REJECT</button></div>'
-          : `<div class="a-done">${m.approved ? '✓ Approved' : '✗ Rejected'} by AJ</div>`}
+          : `<div class="a-done">${m.approved ? '✓ Approved' : '✗ Rejected'} by Owner</div>`}
       </div>`;
     return '';
   }).join('');

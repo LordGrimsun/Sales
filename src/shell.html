@@ -65,7 +65,7 @@
     border: 1px solid var(--hairline); border-radius: 99px; padding: 4px 10px;
   }
   #topbar .sp { flex: 1; }
-  #clock { font-family: var(--serif); font-size: 20px; font-variant-numeric: tabular-nums; }
+  #clock { font-family: var(--serif); font-size: 15px; font-variant-numeric: tabular-nums; white-space: nowrap; flex-shrink: 0; }
 
   #overviewBtn {
     position: fixed; top: 66px; left: 20px; z-index: 23; /* V3: above the dept board */
@@ -158,6 +158,17 @@
   #topconn { display: none; align-items: center; gap: 7px; margin-left: 4px; }
   /* V3.5: inside a department the strip centres in the bar and names the dept it feeds */
   #topconn.focus { display: flex; position: absolute; left: 50%; transform: translateX(-50%); margin: 0; z-index: 10; }
+  /* When in department focus: hide store/catalog/integrations/models so centered connector strip has zero overlap */
+  body.railLeft #topStoreBtn,
+  body.railLeft #topCatalogBtn,
+  body.railLeft #topConnBtn,
+  body.railLeft #topmodels,
+  #topbar:has(#topconn.focus) #topStoreBtn,
+  #topbar:has(#topconn.focus) #topCatalogBtn,
+  #topbar:has(#topconn.focus) #topConnBtn,
+  #topbar:has(#topconn.focus) #topmodels {
+    display: none !important;
+  }
   /* V3.1: the model layer — Claude + ChatGPT run the office headless; wired to the Brain */
   #topmodels { display: flex; align-items: center; gap: 7px; margin-right: 14px; }
   #topmodels .tc-lab .dot { background: var(--ink); }

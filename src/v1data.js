@@ -670,16 +670,16 @@ export const V1 = [
 
 { id:'dlead', name:'DELIVERY LEAD', dept:'delivery', desk:[12,0], sit:[12,1], hair:'#1f1f1f', shirt:'#38bdf8', lead:true,
   role:'Delivery Lead',
-  tagline:'Owns every live project end to end — risk, timelines, staffing, handovers — and reports the state of play to AJ weekly.',
-  tasks:['Reviewing {count} live projects for risk','Re-planning the {co} timeline','Approving the {co} handover','Staffing the {co} project','Writing the weekly delivery summary'],
+  tagline:'Owns every order and fulfillment end to end — logistics, timelines, tracking, supplier handovers — and reports the state of play to the store owner weekly.',
+  tasks:['Reviewing {count} live orders for logistics sync','Re-planning CJ Dropshipping shipping timelines','Approving courier handovers for US orders','Verifying tracking numbers for US/UK buyers','Writing the weekly delivery and supply summary'],
   ev:[
-    {i:'🧭', t:()=>`Project review: ${ri(10,14)} live, ${ri(9,13)} on track, ${rnd(['1 at risk — scope creep','1 at risk — waiting on client assets','none at risk'])}`, p:3},
-    {i:'✅', t:()=>`Handover approved: ${rnd(P.co)} — QA clean, assets in the portal, report sent`, p:2},
-    {i:'⚠', t:()=>`Risk flagged: ${rnd(P.co)} — ${rnd(['client hasn’t signed off week 2','designer capacity','third scope change'])}`, p:1},
+    {i:'🧭', t:()=>`Logistics review: 31 SKUs live on store, USPS air delivery active, tracking syncing cleanly`, p:3},
+    {i:'✅', t:()=>`Fulfillment synced: ${rnd(P.co)} — CJ Dropshipping confirmed order dispatched via USPS`, p:2},
+    {i:'📦', t:()=>`Tracking generated: 7-10 day delivery window active for foreign buyer`, p:1},
   ],
-  stats:[['Live projects','12'],['On track','11'],['Handovers this month','4'],['Avg days to deliver','23']],
-  chartLbl:'Projects delivered — last 8 weeks', chart:[2,3,2,4,3,3,5,4],
-  greeting:`Morning AJ. Twelve live projects, eleven on track. One at risk: ${rnd(P.co)} is on its third scope change — I'd like to extend by a week rather than rush QA, that's in your approvals. Four handovers this month, all clean.`,
+  stats:[['Live Catalog SKUs','31'],['Avg Delivery','7-10d'],['Logistics Partner','CJ Dropshipping'],['Carrier','USPS Air']],
+  chartLbl:'Store orders fulfilled — last 8 weeks', chart:[18,22,29,35,31,38,42,47],
+  greeting:`Hello! Sunnyeora store fulfillment is running smoothly. 31 apparel SKUs synced with CJ Dropshipping, USPS tracked air delivery active. Ask me about orders, shipping status, or inventory fulfillment.`,
   chat:[
     {k:['risk','behind','late','trouble'], r:[`One at risk: ${rnd(P.co)}. Third scope change in two weeks. The Project Co-ordinator has re-planned; I'm asking you to approve a one-week extension so QA isn't squeezed. Everything else is on track.`]},
     {k:['handover','deliver','ship'], r:[`Four handovers this month. A handover means: QA Checker signed off, Client Assets in the portal, Client Reports sent, Onboarder walked them through it. I don't approve one until all four are true.`]},
@@ -789,7 +789,7 @@ export const V1 = [
   chips:['What did you deliver?','Status of the mockup?','How busy are you?'] },
 
 ];
-export const STATS = { emailsSent:128, drafts:41, reports:9, projects:12, onTrack:11, chats:11, insMkt:3, insOps:5, cpa:41.0, spencer:14, arwin:31, jack:16, managers:5, autoOnb:17, billsPaid:14 };
+export const STATS = { emailsSent:28, drafts:9, reports:14, projects:14, onTrack:14, chats:11, insMkt:3, insOps:5, cpa:41.0, spencer:14, arwin:31, jack:16, managers:5, autoOnb:17, billsPaid:14, recCarts:8, storeOrders:31 };
 export const FILE_GEN = {
   pros: ()=>({ icon:'⛏', name:'outbound-batch-'+clockStr().replace(':','')+'.csv', meta:'verified prospects · handed to the Sales Lead · click to view',
     content:`company,city,headcount,contact,title,mobile,icp_score\n${rnd(P.co)},${rnd(P.city)},${ri(8,60)},${person()},${rnd(['Head of Sales','Sales Manager','GM','Founder'])},verified ✓,${ri(70,94)}\n${rnd(P.co)},${rnd(P.city)},${ri(8,60)},${person()},${rnd(['Sales Manager','Director','Founder'])},verified ✓,${ri(70,94)}\n${rnd(P.co)},${rnd(P.city)},${ri(8,60)},${person()},${rnd(['GM','Head of Sales'])},verified ✓,${ri(70,94)}\n…${ri(24,38)} rows · dupes stripped · existing customers excluded` }),
