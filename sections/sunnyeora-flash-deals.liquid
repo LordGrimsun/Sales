@@ -1,0 +1,43 @@
+
+<div class="page-width">
+  <div class="sy-flash-bar">
+    <div style="display: flex; align-items: center; gap: 10px;">
+      <span style="font-size: 24px;">⚡</span>
+      <div>
+        <div style="font-weight: 900; font-size: 16px; letter-spacing: 0.04em;">GEN-Z FLASH SALE — SAVE UP TO 50%</div>
+        <div style="font-size: 12px; opacity: 0.85;">Limited stock available for US & UK Express Delivery</div>
+      </div>
+    </div>
+    <div class="sy-timer-box">
+      <span style="font-size: 12px; font-weight: 700; margin-right: 4px;">ENDS IN:</span>
+      <span class="sy-timer-unit" id="syHrs">04</span> :
+      <span class="sy-timer-unit" id="syMins">18</span> :
+      <span class="sy-timer-unit" id="sySecs">42</span>
+    </div>
+  </div>
+</div>
+
+<script>
+  (function() {
+    let sec = 14322;
+    setInterval(function() {
+      if (sec > 0) sec--;
+      let h = Math.floor(sec / 3600);
+      let m = Math.floor((sec % 3600) / 60);
+      let s = sec % 60;
+      let elH = document.getElementById('syHrs');
+      let elM = document.getElementById('syMins');
+      let elS = document.getElementById('sySecs');
+      if (elH) elH.textContent = String(h).padStart(2, '0');
+      if (elM) elM.textContent = String(m).padStart(2, '0');
+      if (elS) elS.textContent = String(s).padStart(2, '0');
+    }, 1000);
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Flash Deals Bar",
+  "settings": []
+}
+{% endschema %}

@@ -1,0 +1,11 @@
+{
+  "sections": {
+    "main": {
+      "type": "sunnyeora-faq",
+      "settings": {}
+    }
+  },
+  "order": [
+    "main"
+  ]
+}

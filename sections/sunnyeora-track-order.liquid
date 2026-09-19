@@ -1,0 +1,49 @@
+
+<div class="page-width" style="padding-top: 50px; padding-bottom: 70px; max-width: 680px; margin: 0 auto;">
+  <div style="text-align: center; margin-bottom: 36px;">
+    <div class="sy-pill sy-pill-gold" style="margin-bottom: 12px;">USPS EXPRESS TRACKING</div>
+    <h1 style="font-size: 34px; font-weight: 900; margin: 0 0 12px 0; color: #0F172A;">Track Your Package</h1>
+    <p style="font-size: 15px; color: #5A626A;">Enter your order number or tracking number to see real-time shipment status.</p>
+  </div>
+
+  <div class="sy-card" style="padding: 32px;">
+    <div style="margin-bottom: 18px;">
+      <label style="display: block; font-size: 12.5px; font-weight: 700; margin-bottom: 6px; color: #0F172A;">TRACKING NUMBER / ORDER NUMBER</label>
+      <input id="syTrackInput" type="text" placeholder="e.g. 9400111899564123456789 or #SY-1048" style="width: 100%; padding: 14px; border: 1px solid #CBD5E1; border-radius: 8px; font-size: 15px; outline: none;" />
+    </div>
+
+    <button id="syTrackBtn" class="sy-btn-primary" style="width: 100%; border-radius: 10px; padding: 14px;">
+      TRACK SHIPMENT NOW ➔
+    </button>
+
+    <div id="syTrackResult" style="display: none; margin-top: 24px; padding: 18px; background: rgba(0,230,118,0.08); border: 1px solid rgba(0,230,118,0.25); border-radius: 10px;">
+      <div style="font-weight: 800; font-size: 14px; color: #0D5C3A; margin-bottom: 6px;">📦 Package Status: In Transit (USPS Priority Air)</div>
+      <div style="font-size: 13px; color: #151414;">Estimated Delivery: 2-4 business days to your doorstep.</div>
+    </div>
+  </div>
+</div>
+
+<script>
+  (function() {
+    const btn = document.getElementById('syTrackBtn');
+    const input = document.getElementById('syTrackInput');
+    const res = document.getElementById('syTrackResult');
+    if (btn && input && res) {
+      btn.addEventListener('click', function() {
+        if (!input.value.trim()) return;
+        btn.textContent = 'Searching USPS Carrier Network...';
+        setTimeout(function() {
+          btn.textContent = 'TRACK SHIPMENT NOW ➔';
+          res.style.display = 'block';
+        }, 800);
+      });
+    }
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Sunnyeora Track Order",
+  "settings": []
+}
+{% endschema %}

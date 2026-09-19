@@ -1,0 +1,52 @@
+
+<div class="page-width" style="padding-top: 50px; padding-bottom: 70px; max-width: 760px; margin: 0 auto;">
+  <div style="text-align: center; margin-bottom: 36px;">
+    <div class="sy-pill sy-pill-green" style="margin-bottom: 12px;">24/7 CUSTOMER CARE</div>
+    <h1 style="font-size: 34px; font-weight: 900; margin: 0 0 12px 0; color: #0F172A;">We're Here to Help</h1>
+    <p style="font-size: 15px; color: #5A626A;">Have questions about your order, shipping, or returns? Drop us a line below.</p>
+  </div>
+
+  <div class="sy-card" style="padding: 32px;">
+    <form action="/contact#contact_form" method="post" id="contact_form" accept-charset="UTF-8" class="contact-form">
+      <input type="hidden" name="form_type" value="contact" />
+      <input type="hidden" name="utf8" value="✓" />
+
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; margin-bottom: 16px;">
+        <div>
+          <label style="display: block; font-size: 12.5px; font-weight: 700; margin-bottom: 6px; color: #0F172A;">YOUR NAME</label>
+          <input type="text" name="contact[name]" placeholder="e.g. Sarah Miller" required style="width: 100%; padding: 12px 14px; border: 1px solid #CBD5E1; border-radius: 8px; font-size: 14px; outline: none;" />
+        </div>
+        <div>
+          <label style="display: block; font-size: 12.5px; font-weight: 700; margin-bottom: 6px; color: #0F172A;">EMAIL ADDRESS</label>
+          <input type="email" name="contact[email]" placeholder="e.g. sarah@example.com" required style="width: 100%; padding: 12px 14px; border: 1px solid #CBD5E1; border-radius: 8px; font-size: 14px; outline: none;" />
+        </div>
+      </div>
+
+      <div style="margin-bottom: 16px;">
+        <label style="display: block; font-size: 12.5px; font-weight: 700; margin-bottom: 6px; color: #0F172A;">ORDER NUMBER (OPTIONAL)</label>
+        <input type="text" name="contact[order_number]" placeholder="e.g. #SY-10482" style="width: 100%; padding: 12px 14px; border: 1px solid #CBD5E1; border-radius: 8px; font-size: 14px; outline: none;" />
+      </div>
+
+      <div style="margin-bottom: 20px;">
+        <label style="display: block; font-size: 12.5px; font-weight: 700; margin-bottom: 6px; color: #0F172A;">HOW CAN WE HELP?</label>
+        <textarea name="contact[body]" rows="5" placeholder="Write your message here..." required style="width: 100%; padding: 12px 14px; border: 1px solid #CBD5E1; border-radius: 8px; font-size: 14px; outline: none; resize: vertical;"></textarea>
+      </div>
+
+      <button type="submit" class="sy-btn-primary" style="width: 100%; border-radius: 10px; padding: 14px;">
+        SEND MESSAGE ➔
+      </button>
+    </form>
+
+    <div style="margin-top: 24px; padding-top: 20px; border-top: 1px solid #E2E8F0; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 14px; font-size: 13px; color: #5A626A;">
+      <div><b>Email:</b> support@sunnyeora.com</div>
+      <div><b>Hours:</b> Mon-Sun 24/7 Support</div>
+      <div><b>Response:</b> Within 4 hours</div>
+    </div>
+  </div>
+</div>
+{% schema %}
+{
+  "name": "Sunnyeora Contact Us",
+  "settings": []
+}
+{% endschema %}
