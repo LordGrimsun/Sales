@@ -142,36 +142,51 @@ export async function askLLM(system, user, opts = {}) {
 
   // 3. Gemini API (via OpenAI compatible endpoint)
   if (process.env.GEMINI_API_KEY) {
-    const chosenModel = 'gemini-2.0-flash';
-    const res = await fetch('https://generativelanguage.googleapis.com/v1beta/openai/chat/completions', {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${process.env.GEMINI_API_KEY}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        model: chosenModel,
-        max_tokens: maxTokens,
-        messages: [
-          { role: 'system', content: system },
-          { role: 'user', content: user },
-        ],
-      }),
-    });
+    const candidateModels = [
+      process.env.GEMINI_MODEL,
+      'gemini-2.5-flash',
+      'gemini-1.5-flash',
+      'gemini-2.5-pro',
+      'gemini-1.5-pro',
+    ].filter(Boolean);
 
-    if (!res.ok) {
-      const err = await res.text();
-      throw new Error(`Gemini API error (${res.status}): ${err}`);
+    let lastError = null;
+    for (const chosenModel of candidateModels) {
+      try {
+        const res = await fetch('https://generativelanguage.googleapis.com/v1beta/openai/chat/completions', {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${process.env.GEMINI_API_KEY}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            model: chosenModel,
+            max_tokens: maxTokens,
+            messages: [
+              { role: 'system', content: system },
+              { role: 'user', content: user },
+            ],
+          }),
+        });
+
+        if (res.ok) {
+          const data = await res.json();
+          const text = data.choices?.[0]?.message?.content?.trim() || '';
+          return {
+            text,
+            tools: [],
+            usage: data.usage || null,
+            modelId: data.model || chosenModel,
+          };
+        } else {
+          const err = await res.text();
+          lastError = new Error(`Gemini API error (${res.status}): ${err}`);
+        }
+      } catch (e) {
+        lastError = e;
+      }
     }
-
-    const data = await res.json();
-    const text = data.choices?.[0]?.message?.content?.trim() || '';
-    return {
-      text,
-      tools: [],
-      usage: data.usage || null,
-      modelId: chosenModel,
-    };
+    throw lastError || new Error('Gemini API call failed');
   }
 
   // 4. OpenRouter API
