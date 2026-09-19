@@ -1,15 +1,202 @@
 
-<div class="page-width" id="catalog" style="padding-top: 20px; padding-bottom: 60px;">
-  
-  <!-- Marketplace Toolbar -->
-  <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 14px; margin-bottom: 24px; padding-bottom: 14px; border-bottom: 1px solid var(--sy-border);">
+<style>
+  .sy-catalog-section {
+    max-width: 1400px;
+    margin: 40px auto;
+    padding: 0 20px;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  }
+  .sy-catalog-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-bottom: 28px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid #E2E8F0;
+  }
+  .sy-catalog-title {
+    font-size: 1.8rem;
+    font-weight: 900;
+    margin: 0;
+    color: #1E293B;
+  }
+  .sy-catalog-subtitle {
+    font-size: 0.88rem;
+    color: #64748B;
+    margin-top: 4px;
+  }
+  .sy-catalog-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 24px;
+  }
+  .sy-card-wrap {
+    background: #ffffff;
+    border: 1px solid #E2E8F0;
+    border-radius: 16px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+  }
+  .sy-card-wrap:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 30px rgba(0,0,0,0.08);
+  }
+  .sy-card-img-box {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 1;
+    background: #F8FAFC;
+    overflow: hidden;
+  }
+  .sy-card-img-box img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.4s ease;
+  }
+  .sy-card-wrap:hover .sy-card-img-box img {
+    transform: scale(1.05);
+  }
+  .sy-discount-badge {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    background: #0D5C3A;
+    color: #ffffff;
+    font-size: 0.75rem;
+    font-weight: 800;
+    padding: 4px 10px;
+    border-radius: 20px;
+    letter-spacing: 0.3px;
+    box-shadow: 0 2px 8px rgba(13,92,58,0.3);
+  }
+  .sy-heart-btn {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.9);
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    transition: transform 0.2s, background 0.2s;
+  }
+  .sy-heart-btn:hover {
+    transform: scale(1.15);
+    background: #ffffff;
+  }
+  .sy-rating-chip {
+    position: absolute;
+    bottom: 12px;
+    left: 12px;
+    background: rgba(255, 255, 255, 0.94);
+    backdrop-filter: blur(4px);
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 800;
+    color: #1E293B;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  }
+  .sy-card-body {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+  }
+  .sy-brand-tag {
+    font-size: 0.75rem;
+    font-weight: 800;
+    color: #0D5C3A;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 6px;
+  }
+  .sy-prod-title {
+    font-size: 1.05rem;
+    font-weight: 800;
+    color: #1E293B;
+    margin: 0 0 6px 0;
+    line-height: 1.3;
+  }
+  .sy-prod-desc {
+    font-size: 0.85rem;
+    color: #64748B;
+    margin: 0 0 16px 0;
+    line-height: 1.5;
+  }
+  .sy-price-block {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    margin-top: auto;
+    margin-bottom: 16px;
+  }
+  .sy-curr-price {
+    font-size: 1.35rem;
+    font-weight: 900;
+    color: #1E293B;
+  }
+  .sy-mrp-price {
+    font-size: 0.95rem;
+    color: #94A3B8;
+    text-decoration: line-through;
+  }
+  .sy-save-tag {
+    font-size: 0.8rem;
+    font-weight: 800;
+    color: #D97706;
+    margin-left: auto;
+    background: #FEF3C7;
+    padding: 3px 8px;
+    border-radius: 6px;
+  }
+  .sy-buy-btn {
+    width: 100%;
+    background: #0D5C3A;
+    color: #ffffff;
+    border: none;
+    padding: 13px;
+    border-radius: 30px;
+    font-weight: 800;
+    font-size: 0.9rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    box-shadow: 0 4px 12px rgba(13,92,58,0.25);
+    transition: background 0.2s, transform 0.15s;
+  }
+  .sy-buy-btn:hover {
+    background: #092B1C;
+    transform: translateY(-2px);
+  }
+</style>
+
+<div class="sy-catalog-section" id="catalog">
+  <div class="sy-catalog-header">
     <div>
-      <h2 style="font-size: 24px; font-weight: 900; margin: 0; color: #0F172A;">Trending Viral Collection 🔥</h2>
-      <span style="font-size: 13px; color: #64748B;">Showing 3 High-Demand Verified Winners</span>
+      <h2 class="sy-catalog-title">Trending Viral Collection 🔥</h2>
+      <div class="sy-catalog-subtitle">Verified Bio-Tech Winners • Shipped via USPS Air Express</div>
     </div>
-    <div style="display: flex; gap: 10px; align-items: center;">
-      <span style="font-size: 12px; font-weight: 700; color: #64748B;">SORT BY:</span>
-      <select style="background: #ffffff; border: 1px solid var(--sy-border); padding: 8px 14px; border-radius: 8px; font-size: 13px; font-weight: 600; outline: none; cursor: pointer;">
+    <div style="display: flex; gap: 8px; align-items: center;">
+      <span style="font-size: 0.8rem; font-weight: 700; color: #64748B;">SORT BY:</span>
+      <select style="background: #ffffff; border: 1px solid #CBD5E1; padding: 8px 14px; border-radius: 20px; font-size: 0.85rem; font-weight: 700; outline: none; cursor: pointer; color: #1E293B;">
         <option>Popularity / Best Selling</option>
         <option>Customer Rating (High to Low)</option>
         <option>Price (Low to High)</option>
@@ -17,119 +204,88 @@
     </div>
   </div>
 
-  <!-- Marketplace Product Cards Grid -->
-  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px;">
-    
-    <!-- Item 1: Cervical Pillow -->
-    <div class="sy-product-card">
-      <span class="sy-badge-discount">-45% OFF</span>
-      <button class="sy-wishlist-btn" title="Add to Wishlist">❤️</button>
-      
-      <div style="background: linear-gradient(135deg, #F1F5F9, #E2E8F0); height: 220px; display: flex; align-items: center; justify-content: center; font-size: 72px;">
-        🛏️
+  <div class="sy-catalog-grid">
+    <!-- Item 1: Cervical Contour Pillow -->
+    <div class="sy-card-wrap">
+      <div class="sy-card-img-box">
+        <span class="sy-discount-badge">-45% OFF</span>
+        <button class="sy-heart-btn" title="Save to Wishlist">❤️</button>
+        <img src="https://images.unsplash.com/photo-1584100936595-c0654b55a2e2?auto=format&fit=crop&w=800&q=80" alt="Sunnyeora Deep-Sleep Cervical Pillow">
+        <span class="sy-rating-chip">★ 4.9 | 2,840 reviews</span>
       </div>
-
-      <div style="padding: 18px; display: flex; flex-direction: column; flex: 1;">
-        <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 6px;">
-          <span style="color: #FFB800; font-size: 14px;">★★★★★</span>
-          <span style="font-size: 12px; font-weight: 700; color: #0F172A;">4.9 (2,840)</span>
-          <span style="font-size: 11px; color: #64748B; margin-left: auto;">🇺🇸 USPS 2-Day Air</span>
+      <div class="sy-card-body">
+        <div class="sy-brand-tag">SUNNYEORA SLEEP CARE</div>
+        <h3 class="sy-prod-title">Deep-Sleep™ Orthopedic Cervical Pillow</h3>
+        <p class="sy-prod-desc">Slow-rebound memory foam de-compresses cervical vertebrae and eliminates neck pain.</p>
+        <div class="sy-price-block">
+          <span class="sy-curr-price">$49.99</span>
+          <span class="sy-mrp-price">$89.99</span>
+          <span class="sy-save-tag">SAVE $40</span>
         </div>
-
-        <h3 style="font-size: 16px; font-weight: 800; color: #0F172A; margin: 0 0 6px 0; line-height: 1.3;">
-          Sunnyeora Deep-Sleep™ Orthopedic Cervical Pillow
-        </h3>
-        <p style="font-size: 12.5px; color: #64748B; margin: 0 0 14px 0; line-height: 1.4;">
-          Cervical traction memory foam aligns spine & eliminates neck stiffness.
-        </p>
-
-        <div style="display: flex; align-items: baseline; gap: 8px; margin-bottom: 16px;">
-          <span style="font-size: 22px; font-weight: 900; color: #00E676;">$49.99</span>
-          <span style="font-size: 14px; color: #94A3B8; text-decoration: line-through;">$89.99</span>
-          <span style="font-size: 11px; font-weight: 700; color: #FF007A; margin-left: auto;">SAVE $40</span>
-        </div>
-
-        <button class="sy-add-bag-btn sy-trigger-cart" data-title="Sunnyeora Deep-Sleep™ Cervical Pillow" data-price="49.99" data-icon="🛏️" style="margin-top: auto;">
+        <button class="sy-buy-btn" onclick="window.openCartDrawer('Sunnyeora Deep-Sleep™ Cervical Pillow', '49.99', '🛏️')">
           🛍️ ADD TO BAG
         </button>
       </div>
     </div>
 
-    <!-- Item 2: LuminaGlow Wand -->
-    <div class="sy-product-card">
-      <span class="sy-badge-discount">-40% OFF</span>
-      <button class="sy-wishlist-btn" title="Add to Wishlist">❤️</button>
-      
-      <div style="background: linear-gradient(135deg, #FDF2F8, #FCE7F3); height: 220px; display: flex; align-items: center; justify-content: center; font-size: 72px;">
-        ✨
+    <!-- Item 2: Red Light Therapy Wand -->
+    <div class="sy-card-wrap">
+      <div class="sy-card-img-box">
+        <span class="sy-discount-badge">-40% OFF</span>
+        <button class="sy-heart-btn" title="Save to Wishlist">❤️</button>
+        <img src="https://images.unsplash.com/photo-1598440947619-2c35fc9aa908?auto=format&fit=crop&w=800&q=80" alt="Sunnyeora LuminaGlow Red Light Wand">
+        <span class="sy-rating-chip">★ 4.8 | 1,920 reviews</span>
       </div>
-
-      <div style="padding: 18px; display: flex; flex-direction: column; flex: 1;">
-        <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 6px;">
-          <span style="color: #FFB800; font-size: 14px;">★★★★★</span>
-          <span style="font-size: 12px; font-weight: 700; color: #0F172A;">4.8 (1,920)</span>
-          <span style="font-size: 11px; color: #64748B; margin-left: auto;">✨ Viral Favorite</span>
+      <div class="sy-card-body">
+        <div class="sy-brand-tag">SUNNYEORA SKINCARE TECH</div>
+        <h3 class="sy-prod-title">LuminaGlow™ 7-in-1 Red Light Therapy Wand</h3>
+        <p class="sy-prod-desc">660nm clinical red light + microcurrent for collagen stimulation and glass skin radiance.</p>
+        <div class="sy-price-block">
+          <span class="sy-curr-price">$59.99</span>
+          <span class="sy-mrp-price">$99.99</span>
+          <span class="sy-save-tag">SAVE $40</span>
         </div>
-
-        <h3 style="font-size: 16px; font-weight: 800; color: #0F172A; margin: 0 0 6px 0; line-height: 1.3;">
-          Sunnyeora LuminaGlow™ 7-in-1 Red Light Wand
-        </h3>
-        <p style="font-size: 12.5px; color: #64748B; margin: 0 0 14px 0; line-height: 1.4;">
-          660nm red light + microcurrent for snatched jawlines & glass skin.
-        </p>
-
-        <div style="display: flex; align-items: baseline; gap: 8px; margin-bottom: 16px;">
-          <span style="font-size: 22px; font-weight: 900; color: #00E676;">$59.99</span>
-          <span style="font-size: 14px; color: #94A3B8; text-decoration: line-through;">$99.99</span>
-          <span style="font-size: 11px; font-weight: 700; color: #FF007A; margin-left: auto;">SAVE $40</span>
-        </div>
-
-        <button class="sy-add-bag-btn sy-trigger-cart" data-title="Sunnyeora LuminaGlow™ Red Light Wand" data-price="59.99" data-icon="✨" style="margin-top: auto;">
+        <button class="sy-buy-btn" onclick="window.openCartDrawer('Sunnyeora LuminaGlow™ Red Light Wand', '59.99', '✨')">
           🛍️ ADD TO BAG
         </button>
       </div>
     </div>
 
-    <!-- Item 3: CrystalSonic Cleaner -->
-    <div class="sy-product-card">
-      <span class="sy-badge-discount">-43% OFF</span>
-      <button class="sy-wishlist-btn" title="Add to Wishlist">❤️</button>
-      
-      <div style="background: linear-gradient(135deg, #F0F9FF, #E0F2FE); height: 220px; display: flex; align-items: center; justify-content: center; font-size: 72px;">
-        💎
+    <!-- Item 3: Ultrasonic Cleaner -->
+    <div class="sy-card-wrap">
+      <div class="sy-card-img-box">
+        <span class="sy-discount-badge">-43% OFF</span>
+        <button class="sy-heart-btn" title="Save to Wishlist">❤️</button>
+        <img src="https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=800&q=80" alt="Sunnyeora CrystalSonic Ultrasonic Cleaner">
+        <span class="sy-rating-chip">★ 4.9 | 3,410 reviews</span>
       </div>
-
-      <div style="padding: 18px; display: flex; flex-direction: column; flex: 1;">
-        <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 6px;">
-          <span style="color: #FFB800; font-size: 14px;">★★★★★</span>
-          <span style="font-size: 12px; font-weight: 700; color: #0F172A;">4.9 (3,410)</span>
-          <span style="font-size: 11px; color: #64748B; margin-left: auto;">🌊 45kHz Sonic</span>
+      <div class="sy-card-body">
+        <div class="sy-brand-tag">SUNNYEORA SONIC TECH</div>
+        <h3 class="sy-prod-title">CrystalSonic™ 45,000Hz Ultrasonic Cleaner</h3>
+        <p class="sy-prod-desc">High-frequency cavitation bubbles restore jewelry, glasses, and retainers in 180 seconds.</p>
+        <div class="sy-price-block">
+          <span class="sy-curr-price">$39.99</span>
+          <span class="sy-mrp-price">$69.99</span>
+          <span class="sy-save-tag">SAVE $30</span>
         </div>
-
-        <h3 style="font-size: 16px; font-weight: 800; color: #0F172A; margin: 0 0 6px 0; line-height: 1.3;">
-          Sunnyeora CrystalSonic™ Ultrasonic Cleaner
-        </h3>
-        <p style="font-size: 12.5px; color: #64748B; margin: 0 0 14px 0; line-height: 1.4;">
-          45,000Hz sound waves dislodge grime from jewelry, glasses & aligners in 180s.
-        </p>
-
-        <div style="display: flex; align-items: baseline; gap: 8px; margin-bottom: 16px;">
-          <span style="font-size: 22px; font-weight: 900; color: #00E676;">$39.99</span>
-          <span style="font-size: 14px; color: #94A3B8; text-decoration: line-through;">$69.99</span>
-          <span style="font-size: 11px; font-weight: 700; color: #FF007A; margin-left: auto;">SAVE $30</span>
-        </div>
-
-        <button class="sy-add-bag-btn sy-trigger-cart" data-title="Sunnyeora CrystalSonic™ Ultrasonic Cleaner" data-price="39.99" data-icon="💎" style="margin-top: auto;">
+        <button class="sy-buy-btn" onclick="window.openCartDrawer('Sunnyeora CrystalSonic™ Ultrasonic Cleaner', '39.99', '💎')">
           🛍️ ADD TO BAG
         </button>
       </div>
     </div>
-
   </div>
 </div>
+
 {% schema %}
 {
   "name": "Marketplace Grid Catalog",
-  "settings": []
+  "tag": "section",
+  "class": "section",
+  "settings": [],
+  "presets": [
+    {
+      "name": "Marketplace Grid Catalog"
+    }
+  ]
 }
 {% endschema %}
