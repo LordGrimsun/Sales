@@ -12,6 +12,12 @@
     "grid_catalog": {
       "type": "sunnyeora-grid-catalog"
     },
+    "reviews_wall": {
+      "type": "sunnyeora-reviews-wall"
+    },
+    "faq": {
+      "type": "sunnyeora-faq"
+    },
     "marquee": {
       "type": "sunnyeora-marquee"
     }
@@ -21,6 +27,8 @@
     "deals_day",
     "categories_grid",
     "grid_catalog",
+    "reviews_wall",
+    "faq",
     "marquee"
   ]
 }
