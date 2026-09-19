@@ -12,12 +12,6 @@
     "grid_catalog": {
       "type": "sunnyeora-grid-catalog"
     },
-    "comparison": {
-      "type": "sunnyeora-comparison"
-    },
-    "ugc": {
-      "type": "sunnyeora-ugc"
-    },
     "marquee": {
       "type": "sunnyeora-marquee"
     }
@@ -27,8 +21,6 @@
     "deals_day",
     "categories_grid",
     "grid_catalog",
-    "comparison",
-    "ugc",
     "marquee"
   ]
 }
