@@ -1,6 +1,7 @@
 
 <style>
-  .sy-404-container {
+  /* 404 Standard Container */
+  .sy-fallback-404 {
     max-width: 1400px;
     margin: 50px auto;
     padding: 0 20px;
@@ -42,24 +43,676 @@
     box-shadow: 0 4px 15px rgba(13,92,58,0.25);
     transition: background 0.2s;
   }
-  .sy-404-cta:hover {
-    background: #092B1C;
+
+  /* Dynamic eCommerce Product Detail Page (PDP) */
+  .sy-pdp-wrap {
+    display: none;
+    max-width: 1320px;
+    margin: 30px auto 60px auto;
+    padding: 0 20px;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  }
+  .sy-pdp-breadcrumb {
+    font-size: 0.82rem;
+    color: #8C96A3;
+    margin-bottom: 24px;
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+  .sy-pdp-breadcrumb a {
+    color: #696E79;
+    text-decoration: none;
+    font-weight: 600;
+  }
+  .sy-pdp-grid {
+    display: grid;
+    grid-template-columns: 1.15fr 1fr;
+    gap: 48px;
+    align-items: start;
+  }
+  @media (max-width: 900px) {
+    .sy-pdp-grid {
+      grid-template-columns: 1fr;
+      gap: 30px;
+    }
+  }
+  .sy-pdp-gallery {
+    display: flex;
+    gap: 16px;
+  }
+  .sy-pdp-thumbs {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    width: 80px;
+  }
+  .sy-pdp-thumb {
+    width: 80px;
+    height: 96px;
+    border-radius: 8px;
+    object-fit: cover;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: all 0.2s;
+  }
+  .sy-pdp-thumb.active {
+    border-color: #ff3f6c;
+    box-shadow: 0 4px 12px rgba(255,63,108,0.2);
+  }
+  .sy-pdp-main-img-box {
+    flex: 1;
+    position: relative;
+    border-radius: 12px;
+    overflow: hidden;
+    background: #f8fafc;
+    box-shadow: 0 6px 24px rgba(0,0,0,0.06);
+  }
+  .sy-pdp-main-img {
+    width: 100%;
+    height: 540px;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.3s;
+  }
+  .sy-pdp-main-img:hover {
+    transform: scale(1.03);
+  }
+  .sy-pdp-brand-tag {
+    font-size: 0.8rem;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+    color: #ff3f6c;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .sy-pdp-title {
+    font-size: 1.9rem;
+    font-weight: 900;
+    color: #282c3f;
+    line-height: 1.3;
+    margin: 0 0 12px 0;
+  }
+  .sy-pdp-meta-row {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 16px;
+    font-size: 0.85rem;
+    color: #64748B;
+    flex-wrap: wrap;
+  }
+  .sy-pdp-rating-badge {
+    background: #FFFBEB;
+    border: 1px solid #FDE68A;
+    color: #B45309;
+    font-weight: 800;
+    padding: 4px 10px;
+    border-radius: 6px;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .sy-pdp-pricing {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    padding: 16px 0;
+    border-top: 1px solid #F1F5F9;
+    border-bottom: 1px solid #F1F5F9;
+    margin-bottom: 20px;
+  }
+  .sy-pdp-price-now {
+    font-size: 2.2rem;
+    font-weight: 900;
+    color: #282c3f;
+  }
+  .sy-pdp-price-was {
+    font-size: 1.25rem;
+    color: #94A3B8;
+    text-decoration: line-through;
+  }
+  .sy-pdp-discount-tag {
+    background: #FFF1F2;
+    color: #ff3f6c;
+    font-weight: 800;
+    font-size: 0.9rem;
+    padding: 4px 10px;
+    border-radius: 6px;
+  }
+  .sy-pdp-urgency {
+    background: #FEF2F2;
+    border: 1px solid #FEE2E2;
+    color: #DC2626;
+    font-size: 0.82rem;
+    font-weight: 700;
+    padding: 8px 14px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .sy-variant-label {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: #282c3f;
+    margin-bottom: 8px;
+    display: flex;
+    justify-content: space-between;
+  }
+  .sy-swatch-list {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  .sy-swatch-btn {
+    padding: 10px 18px;
+    border: 1.5px solid #E2E8F0;
+    border-radius: 8px;
+    background: #fff;
+    color: #282c3f;
+    font-size: 0.85rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .sy-swatch-btn.active, .sy-swatch-btn:hover {
+    border-color: #ff3f6c;
+    background: #FFF1F2;
+    color: #ff3f6c;
+  }
+  .sy-qty-pdp {
+    display: flex;
+    align-items: center;
+    border: 1px solid #CBD5E1;
+    border-radius: 8px;
+    width: 120px;
+    margin-bottom: 24px;
+    background: #fff;
+  }
+  .sy-qty-pdp button {
+    background: transparent;
+    border: none;
+    padding: 10px 14px;
+    font-size: 1.1rem;
+    font-weight: 700;
+    cursor: pointer;
+    color: #282c3f;
+  }
+  .sy-qty-pdp span {
+    flex: 1;
+    text-align: center;
+    font-weight: 800;
+    font-size: 0.95rem;
+    color: #282c3f;
+  }
+  .sy-pdp-actions {
+    display: flex;
+    gap: 14px;
+    margin-bottom: 24px;
+  }
+  .sy-btn-bag-main {
+    flex: 1;
+    background: #ff3f6c;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 16px;
+    font-size: 1rem;
+    font-weight: 800;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    box-shadow: 0 8px 24px rgba(255,63,108,0.3);
+    transition: all 0.2s;
+  }
+  .sy-btn-bag-main:hover {
+    background: #e02f5a;
+    transform: translateY(-2px);
+  }
+  .sy-btn-checkout-now {
+    flex: 1;
+    background: #0D5C3A;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 16px;
+    font-size: 1rem;
+    font-weight: 800;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    box-shadow: 0 8px 24px rgba(13,92,58,0.25);
+    transition: all 0.2s;
+  }
+  .sy-btn-checkout-now:hover {
+    background: #084028;
+    transform: translateY(-2px);
+  }
+  .sy-pdp-trust-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    background: #F8FAFC;
+    border: 1px solid #E2E8F0;
+    border-radius: 10px;
+    padding: 14px;
+    margin-bottom: 24px;
+    text-align: center;
+  }
+  .sy-pdp-trust-item div {
+    font-size: 0.78rem;
+    font-weight: 800;
+    color: #1E293B;
+    margin-top: 4px;
+  }
+  .sy-pdp-trust-item span {
+    font-size: 0.7rem;
+    color: #64748B;
+  }
+  .sy-pdp-tabs {
+    margin-top: 24px;
+  }
+  .sy-pdp-tab-header {
+    display: flex;
+    gap: 20px;
+    border-bottom: 2px solid #E2E8F0;
+    margin-bottom: 16px;
+  }
+  .sy-pdp-tab-btn {
+    background: transparent;
+    border: none;
+    font-size: 0.92rem;
+    font-weight: 800;
+    padding: 10px 4px;
+    color: #64748B;
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -2px;
+  }
+  .sy-pdp-tab-btn.active {
+    color: #ff3f6c;
+    border-bottom-color: #ff3f6c;
+  }
+  .sy-pdp-tab-pane {
+    font-size: 0.92rem;
+    color: #475569;
+    line-height: 1.7;
+    display: none;
+  }
+  .sy-pdp-tab-pane.active {
+    display: block;
+  }
+  .sy-pdp-tab-pane ul {
+    padding-left: 20px;
+    margin: 8px 0;
   }
 </style>
 
-<div class="sy-404-container">
+<!-- Fallback 404 Container -->
+<div id="syFallback404" class="sy-fallback-404">
   <span class="sy-404-badge">SUNNYEORA CATALOG</span>
   <h1 class="sy-404-title">Looking for Something Special?</h1>
   <p class="sy-404-desc">The page you requested may have moved, but all our high-demand viral wellness hits are available right here in the marketplace.</p>
-  
   <a href="/collections/all" class="sy-404-cta">
     EXPLORE ALL BESTSELLING PRODUCTS ➔
   </a>
 </div>
 
+<!-- Dynamic eCommerce Product Detail Page (PDP) -->
+<div id="syPdpWrap" class="sy-pdp-wrap">
+  <div class="sy-pdp-breadcrumb">
+    <a href="/">Home</a> <span>/</span>
+    <a href="/collections/all">Collections</a> <span>/</span>
+    <span id="pdpBreadcrumbCategory">Wellness</span> <span>/</span>
+    <span id="pdpBreadcrumbTitle" style="color: #282C3F; font-weight: 700;">Product</span>
+  </div>
+
+  <div class="sy-pdp-grid">
+    <!-- Gallery -->
+    <div class="sy-pdp-gallery">
+      <div class="sy-pdp-thumbs" id="pdpThumbsContainer"></div>
+      <div class="sy-pdp-main-img-box">
+        <img id="pdpMainImg" class="sy-pdp-main-img" src="" alt="Sunnyeora Product">
+      </div>
+    </div>
+
+    <!-- Product Info -->
+    <div>
+      <div class="sy-pdp-brand-tag" id="pdpBrandTag">SUNNYEORA WELLNESS • CJ DROPSHIPPING VERIFIED</div>
+      <h1 class="sy-pdp-title" id="pdpTitle">Sunnyeora Product</h1>
+
+      <div class="sy-pdp-meta-row">
+        <span class="sy-pdp-rating-badge" id="pdpRatingBadge">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="#B45309"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+          <span id="pdpRatingText">4.9 ★ (2,840 reviews)</span>
+        </span>
+        <span id="pdpSoldCount">🔥 12,800+ sold in US & UK</span>
+        <span>• In Stock</span>
+      </div>
+
+      <div class="sy-pdp-pricing">
+        <span class="sy-pdp-price-now" id="pdpPriceNow">$49.99</span>
+        <span class="sy-pdp-price-was" id="pdpPriceWas">$89.99</span>
+        <span class="sy-pdp-discount-tag" id="pdpDiscountTag">SAVE $40 (45% OFF)</span>
+      </div>
+
+      <div class="sy-pdp-urgency">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+        <span>High Demand: Only <b id="pdpStockLeft">7</b> units remaining for USPS Express Priority Air delivery.</span>
+      </div>
+
+      <!-- Variants -->
+      <div>
+        <div class="sy-variant-label">
+          <span>COLOR / EDITION: <b id="pdpSelectedColor" style="color:#ff3f6c;">Ice-Silk White</b></span>
+        </div>
+        <div class="sy-swatch-list" id="pdpColorSwatches"></div>
+
+        <div class="sy-variant-label">
+          <span>SIZE / SPECIFICATION: <b id="pdpSelectedSize">Universal Ergonomic Fit</b></span>
+        </div>
+      </div>
+
+      <!-- Quantity Adjuster -->
+      <div style="font-size: 0.85rem; font-weight: 700; margin-bottom: 8px;">QUANTITY:</div>
+      <div class="sy-qty-pdp">
+        <button onclick="changePdpQty(-1)">-</button>
+        <span id="pdpQtyVal">1</span>
+        <button onclick="changePdpQty(1)">+</button>
+      </div>
+
+      <!-- Actions -->
+      <div class="sy-pdp-actions">
+        <button class="sy-btn-bag-main" id="pdpAddBagBtn">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
+          ADD TO BAG
+        </button>
+        <button class="sy-btn-checkout-now" id="pdpBuyNowBtn">
+          PROCEED TO CHECKOUT ➔
+        </button>
+      </div>
+
+      <!-- Trust Badges Grid -->
+      <div class="sy-pdp-trust-grid">
+        <div class="sy-pdp-trust-item">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0D5C3A" stroke-width="2"><path d="M17.8 19.2L16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.3c.4-.2.6-.6.5-1.1z"></path></svg>
+          <div>USPS Air Express</div>
+          <span>7-10 Days (US & UK)</span>
+        </div>
+        <div class="sy-pdp-trust-item">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#E58A2B" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+          <div>30-Night Trial</div>
+          <span>100% Money-Back</span>
+        </div>
+        <div class="sy-pdp-trust-item">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#6366F1" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+          <div>256-Bit SSL</div>
+          <span>Safe & Encrypted</span>
+        </div>
+      </div>
+
+      <!-- Tabbed Accordions -->
+      <div class="sy-pdp-tabs">
+        <div class="sy-pdp-tab-header">
+          <button class="sy-pdp-tab-btn active" onclick="switchPdpTab(0)">Overview & Benefits</button>
+          <button class="sy-pdp-tab-btn" onclick="switchPdpTab(1)">Specifications</button>
+          <button class="sy-pdp-tab-btn" onclick="switchPdpTab(2)">Shipping & Returns</button>
+        </div>
+        <div class="sy-pdp-tab-pane active" id="pdpTabOverview"></div>
+        <div class="sy-pdp-tab-pane" id="pdpTabSpecs"></div>
+        <div class="sy-pdp-tab-pane" id="pdpTabShipping">
+          <p><b>Fulfillment Partner:</b> CJ Dropshipping Logistics Direct Express</p>
+          <p><b>Carriers:</b> USPS Priority Air (United States), Royal Mail (United Kingdom), Canada Post (Canada), Australia Post (Australia).</p>
+          <p><b>Tracking:</b> Fully end-to-end tracked with door-to-door delivery updates sent to your email.</p>
+          <p><b>30-Day Guarantee:</b> Return within 30 days of delivery for a hassle-free 100% refund.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  (function() {
+    const CATALOG = {
+      'deep-sleep-cervical-pillow': {
+        id: 'sunnyeora-cervical-pillow',
+        category: 'Sleep & Ergonomics',
+        brand: 'SUNNYEORA SLEEP CARE • CJ DROPSHIPPING VERIFIED',
+        title: 'Sunnyeora Deep-Sleep™ Orthopedic Cervical Contour Pillow',
+        price: '49.99',
+        wasPrice: '89.99',
+        discount: 'SAVE $40 (45% OFF)',
+        rating: '4.9 ★ (2,840 reviews)',
+        sold: '12,800+ units delivered',
+        stock: '7',
+        images: [
+          'https://images.unsplash.com/photo-1584100936595-c0654b55a2e2?auto=format&fit=crop&w=1000&q=80',
+          'https://images.unsplash.com/photo-1631679706909-1844bbd07221?auto=format&fit=crop&w=1000&q=80',
+          'https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&w=1000&q=80'
+        ],
+        colors: ['Ice-Silk White', 'Cloud Gray', 'Lavender Dream'],
+        size: 'Universal Ergonomic Fit (4.3" / 3.5" Dual Height)',
+        overview: `
+          <p>Do you wake up feeling like your neck is locked up, with nagging shoulder tension or morning headaches? Traditional flat pillows leave a hollow gap under your cervical curve, forcing your spine out of alignment for 8 hours every night.</p>
+          <p>The <b>Sunnyeora Deep-Sleep™ Orthopedic Cervical Contour Pillow</b> cradles your skull, decompresses your cervical vertebrae, and restores your neck's natural 45° cervical lordosis curve in any sleeping posture.</p>
+          <ul>
+            <li><b>Ergonomic Central Cradle:</b> Distributes head pressure evenly across 12 contact points.</li>
+            <li><b>Slow-Rebound Memory Foam:</b> High-density core absorbs body heat and never sags or flattens.</li>
+            <li><b>Ice-Silk Cooling Fabric:</b> Hypoallergenic, breathable, machine-washable outer shell.</li>
+            <li><b>Back & Side Sleeper Wings:</b> Dual-height contour accommodates all sleep positions.</li>
+          </ul>
+        `,
+        specs: `
+          <ul>
+            <li><b>Dimensions:</b> 24" x 14" x 4.3" / 3.5" (60cm x 35cm x 11cm/9cm)</li>
+            <li><b>Core Material:</b> 100% High-Density CertiPUR-US® Certified Memory Foam</li>
+            <li><b>Cover:</b> 65% Poly-Fiber / 35% Ice-Silk Rayon (Removable & Washable)</li>
+            <li><b>Weight:</b> 950g</li>
+            <li><b>Certifications:</b> OEKO-TEX Standard 100, CertiPUR-US</li>
+          </ul>
+        `
+      },
+      'luminaglow-red-light-wand': {
+        id: 'sunnyeora-red-light-wand',
+        category: 'Skincare & Phototherapy',
+        brand: 'SUNNYEORA BEAUTY TECH • CJ DROPSHIPPING VERIFIED',
+        title: 'Sunnyeora LuminaGlow™ 7-in-1 Red Light Facial Therapy Wand',
+        price: '59.99',
+        wasPrice: '99.99',
+        discount: 'SAVE $40 (40% OFF)',
+        rating: '4.8 ★ (1,920 reviews)',
+        sold: '9,400+ units delivered',
+        stock: '9',
+        images: [
+          'https://images.unsplash.com/photo-1598440947619-2c35fc9aa908?auto=format&fit=crop&w=1000&q=80',
+          'https://images.unsplash.com/photo-1512290900672-1f02e60058b7?auto=format&fit=crop&w=1000&q=80',
+          'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=1000&q=80'
+        ],
+        colors: ['Rose Gold Luxury', 'Pearl White', 'Midnight Obsidian'],
+        size: 'Portable Rechargeable Wand (USB-C Fast Charging)',
+        overview: `
+          <p>Achieve radiant glass skin in just 5 minutes a day. The <b>Sunnyeora LuminaGlow™</b> combines 4 clinical dermatological modalities into one sleek, 90-degree rotating wand.</p>
+          <ul>
+            <li><b>660nm Red Light Phototherapy:</b> Penetrates deep into the dermis to boost collagen production.</li>
+            <li><b>Microcurrent Muscle Toning:</b> Gentle electrical pulses lift sagging jowls and sculpt cheekbones.</li>
+            <li><b>104°F Warming Massage:</b> Opens micro-capillaries to boost serum absorption by 300%.</li>
+            <li><b>Sonic Vibration (12,000 RPM):</b> Drains lymphatic fluids and diminishes morning puffiness.</li>
+          </ul>
+        `,
+        specs: `
+          <ul>
+            <li><b>Wavelength:</b> 660nm Red Light Spectrum</li>
+            <li><b>Battery:</b> 350mAh Lithium-ion (Up to 12 sessions per charge)</li>
+            <li><b>Charging Port:</b> Type-C Quick Charge</li>
+            <li><b>Head Rotation:</b> 90° Ergonomic Swivel</li>
+            <li><b>Weight:</b> 180g</li>
+          </ul>
+        `
+      },
+      'crystal-sonic-cleaner': {
+        id: 'sunnyeora-ultrasonic-cleaner',
+        category: 'Smart Tech & Care',
+        brand: 'SUNNYEORA SONIC TECH • CJ DROPSHIPPING VERIFIED',
+        title: 'Sunnyeora CrystalSonic™ 45,000Hz Ultrasonic Multi-Purpose Cleaner',
+        price: '39.99',
+        wasPrice: '69.99',
+        discount: 'SAVE $30 (43% OFF)',
+        rating: '4.9 ★ (3,410 reviews)',
+        sold: '15,200+ units delivered',
+        stock: '12',
+        images: [
+          'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=1000&q=80',
+          'https://images.unsplash.com/photo-1583863788434-e58a36330cf0?auto=format&fit=crop&w=1000&q=80',
+          'https://images.unsplash.com/photo-1584100936595-c0654b55a2e2?auto=format&fit=crop&w=1000&q=80'
+        ],
+        colors: ['Nordic White', 'Mint Aqua', 'Blush Pink'],
+        size: 'Standard 450ml Stainless Tank',
+        overview: `
+          <p>Restore showroom brilliance to your everyday essentials in 180 seconds flat — using nothing but plain tap water.</p>
+          <ul>
+            <li><b>45,000Hz Cavitation:</b> Millions of microscopic bubbles implode against crevices to dislodge trapped grease, makeup, and dirt.</li>
+            <li><b>Safe For All Valuables:</b> Cleans diamond rings, prescription glasses, retainers, and watches without scratching.</li>
+            <li><b>One-Touch Timer:</b> 3-minute automatic shut-off prevents overheating.</li>
+          </ul>
+        `,
+        specs: `
+          <ul>
+            <li><b>Ultrasonic Frequency:</b> 45,000 Hz</li>
+            <li><b>Tank Capacity:</b> 450 ml (SUS304 Food-Grade Stainless Steel)</li>
+            <li><b>Power:</b> 15W (Quiet Operation <40dB)</li>
+            <li><b>Dimensions:</b> 210mm x 95mm x 65mm</li>
+          </ul>
+        `
+      }
+    };
+
+    // Determine current path
+    const pathName = window.location.pathname.toLowerCase();
+    
+    // Check if path matches a known product handle or contains product query
+    let matchedHandle = null;
+    if (pathName.includes('pillow') || pathName.includes('cervical') || pathName.includes('deep-sleep')) {
+      matchedHandle = 'deep-sleep-cervical-pillow';
+    } else if (pathName.includes('wand') || pathName.includes('red-light') || pathName.includes('luminaglow')) {
+      matchedHandle = 'luminaglow-red-light-wand';
+    } else if (pathName.includes('cleaner') || pathName.includes('sonic') || pathName.includes('ultrasonic')) {
+      matchedHandle = 'crystal-sonic-cleaner';
+    } else if (pathName.startsWith('/products/')) {
+      // Default fallback product if general /products/ route
+      matchedHandle = 'deep-sleep-cervical-pillow';
+    }
+
+    if (matchedHandle && CATALOG[matchedHandle]) {
+      const prod = CATALOG[matchedHandle];
+      document.getElementById('syFallback404').style.display = 'none';
+      document.getElementById('syPdpWrap').style.display = 'block';
+      document.title = prod.title + ' | Sunnyeora';
+
+      // Populate PDP
+      document.getElementById('pdpBreadcrumbCategory').textContent = prod.category;
+      document.getElementById('pdpBreadcrumbTitle').textContent = prod.title;
+      document.getElementById('pdpBrandTag').textContent = prod.brand;
+      document.getElementById('pdpTitle').textContent = prod.title;
+      document.getElementById('pdpPriceNow').textContent = '$' + prod.price;
+      document.getElementById('pdpPriceWas').textContent = '$' + prod.wasPrice;
+      document.getElementById('pdpDiscountTag').textContent = prod.discount;
+      document.getElementById('pdpRatingText').textContent = prod.rating;
+      document.getElementById('pdpSoldCount').textContent = '🔥 ' + prod.sold;
+      document.getElementById('pdpStockLeft').textContent = prod.stock;
+      document.getElementById('pdpSelectedSize').textContent = prod.size;
+      document.getElementById('pdpSelectedColor').textContent = prod.colors[0];
+
+      // Gallery
+      const mainImg = document.getElementById('pdpMainImg');
+      mainImg.src = prod.images[0];
+      const thumbsBox = document.getElementById('pdpThumbsContainer');
+      thumbsBox.innerHTML = '';
+      prod.images.forEach((imgUrl, idx) => {
+        const thumb = document.createElement('img');
+        thumb.className = 'sy-pdp-thumb' + (idx === 0 ? ' active' : '');
+        thumb.src = imgUrl;
+        thumb.alt = prod.title;
+        thumb.onclick = function() {
+          mainImg.src = imgUrl;
+          document.querySelectorAll('.sy-pdp-thumb').forEach(t => t.classList.remove('active'));
+          thumb.classList.add('active');
+        };
+        thumbsBox.appendChild(thumb);
+      });
+
+      // Swatches
+      const swatchesBox = document.getElementById('pdpColorSwatches');
+      swatchesBox.innerHTML = '';
+      prod.colors.forEach((col, idx) => {
+        const btn = document.createElement('button');
+        btn.className = 'sy-swatch-btn' + (idx === 0 ? ' active' : '');
+        btn.textContent = col;
+        btn.onclick = function() {
+          document.querySelectorAll('.sy-swatch-btn').forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          document.getElementById('pdpSelectedColor').textContent = col;
+        };
+        swatchesBox.appendChild(btn);
+      });
+
+      // Tabs
+      document.getElementById('pdpTabOverview').innerHTML = prod.overview;
+      document.getElementById('pdpTabSpecs').innerHTML = prod.specs;
+
+      // Add to Bag Button
+      document.getElementById('pdpAddBagBtn').onclick = function() {
+        const color = document.getElementById('pdpSelectedColor').textContent;
+        const fullTitle = prod.title + ' (' + color + ')';
+        if (window.openCartDrawer) {
+          window.openCartDrawer(fullTitle, prod.price, prod.images[0]);
+        }
+      };
+
+      // Proceed to Checkout Button
+      document.getElementById('pdpBuyNowBtn').onclick = function() {
+        const color = document.getElementById('pdpSelectedColor').textContent;
+        const fullTitle = prod.title + ' (' + color + ')';
+        if (window.openCartDrawer) {
+          window.openCartDrawer(fullTitle, prod.price, prod.images[0]);
+        }
+        window.location.href = '/checkout';
+      };
+    } else if (pathName.includes('/collections/')) {
+      // If collection not found in shopify, redirect to /collections/all smoothly
+      window.location.replace('/collections/all');
+    }
+  })();
+
+  let pdpQty = 1;
+  window.changePdpQty = function(d) {
+    pdpQty += d;
+    if (pdpQty < 1) pdpQty = 1;
+    document.getElementById('pdpQtyVal').textContent = pdpQty;
+  };
+
+  window.switchPdpTab = function(idx) {
+    document.querySelectorAll('.sy-pdp-tab-btn').forEach((b, i) => {
+      b.classList.toggle('active', i === idx);
+    });
+    const panes = [
+      document.getElementById('pdpTabOverview'),
+      document.getElementById('pdpTabSpecs'),
+      document.getElementById('pdpTabShipping')
+    ];
+    panes.forEach((p, i) => {
+      if (p) p.classList.toggle('active', i === idx);
+    });
+  };
+</script>
+
 {% schema %}
 {
-  "name": "404 Page",
+  "name": "404 Page & Dynamic PDP",
   "tag": "section",
   "class": "section",
   "settings": []
