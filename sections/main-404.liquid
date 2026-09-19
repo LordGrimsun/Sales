@@ -477,7 +477,7 @@
 </div>
 
 <script>
-  (function() {
+  function initDynamicPdp() {
     const CATALOG = {
       'deep-sleep-cervical-pillow': {
         id: 'sunnyeora-cervical-pillow',
@@ -593,100 +593,172 @@
 
     // Determine current path
     const pathName = window.location.pathname.toLowerCase();
-    
-    // Check if path matches a known product handle or contains product query
-    let matchedHandle = null;
-    if (pathName.includes('pillow') || pathName.includes('cervical') || pathName.includes('deep-sleep')) {
-      matchedHandle = 'deep-sleep-cervical-pillow';
-    } else if (pathName.includes('wand') || pathName.includes('red-light') || pathName.includes('luminaglow')) {
-      matchedHandle = 'luminaglow-red-light-wand';
-    } else if (pathName.includes('cleaner') || pathName.includes('sonic') || pathName.includes('ultrasonic')) {
-      matchedHandle = 'crystal-sonic-cleaner';
-    } else if (pathName.startsWith('/products/')) {
-      // Default fallback product if general /products/ route
-      matchedHandle = 'deep-sleep-cervical-pillow';
+    const handleFromPath = pathName.replace("/products/", "").replace(/\//g, "").trim();
+
+    let matchedProd = null;
+
+    // Look up in window.SUNNYEORA_CATALOG
+    if (window.SUNNYEORA_CATALOG && Array.isArray(window.SUNNYEORA_CATALOG)) {
+      matchedProd = window.SUNNYEORA_CATALOG.find(p => p.handle === handleFromPath || pathName.includes(p.handle));
+      if (!matchedProd && handleFromPath) {
+        matchedProd = window.SUNNYEORA_CATALOG.find(p => p.handle.includes(handleFromPath) || handleFromPath.includes(p.handle));
+      }
     }
 
-    if (matchedHandle && CATALOG[matchedHandle]) {
-      const prod = CATALOG[matchedHandle];
-      document.getElementById('syFallback404').style.display = 'none';
-      document.getElementById('syPdpWrap').style.display = 'block';
-      document.title = prod.title + ' | Sunnyeora';
-
-      // Populate PDP
-      document.getElementById('pdpBreadcrumbCategory').textContent = prod.category;
-      document.getElementById('pdpBreadcrumbTitle').textContent = prod.title;
-      document.getElementById('pdpBrandTag').textContent = prod.brand;
-      document.getElementById('pdpTitle').textContent = prod.title;
-      document.getElementById('pdpPriceNow').textContent = '$' + prod.price;
-      document.getElementById('pdpPriceWas').textContent = '$' + prod.wasPrice;
-      document.getElementById('pdpDiscountTag').textContent = prod.discount;
-      document.getElementById('pdpRatingText').textContent = prod.rating;
-      document.getElementById('pdpSoldCount').textContent = '🔥 ' + prod.sold;
-      document.getElementById('pdpStockLeft').textContent = prod.stock;
-      document.getElementById('pdpSelectedSize').textContent = prod.size;
-      document.getElementById('pdpSelectedColor').textContent = prod.colors[0];
-
-      // Gallery
-      const mainImg = document.getElementById('pdpMainImg');
-      mainImg.src = prod.images[0];
-      const thumbsBox = document.getElementById('pdpThumbsContainer');
-      thumbsBox.innerHTML = '';
-      prod.images.forEach((imgUrl, idx) => {
-        const thumb = document.createElement('img');
-        thumb.className = 'sy-pdp-thumb' + (idx === 0 ? ' active' : '');
-        thumb.src = imgUrl;
-        thumb.alt = prod.title;
-        thumb.onclick = function() {
-          mainImg.src = imgUrl;
-          document.querySelectorAll('.sy-pdp-thumb').forEach(t => t.classList.remove('active'));
-          thumb.classList.add('active');
+    // Fallback to CATALOG dictionary
+    if (!matchedProd) {
+      let matchedHandle = null;
+      if (pathName.includes("pillow") || pathName.includes("cervical") || pathName.includes("deep-sleep")) {
+        matchedHandle = "deep-sleep-cervical-pillow";
+      } else if (pathName.includes("wand") || pathName.includes("red-light") || pathName.includes("luminaglow")) {
+        matchedHandle = "luminaglow-red-light-wand";
+      } else if (pathName.includes("cleaner") || pathName.includes("sonic") || pathName.includes("ultrasonic")) {
+        matchedHandle = "crystal-sonic-cleaner";
+      } else if (CATALOG[handleFromPath]) {
+        matchedHandle = handleFromPath;
+      }
+      if (matchedHandle && CATALOG[matchedHandle]) {
+        const c = CATALOG[matchedHandle];
+        matchedProd = {
+          handle: matchedHandle,
+          title: c.title,
+          brand: c.brand,
+          price: c.price,
+          comparePrice: c.wasPrice,
+          discount: c.discount,
+          rating: c.rating,
+          reviewsCount: "2,400",
+          soldCount: c.sold,
+          stock: c.stock,
+          image: c.images[0],
+          thumbnails: c.images,
+          colors: c.colors,
+          sizes: [c.size || "Standard"],
+          department: c.category || "Specialty Care",
+          overview: c.overview,
+          specs: c.specs
         };
-        thumbsBox.appendChild(thumb);
-      });
-
-      // Swatches
-      const swatchesBox = document.getElementById('pdpColorSwatches');
-      swatchesBox.innerHTML = '';
-      prod.colors.forEach((col, idx) => {
-        const btn = document.createElement('button');
-        btn.className = 'sy-swatch-btn' + (idx === 0 ? ' active' : '');
-        btn.textContent = col;
-        btn.onclick = function() {
-          document.querySelectorAll('.sy-swatch-btn').forEach(b => b.classList.remove('active'));
-          btn.classList.add('active');
-          document.getElementById('pdpSelectedColor').textContent = col;
-        };
-        swatchesBox.appendChild(btn);
-      });
-
-      // Tabs
-      document.getElementById('pdpTabOverview').innerHTML = prod.overview;
-      document.getElementById('pdpTabSpecs').innerHTML = prod.specs;
-
-      // Add to Bag Button
-      document.getElementById('pdpAddBagBtn').onclick = function() {
-        const color = document.getElementById('pdpSelectedColor').textContent;
-        const fullTitle = prod.title + ' (' + color + ')';
-        if (window.openCartDrawer) {
-          window.openCartDrawer(fullTitle, prod.price, prod.images[0]);
-        }
-      };
-
-      // Proceed to Checkout Button
-      document.getElementById('pdpBuyNowBtn').onclick = function() {
-        const color = document.getElementById('pdpSelectedColor').textContent;
-        const fullTitle = prod.title + ' (' + color + ')';
-        if (window.openCartDrawer) {
-          window.openCartDrawer(fullTitle, prod.price, prod.images[0]);
-        }
-        window.location.href = '/checkout';
-      };
-    } else if (pathName.includes('/collections/')) {
-      // If collection not found in shopify, redirect to /collections/all smoothly
-      window.location.replace('/collections/all');
+      }
     }
-  })();
+
+    // If on /products/ route without direct match, pick first catalog product
+    if (!matchedProd && pathName.startsWith("/products/")) {
+      if (window.SUNNYEORA_CATALOG && window.SUNNYEORA_CATALOG.length > 0) {
+        matchedProd = window.SUNNYEORA_CATALOG[0];
+      }
+    }
+
+    if (matchedProd) {
+      const fallbackEl = document.getElementById("syFallback404");
+      const pdpEl = document.getElementById("syPdpWrap");
+      if (fallbackEl) fallbackEl.style.display = "none";
+      if (pdpEl) pdpEl.style.display = "block";
+      document.title = matchedProd.title + " | Sunnyeora";
+
+      const deptName = (matchedProd.department || matchedProd.sector || "Marketplace").toUpperCase();
+      const catEl = document.getElementById("pdpBreadcrumbCategory");
+      if (catEl) {
+        catEl.textContent = deptName;
+        catEl.href = "/collections/all?dept=" + (matchedProd.department || matchedProd.sector || "all").toLowerCase();
+      }
+      const bcTitle = document.getElementById("pdpBreadcrumbTitle");
+      if (bcTitle) bcTitle.textContent = matchedProd.title;
+      const bTag = document.getElementById("pdpBrandTag");
+      if (bTag) bTag.textContent = (matchedProd.brand || "SUNNYEORA") + " • CJ DROPSHIPPING VERIFIED";
+      const pTitle = document.getElementById("pdpTitle");
+      if (pTitle) pTitle.textContent = matchedProd.title;
+      const pNow = document.getElementById("pdpPriceNow");
+      if (pNow) pNow.textContent = "$" + matchedProd.price;
+      const pWas = document.getElementById("pdpPriceWas");
+      if (pWas) pWas.textContent = matchedProd.comparePrice ? "$" + matchedProd.comparePrice : "";
+      const dTag = document.getElementById("pdpDiscountTag");
+      if (dTag) dTag.textContent = matchedProd.discount ? (matchedProd.discount.includes("SAVE") ? matchedProd.discount : "SAVE " + matchedProd.discount) : "";
+      const rText = document.getElementById("pdpRatingText");
+      if (rText) rText.textContent = (matchedProd.rating || "4.8 ★") + " (" + (matchedProd.reviewsCount || "1,420") + " reviews)";
+      const sCount = document.getElementById("pdpSoldCount");
+      if (sCount) sCount.textContent = "🔥 " + (matchedProd.soldCount || "1,200+ units delivered");
+      const sLeft = document.getElementById("pdpStockLeft");
+      if (sLeft) sLeft.textContent = matchedProd.stock || 5;
+
+      const colors = matchedProd.colors || ["Jet Black", "Classic Silver", "Navy Blue"];
+      const sizes = matchedProd.sizes || ["S", "M", "L", "XL", "One Size"];
+      const selSize = document.getElementById("pdpSelectedSize");
+      if (selSize) selSize.textContent = sizes[0];
+      const selCol = document.getElementById("pdpSelectedColor");
+      if (selCol) selCol.textContent = colors[0];
+
+      const mainImg = document.getElementById("pdpMainImg");
+      const galleryImages = (matchedProd.thumbnails && matchedProd.thumbnails.length > 0) ? matchedProd.thumbnails : [matchedProd.image];
+      if (mainImg) { mainImg.src = galleryImages[0]; mainImg.alt = matchedProd.title; }
+
+      const thumbsBox = document.getElementById("pdpThumbsContainer");
+      if (thumbsBox) {
+        thumbsBox.innerHTML = "";
+        galleryImages.forEach((imgUrl, idx) => {
+          const thumb = document.createElement("img");
+          thumb.className = "sy-pdp-thumb" + (idx === 0 ? " active" : "");
+          thumb.src = imgUrl;
+          thumb.alt = matchedProd.title;
+          thumb.onclick = function() {
+            if (mainImg) mainImg.src = imgUrl;
+            document.querySelectorAll(".sy-pdp-thumb").forEach(t => t.classList.remove("active"));
+            thumb.classList.add("active");
+          };
+          thumbsBox.appendChild(thumb);
+        });
+      }
+
+      const swatchesBox = document.getElementById("pdpColorSwatches");
+      if (swatchesBox) {
+        swatchesBox.innerHTML = "";
+        colors.forEach((col, idx) => {
+          const btn = document.createElement("button");
+          btn.className = "sy-swatch-btn" + (idx === 0 ? " active" : "");
+          btn.textContent = col;
+          btn.onclick = function() {
+            document.querySelectorAll(".sy-swatch-btn").forEach(b => b.classList.remove("active"));
+            btn.classList.add("active");
+            if (selCol) selCol.textContent = col;
+          };
+          swatchesBox.appendChild(btn);
+        });
+      }
+
+      const overviewHtml = matchedProd.overview || "<p>" + matchedProd.title + " is engineered with premium materials, precision ergonomics, and verified CJ Dropshipping quality standards for everyday excellence.</p><ul><li><b>USPS Air Express Shipping:</b> Tracked door-to-door delivery with 5–8 day delivery windows.</li><li><b>Rigorous Quality Inspection:</b> Passed triple-point factory QA testing before dispatch.</li><li><b>30-Day Money-Back Guarantee:</b> Seamless exchanges or 100% full refund if unsatisfied.</li></ul>";
+      const specsHtml = matchedProd.specs || "<ul><li><b>Brand:</b> " + (matchedProd.brand || "Sunnyeora") + "</li><li><b>Department:</b> " + deptName + "</li><li><b>Target Audience:</b> " + ((matchedProd.gender || "Unisex").toUpperCase()) + "</li><li><b>Protection:</b> 1-Year Comprehensive Manufacturer Warranty</li><li><b>Packaging:</b> Gift-ready reinforced eco-carton</li></ul>";
+      const tabOver = document.getElementById("pdpTabOverview");
+      if (tabOver) tabOver.innerHTML = overviewHtml;
+      const tabSp = document.getElementById("pdpTabSpecs");
+      if (tabSp) tabSp.innerHTML = specsHtml;
+
+      const addBtn = document.getElementById("pdpAddBagBtn");
+      if (addBtn) {
+        addBtn.onclick = function() {
+          const col = selCol ? selCol.textContent : colors[0];
+          const fullTitle = matchedProd.title + " (" + col + ")";
+          if (window.openCartDrawer) window.openCartDrawer(fullTitle, matchedProd.price, galleryImages[0]);
+        };
+      }
+
+      const buyBtn = document.getElementById("pdpBuyNowBtn");
+      if (buyBtn) {
+        buyBtn.onclick = function() {
+          const col = selCol ? selCol.textContent : colors[0];
+          const fullTitle = matchedProd.title + " (" + col + ")";
+          if (window.openCartDrawer) window.openCartDrawer(fullTitle, matchedProd.price, galleryImages[0]);
+          window.location.href = "/checkout";
+        };
+      }
+    } else if (pathName.includes("/collections/")) {
+      window.location.replace("/collections/all");
+    }
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initDynamicPdp);
+  } else {
+    initDynamicPdp();
+  }
 
   let pdpQty = 1;
   window.changePdpQty = function(d) {
