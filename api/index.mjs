@@ -112,7 +112,7 @@ export default async function handler(req, res) {
         models: MODEL_KEYS,
         efforts: EFFORT_KEYS,
         name: baseCfg.name || 'Sales',
-        brain: 'Sales Brain',
+        brain: 'Sunnyeora Brain',
         notes: 35,
         depts: DEPT_KEYS,
         agents: AGENTS.map(a => ({
