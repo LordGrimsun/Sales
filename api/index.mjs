@@ -283,7 +283,7 @@ export default async function handler(req, res) {
         try {
           const sys = `You are ${agent.name}, ${agent.role} in the ${task.dept.toUpperCase()} department at ${baseCfg.name || 'Sales'}.\n` +
             `${agent.does || ''}\n` +
-            `Produce the finished, professional deliverable directly in clean markdown. Be concise, actionable, and thorough.`;
+            `Produce the finished, professional deliverable directly in clean markdown. Be concise, actionable, and thorough. Output ONLY the deliverable content itself. Never output role recaps, persona bullet points, or thinking steps.`;
           const userPrompt = `Task: ${task.title}\nRequest details: ${task.text}` +
             (feedback ? `\n\nOwner requested revision: "${feedback}"\nPrevious version:\n${task.result || ''}` : '');
 
@@ -315,7 +315,7 @@ export default async function handler(req, res) {
 
       const sys = `You are ${agent.name}, ${agent.role} in ${deptName} at ${baseCfg.name || 'Sales'}.\n` +
         `Your responsibility: ${agent.does || ''}\n` +
-        `Tone: sharp, competent, proactive, direct. Speak in first person as the agent sitting at your desk in the command centre. Always give real, helpful sales domain answers.`;
+        `Tone: sharp, competent, proactive, direct. Speak in first person as the agent sitting at your desk in the command centre. Always give real, helpful sales domain answers. Speak directly to the user — do NOT include persona notes, bullet lists of your instructions, or thinking steps.`;
 
       const messages = history.map(m => `${m.who === 'user' ? 'User' : agent.name}: ${m.text}`).join('\n') + `\nUser: ${text}`;
       const resp = await askLLM(sys, messages, { maxTokens: 1000 });

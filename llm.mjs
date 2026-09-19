@@ -26,6 +26,14 @@ try {
   }
 } catch {}
 
+function stripScratchpad(text) {
+  if (!text) return '';
+  let s = String(text).replace(/<think>[\s\S]*?<\/think>/gi, '').trim();
+  s = s.replace(/^(?:(?:\*|-)\s*(?:Role|Persona|Goal|Responsibilities|Tone|Scenario|Recipient|Team Structure):[\s\S]*?\n\n+)+/i, '').trim();
+  s = s.replace(/^(?:Thinking|Thought)\s*Process:[\s\S]*?\n\n+/i, '').trim();
+  return s;
+}
+
 export function detectProvider() {
   if (process.env.ANTHROPIC_API_KEY) return 'anthropic';
   if (process.env.OPENAI_API_KEY) return 'openai';
@@ -41,7 +49,7 @@ export function getProviderInfo() {
     isConfigured: provider !== 'claude-cli' || hasClaudeCli(),
     defaultModel: provider === 'anthropic' ? 'claude-3-5-sonnet-20241022'
       : provider === 'openai' ? 'gpt-4o'
-      : provider === 'gemini' ? 'gemini-2.0-flash'
+      : provider === 'gemini' ? 'gemini-1.5-flash'
       : provider === 'openrouter' ? 'anthropic/claude-3.5-sonnet'
       : 'sonnet'
   };
@@ -173,7 +181,7 @@ export async function askLLM(system, user, opts = {}) {
 
         if (res.ok) {
           const data = await res.json();
-          const text = data.candidates?.[0]?.content?.parts?.[0]?.text?.trim() || '';
+          const text = stripScratchpad(data.candidates?.[0]?.content?.parts?.[0]?.text?.trim() || '');
           return {
             text,
             tools: [],
@@ -211,7 +219,7 @@ export async function askLLM(system, user, opts = {}) {
             });
             if (res.ok) {
               const data = await res.json();
-              const text = data.candidates?.[0]?.content?.parts?.[0]?.text?.trim() || '';
+              const text = stripScratchpad(data.candidates?.[0]?.content?.parts?.[0]?.text?.trim() || '');
               return { text, tools: [], usage: data.usageMetadata || null, modelId: m };
             }
           } catch {}
