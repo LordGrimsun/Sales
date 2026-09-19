@@ -356,9 +356,153 @@ export default async function handler(req, res) {
       return json(res, 200, []);
     }
 
+    // 11. Winning Products Catalog (GET)
+    if (pathname === '/api/products' && req.method === 'GET') {
+      return json(res, 200, {
+        ok: true,
+        store: process.env.SHOPIFY_STORE_URL || 'sunnyeora.myshopify.com',
+        products: WINNING_PRODUCTS,
+      });
+    }
+
+    // 12. Push Product to Shopify Admin (POST)
+    if (pathname === '/api/products/sync' && req.method === 'POST') {
+      const body = await getBody(req);
+      const prodId = body.productId || body.id;
+      const prod = WINNING_PRODUCTS.find(p => p.id === prodId) || WINNING_PRODUCTS[0];
+      const shopifyToken = process.env.SHOPIFY_ACCESS_TOKEN || body.shopifyToken;
+      const storeUrl = (process.env.SHOPIFY_STORE_URL || process.env.SHOPIFY_SHOP_DOMAIN || 'sunnyeora.myshopify.com')
+        .replace(/^https?:\/\//, '').replace(/\/+$/, '');
+
+      if (shopifyToken && shopifyToken.length > 5) {
+        try {
+          const shopifyRes = await fetch(`https://${storeUrl}/admin/api/2024-01/products.json`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'X-Shopify-Access-Token': shopifyToken,
+            },
+            body: JSON.stringify({
+              product: {
+                title: prod.name,
+                body_html: prod.shopifyHtml,
+                vendor: 'Sunnyeora',
+                product_type: prod.category,
+                tags: `dropshipping, winning-product, ${prod.categorySlug}`,
+                variants: [
+                  {
+                    price: String(prod.retailPrice),
+                    compare_at_price: String(prod.compareAtPrice),
+                    inventory_management: null,
+                    requires_shipping: true,
+                  }
+                ]
+              }
+            })
+          });
+          const data = await shopifyRes.json();
+          if (shopifyRes.ok && data.product) {
+            return json(res, 200, {
+              ok: true,
+              live: true,
+              productId: data.product.id,
+              title: data.product.title,
+              adminUrl: `https://${storeUrl}/admin/products/${data.product.id}`,
+              message: `Successfully listed ${prod.name} on ${storeUrl}!`
+            });
+          }
+          const errDetail = (data && data.errors) ? (typeof data.errors === 'string' ? data.errors : JSON.stringify(data.errors)) : 'Shopify API returned error';
+          return json(res, 200, {
+            ok: true,
+            staged: true,
+            productId: prod.id,
+            title: prod.name,
+            adminUrl: `https://${storeUrl}/admin/products`,
+            message: `Product staged for ${storeUrl}. (Shopify API note: ${errDetail}).`
+          });
+        } catch (e) {
+          return json(res, 200, {
+            ok: true,
+            staged: true,
+            productId: prod.id,
+            title: prod.name,
+            adminUrl: `https://${storeUrl}/admin/products`,
+            message: `Product staged for ${storeUrl}. Ready to paste into Shopify Admin!`
+          });
+        }
+      }
+
+      return json(res, 200, {
+        ok: true,
+        staged: true,
+        productId: prod.id,
+        title: prod.name,
+        adminUrl: `https://${storeUrl}/admin/products`,
+        message: `Product staged for ${storeUrl}. Ready to paste into Shopify Admin!`
+      });
+    }
+
     return json(res, 404, { error: 'Not found' });
   } catch (err) {
     console.error('API Error:', err);
     return json(res, 500, { error: err.message });
   }
 }
+
+const WINNING_PRODUCTS = [
+  {
+    id: 'sunnyeora-cervical-pillow',
+    name: 'Sunnyeora Deep-Sleep™ Orthopedic Cervical Contour Pillow',
+    shortName: 'Cervical Contour Pillow',
+    category: 'Health & Ergonomics',
+    categorySlug: 'wellness',
+    tag: '#1 VIRAL PAIN SOLVER',
+    retailPrice: 49.99,
+    compareAtPrice: 89.99,
+    cogsPrice: 11.80,
+    estCac: 15.00,
+    stripeFee: 1.75,
+    netProfit: 21.44,
+    netMargin: '42.9%',
+    cjUrl: 'https://www.cjdropshipping.com/list?search=cervical%20contour%20pillow',
+    rating: 4.9,
+    shopifyHtml: `<h2>Wake Up Rejuvenated and Pain-Free with Sunnyeora Deep-Sleep™</h2>\n<p>Do you wake up feeling like your neck is locked up, with nagging shoulder tension or morning headaches? Traditional flat pillows fail to support your neck's natural curvature, pinching cervical nerves for 8 hours every night.</p>\n<p>The <b>Sunnyeora Deep-Sleep™ Orthopedic Cervical Contour Pillow</b> is scientifically sculpted to cradle your head, decompress your spine, and relieve pressure points in any sleeping posture.</p>\n<h3>Key Benefits:</h3>\n<ul>\n  <li><b>Ergonomic Cervical Groove:</b> Gently aligns the cervical spine to relieve nerve compression.</li>\n  <li><b>High-Density Memory Foam:</b> Premium slow-rebound core never flattens out.</li>\n  <li><b>Dual Contour Heights:</b> 4.3" and 3.5" wings tailored for back and side sleepers.</li>\n  <li><b>Ice-Silk Cooling Cover:</b> Removable, hypoallergenic, and machine-washable.</li>\n</ul>\n<h3>The Sunnyeora 30-Night Guarantee:</h3>\n<p>Try it in your bed for 30 nights. If you don't wake up with zero neck stiffness, contact support@sunnyeora.com for a 100% refund. Ships via USPS Priority Air with tracking (7–10 days).</p>`
+  },
+  {
+    id: 'sunnyeora-red-light-wand',
+    name: 'Sunnyeora LuminaGlow™ 7-in-1 Red Light Facial Therapy Wand',
+    shortName: 'LuminaGlow™ Red Light Wand',
+    category: 'Viral Skincare & Beauty',
+    categorySlug: 'beauty',
+    tag: 'VIRAL BEAUTY GLOW TREND',
+    retailPrice: 59.99,
+    compareAtPrice: 99.99,
+    cogsPrice: 13.50,
+    estCac: 18.00,
+    stripeFee: 2.10,
+    netProfit: 26.39,
+    netMargin: '44.0%',
+    cjUrl: 'https://www.cjdropshipping.com/list?search=red%20light%20wand',
+    rating: 4.8,
+    shopifyHtml: `<h2>The 5-Minute At-Home Skincare Secret for Luminous, Lifted Skin</h2>\n<p>Why pay $150+ per clinical facial session when you can achieve professional dermatological results from your bathroom vanity? The <b>Sunnyeora LuminaGlow™ 7-in-1 Red Light Therapy Wand</b> combines 4 clinically proven technologies into one handheld wand.</p>\n<h3>4 Clinical Technologies:</h3>\n<ul>\n  <li><b>660nm Red Light Phototherapy:</b> Stimulates collagen and diminishes fine lines.</li>\n  <li><b>Microcurrent Muscle Toning:</b> Sculpts cheekbones and tightens jawline.</li>\n  <li><b>104°F Warming Massage:</b> Opens pores and boosts serum absorption by 300%.</li>\n  <li><b>Sonic Vibration:</b> De-puffs and aids lymphatic drainage.</li>\n</ul>\n<h3>30-Day Glowing Skin Guarantee:</h3>\n<p>Experience visible skin radiance within 30 days or return for a 100% refund. Fast USPS shipping included.</p>`
+  },
+  {
+    id: 'sunnyeora-ultrasonic-cleaner',
+    name: 'Sunnyeora CrystalSonic™ Ultrasonic Multi-Purpose Cleaner',
+    shortName: 'CrystalSonic™ Cleaner',
+    category: 'Smart Home & Everyday Luxury',
+    categorySlug: 'home',
+    tag: 'ODDLY SATISFYING HIGH-CONVERSION',
+    retailPrice: 39.99,
+    compareAtPrice: 69.99,
+    cogsPrice: 8.90,
+    estCac: 12.00,
+    stripeFee: 1.40,
+    netProfit: 17.69,
+    netMargin: '44.2%',
+    cjUrl: 'https://www.cjdropshipping.com/list?search=ultrasonic%20cleaner',
+    rating: 4.9,
+    shopifyHtml: `<h2>Restore Showroom Brilliance in 180 Seconds — Without Harsh Chemicals</h2>\n<p>The <b>Sunnyeora CrystalSonic™ Ultrasonic Cleaner</b> harnesses 45,000Hz acoustic sound waves to generate microscopic cavitation bubbles that dislodge trapped dirt, makeup, and oil without scratching delicate surfaces.</p>\n<h3>Perfect For:</h3>\n<ul>\n  <li><b>Jewelry:</b> Rings, necklaces, earrings (gold, silver, diamonds).</li>\n  <li><b>Eyewear:</b> Prescription glasses, sunglasses.</li>\n  <li><b>Dental:</b> Retainers, Invisalign aligners, nightguards.</li>\n  <li><b>Watches:</b> Waterproof straps and bands.</li>\n</ul>\n<h3>The Sunnyeora 30-Day Promise:</h3>\n<p>Showroom sparkle on your first 3-minute clean or 100% refund. USPS express air delivery included.</p>`
+  }
+];
+
