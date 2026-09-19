@@ -1,0 +1,455 @@
+<style>
+  /* Exact Myntra Banner Carousel */
+  .myntra-hero-wrap {
+    width: 100%;
+    margin: 0 0 25px 0;
+    position: relative;
+    background: #FFFFFF;
+    user-select: none;
+    overflow: hidden;
+  }
+  .myntra-carousel-viewport {
+    position: relative;
+    width: 100%;
+    max-width: 1440px;
+    margin: 0 auto;
+    overflow: hidden;
+  }
+  .myntra-carousel-track {
+    display: flex;
+    transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+    width: 100%;
+  }
+
+  /* Each Banner Slide (Exact Myntra 3.5:1 / 4:1 banner format) */
+  .myntra-banner-slide {
+    min-width: 100%;
+    box-sizing: border-box;
+    height: 380px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    text-decoration: none !important;
+    cursor: pointer;
+    overflow: hidden;
+  }
+  @media (max-width: 990px) {
+    .myntra-banner-slide {
+      height: 280px;
+    }
+  }
+  @media (max-width: 600px) {
+    .myntra-banner-slide {
+      height: 220px;
+    }
+  }
+
+  /* SLIDE 1: Yellow Gen-Z FWD Style (Matching Screenshot 1) */
+  .myntra-slide-fwd {
+    background: linear-gradient(90deg, #FEE440 0%, #FED926 40%, #FDCA00 100%);
+    justify-content: space-between;
+  }
+  .fwd-models-box {
+    height: 100%;
+    width: 38%;
+    display: flex;
+    align-items: flex-end;
+    overflow: hidden;
+  }
+  .fwd-models-box img {
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+    object-position: top center;
+  }
+  .fwd-center-logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .fwd-logo-text {
+    font-size: clamp(3.2rem, 7vw, 6.5rem);
+    font-weight: 900;
+    font-style: italic;
+    color: #111111;
+    letter-spacing: -2px;
+    line-height: 0.9;
+  }
+  .fwd-right-content {
+    width: 32%;
+    padding-right: 50px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+  }
+  .fwd-headline {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    font-size: clamp(1.4rem, 2.5vw, 2.2rem);
+    font-weight: 900;
+    color: #111111;
+    line-height: 1.1;
+    margin-bottom: 8px;
+    letter-spacing: -0.5px;
+  }
+  .fwd-price-tag {
+    font-size: clamp(0.95rem, 1.4vw, 1.25rem);
+    font-weight: 800;
+    color: #111111;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 2px;
+  }
+  .fwd-price-val {
+    font-size: clamp(2rem, 4.5vw, 3.8rem);
+    font-weight: 900;
+    color: #111111;
+    line-height: 1;
+    margin-bottom: 16px;
+    letter-spacing: -1px;
+  }
+  .fwd-btn {
+    background: #FFFFFF;
+    color: #111111;
+    padding: 12px 28px;
+    border-radius: 6px;
+    font-weight: 900;
+    font-size: 0.95rem;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.12);
+    display: inline-block;
+    letter-spacing: 0.5px;
+    transition: transform 0.2s;
+  }
+  .myntra-banner-slide:hover .fwd-btn {
+    transform: scale(1.04);
+  }
+
+  /* SLIDES 2 & 3: Editorial Brand Luxury (Matching Screenshots 2 & 3) */
+  .myntra-slide-editorial {
+    background: #FFFFFF;
+    justify-content: space-between;
+  }
+  .editorial-brand-badge {
+    position: absolute;
+    top: 24px;
+    left: 30px;
+    background: #FFFFFF;
+    padding: 6px 14px;
+    border: 1px solid #E2E8F0;
+    font-size: 0.78rem;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+    color: #282C3F;
+    text-transform: uppercase;
+    z-index: 5;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  }
+  .editorial-visual-left {
+    height: 100%;
+    width: 62%;
+    position: relative;
+    overflow: hidden;
+  }
+  .editorial-visual-left img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 25%;
+  }
+  .editorial-content-right {
+    width: 38%;
+    padding: 0 50px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    background: #FFFFFF;
+    height: 100%;
+    box-sizing: border-box;
+  }
+  .editorial-title {
+    font-family: "Playfair Display", Didot, "Times New Roman", serif;
+    font-size: clamp(1.8rem, 3.2vw, 2.9rem);
+    font-weight: 700;
+    color: #282C3F;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    line-height: 1.1;
+    margin-bottom: 8px;
+  }
+  .editorial-sub {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    font-size: clamp(1.1rem, 1.6vw, 1.45rem);
+    color: #535766;
+    font-weight: 500;
+    margin-bottom: 18px;
+  }
+  .editorial-divider {
+    width: 140px;
+    height: 1px;
+    background: #EAEAEC;
+    margin-bottom: 16px;
+  }
+  .editorial-explore {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    color: #94969F;
+    font-size: 0.95rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    transition: color 0.2s;
+  }
+  .myntra-banner-slide:hover .editorial-explore {
+    color: #282C3F;
+  }
+
+  /* Exact Myntra Right-Edge Vertical Tab */
+  .myntra-edge-tab {
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    background: #535766;
+    color: #FFFFFF;
+    width: 32px;
+    padding: 14px 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px 0 0 4px;
+    box-shadow: -2px 0 10px rgba(0, 0, 0, 0.15);
+    z-index: 20;
+    cursor: pointer;
+  }
+  .myntra-edge-arrow {
+    width: 0;
+    height: 0;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-bottom: 7px solid #FFFFFF;
+    margin-bottom: 8px;
+  }
+  .myntra-edge-text {
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    white-space: nowrap;
+    color: #FFFFFF;
+  }
+
+  /* Myntra Subtle Dots Indicator (Exact Centered Gray Dots) */
+  .myntra-dots-container {
+    position: absolute;
+    bottom: 12px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    z-index: 20;
+  }
+  .myntra-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #D4D5D9;
+    cursor: pointer;
+    transition: background 0.25s, transform 0.25s;
+    border: none;
+    padding: 0;
+  }
+  .myntra-dot.active {
+    background: #535766;
+    transform: scale(1.2);
+  }
+
+  /* Responsive tweaks */
+  @media (max-width: 768px) {
+    .editorial-content-right {
+      padding: 0 20px;
+    }
+    .fwd-right-content {
+      padding-right: 25px;
+    }
+    .myntra-edge-tab {
+      display: none;
+    }
+  }
+</style>
+
+<div class="myntra-hero-wrap" id="myntraHeroWrap">
+  <div class="myntra-carousel-viewport" id="myntraCarouselViewport">
+    
+    <!-- Exact Myntra Vertical Edge Tab -->
+    <div class="myntra-edge-tab">
+      <div class="myntra-edge-arrow"></div>
+      <div class="myntra-edge-text">UPTO $40 OFF</div>
+    </div>
+
+    <!-- Carousel Track -->
+    <div class="myntra-carousel-track" id="myntraCarouselTrack">
+      
+      <!-- SLIDE 1: FWD Gen-Z Style (Exact layout of user screenshot 1) -->
+      <a href="/collections/all" class="myntra-banner-slide myntra-slide-fwd">
+        <div class="fwd-models-box">
+          <img src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=800&q=85" alt="Viral Fashion Models">
+        </div>
+        <div class="fwd-center-logo">
+          <span class="fwd-logo-text">fwd</span>
+        </div>
+        <div class="fwd-right-content">
+          <div class="fwd-headline">Gen-Z Hits<br>For All</div>
+          <div class="fwd-price-tag">UNDER</div>
+          <div class="fwd-price-val">$49</div>
+          <span class="fwd-btn">SHOP NOW &gt;</span>
+        </div>
+      </a>
+
+      <!-- SLIDE 2: 2-Piece Suits & Co-ords -->
+      <a href="/collections/all?q=suit" class="myntra-banner-slide myntra-slide-editorial">
+        <div class="editorial-brand-badge">SUNNYEORA CO-ORDS</div>
+        <div class="editorial-visual-left">
+          <img src="https://images.unsplash.com/photo-1539109136881-3be0616acf4b?auto=format&fit=crop&w=1100&q=85" alt="Sunnyeora 2-Piece Suits and Co-ord Sets">
+        </div>
+        <div class="editorial-content-right">
+          <h2 class="editorial-title">SUITS &amp; SETS</h2>
+          <div class="editorial-sub">Min. 50% Off</div>
+          <div class="editorial-divider"></div>
+          <div class="editorial-explore">+ Explore</div>
+        </div>
+      </a>
+
+      <!-- SLIDE 3: Coats & Knitted Outerwear -->
+      <a href="/collections/all?q=sweater" class="myntra-banner-slide myntra-slide-editorial">
+        <div class="editorial-brand-badge">SUNNYEORA WINTER EDIT</div>
+        <div class="editorial-visual-left">
+          <img src="https://images.unsplash.com/photo-1516257984-b1b4d707412e?auto=format&fit=crop&w=1200&q=85" alt="Sunnyeora Autumn &amp; Winter Outerwear and Knits">
+        </div>
+        <div class="editorial-content-right">
+          <h2 class="editorial-title">COATS &amp; KNITS</h2>
+          <div class="editorial-sub">Up To 50% Off</div>
+          <div class="editorial-divider"></div>
+          <div class="editorial-explore">+ Explore</div>
+        </div>
+      </a>
+
+      <!-- SLIDE 4: Beauty & Rolling Perfumes Editorial -->
+      <a href="/collections/all?q=perfume" class="myntra-banner-slide myntra-slide-editorial">
+        <div class="editorial-brand-badge">SUNNYEORA BEAUTY</div>
+        <div class="editorial-visual-left">
+          <img src="https://images.unsplash.com/photo-1598440947619-2c35fc9aa908?auto=format&fit=crop&w=1100&q=85" alt="Sunnyeora Fragrance and Beauty Collection">
+        </div>
+        <div class="editorial-content-right">
+          <h2 class="editorial-title">BEAUTY &amp; PERFUME</h2>
+          <div class="editorial-sub">Starting at $19</div>
+          <div class="editorial-divider"></div>
+          <div class="editorial-explore">+ Explore</div>
+        </div>
+      </a>
+
+    </div>
+
+    <!-- Myntra Subtle Dots Indicator -->
+    <div class="myntra-dots-container" id="myntraDotsContainer">
+      <button class="myntra-dot active" data-index="0" aria-label="Slide 1"></button>
+      <button class="myntra-dot" data-index="1" aria-label="Slide 2"></button>
+      <button class="myntra-dot" data-index="2" aria-label="Slide 3"></button>
+      <button class="myntra-dot" data-index="3" aria-label="Slide 4"></button>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  (function() {
+    var track = document.getElementById('myntraCarouselTrack');
+    var viewport = document.getElementById('myntraCarouselViewport');
+    var dots = document.querySelectorAll('#myntraDotsContainer .myntra-dot');
+    if (!track || !viewport) return;
+
+    var currentIndex = 0;
+    var totalSlides = 4;
+    var slideInterval = null;
+    var touchStartX = 0;
+    var touchEndX = 0;
+
+    function goToSlide(index) {
+      if (index < 0) index = totalSlides - 1;
+      if (index >= totalSlides) index = 0;
+      currentIndex = index;
+
+      track.style.transform = 'translateX(-' + (currentIndex * 100) + '%)';
+
+      dots.forEach(function(dot, i) {
+        if (i === currentIndex) {
+          dot.classList.add('active');
+        } else {
+          dot.classList.remove('active');
+        }
+      });
+    }
+
+    function startAutoSlide() {
+      clearInterval(slideInterval);
+      slideInterval = setInterval(function() {
+        goToSlide(currentIndex + 1);
+      }, 4200);
+    }
+
+    function stopAutoSlide() {
+      clearInterval(slideInterval);
+    }
+
+    dots.forEach(function(dot) {
+      dot.addEventListener('click', function(e) {
+        e.stopPropagation();
+        var idx = parseInt(this.getAttribute('data-index'), 10);
+        goToSlide(idx);
+        startAutoSlide();
+      });
+    });
+
+    viewport.addEventListener('mouseenter', stopAutoSlide);
+    viewport.addEventListener('mouseleave', startAutoSlide);
+
+    viewport.addEventListener('touchstart', function(e) {
+      stopAutoSlide();
+      touchStartX = e.changedTouches[0].screenX;
+    }, { passive: true });
+
+    viewport.addEventListener('touchend', function(e) {
+      touchEndX = e.changedTouches[0].screenX;
+      startAutoSlide();
+      var diff = touchStartX - touchEndX;
+      if (Math.abs(diff) > 40) {
+        if (diff > 0) {
+          goToSlide(currentIndex + 1);
+        } else {
+          goToSlide(currentIndex - 1);
+        }
+      }
+    }, { passive: true });
+
+    startAutoSlide();
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Sunnyeora Banner Carousel",
+  "tag": "section",
+  "class": "section",
+  "settings": [],
+  "presets": [
+    {
+      "name": "Sunnyeora Banner Carousel"
+    }
+  ]
+}
+{% endschema %}

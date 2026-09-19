@@ -1,7 +1,7 @@
 {
   "sections": {
-    "hero_carousel": {
-      "type": "sunnyeora-hero-carousel"
+    "main_hero_carousel": {
+      "type": "sunnyeora-banner-carousel"
     },
     "deals_day": {
       "type": "sunnyeora-deals-day"
@@ -23,7 +23,7 @@
     }
   },
   "order": [
-    "hero_carousel",
+    "main_hero_carousel",
     "deals_day",
     "categories_grid",
     "grid_catalog",
