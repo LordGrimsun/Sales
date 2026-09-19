@@ -793,6 +793,86 @@ export function initTasks(ctx) {
       requestAnimationFrame(() => requestAnimationFrame(() => { n.style.transition = 'transform .65s var(--ease)'; n.style.transform = ''; }));
     });
   }
+  function renderAllEmptyState() {
+    const rts = scopedRoutines().sort(byNext);
+    let html = '';
+    
+    // 1. Live Autonomous Routines
+    if (rts.length > 0) {
+      html += `
+        <div class="tp-section-head">
+          <span>AUTONOMOUS STORE ROUTINES</span>
+          <span class="tp-sh-tag">${rts.length} ACTIVE</span>
+        </div>
+        <div class="tp-routines-box">${rts.map(rowHTMLr).join('')}</div>
+      `;
+    }
+    
+    // 2. 1-Click Sales & Growth Playbooks
+    html += `
+      <div class="tp-section-head" style="margin-top:14px;">
+        <span>1-CLICK SALES PLAYBOOKS</span>
+        <span class="tp-sh-tag">GROWTH ENGINE</span>
+      </div>
+      <div class="tp-playbooks">
+        <div class="tp-pb-card" data-cmd="as a team, recover stalled checkouts and generate recovery outreach for sunnyeora">
+          <div class="tp-pb-icon">⚡</div>
+          <div class="tp-pb-body">
+            <div class="tp-pb-title">Recover Abandoned Checkouts</div>
+            <div class="tp-pb-desc">Drafts targeted email & SMS recovery with 10% off code</div>
+          </div>
+          <button class="tp-pb-btn" type="button">TRIGGER</button>
+        </div>
+        <div class="tp-pb-card" data-cmd="generate 3 viral TikTok ad hooks for Sunnyeora 2-piece suits and sweaters">
+          <div class="tp-pb-icon">🎬</div>
+          <div class="tp-pb-body">
+            <div class="tp-pb-title">Generate Viral Ad Hooks</div>
+            <div class="tp-pb-desc">Creates 3 high-converting script hooks for US/UK TikTok & Reels</div>
+          </div>
+          <button class="tp-pb-btn" type="button">TRIGGER</button>
+        </div>
+        <div class="tp-pb-card" data-cmd="audit cross-border profit margins for the 31 live Shopify dropshipping products">
+          <div class="tp-pb-icon">💰</div>
+          <div class="tp-pb-body">
+            <div class="tp-pb-title">Audit Unit Profit Margins</div>
+            <div class="tp-pb-desc">Validates supplier COGS vs ad CAC for 40%+ net margins</div>
+          </div>
+          <button class="tp-pb-btn" type="button">TRIGGER</button>
+        </div>
+      </div>
+    `;
+    
+    // 3. Live Storefront KPI Summary
+    html += `
+      <div class="tp-store-card">
+        <div class="tp-sc-head">
+          <span class="tp-sc-title">🛍️ SUNNYEORA STOREFRONT</span>
+          <a href="https://sunnyeora.myshopify.com/" target="_blank" rel="noopener" class="tp-sc-link">OPEN STORE ↗</a>
+        </div>
+        <div class="tp-sc-grid">
+          <div class="tp-sc-item">
+            <span class="tp-sc-lbl">CATALOG</span>
+            <span class="tp-sc-val">31 Live SKUs</span>
+          </div>
+          <div class="tp-sc-item">
+            <span class="tp-sc-lbl">SHIPPING</span>
+            <span class="tp-sc-val">USPS 7-10d</span>
+          </div>
+          <div class="tp-sc-item">
+            <span class="tp-sc-lbl">AVG MARGIN</span>
+            <span class="tp-sc-val">41.5% Net</span>
+          </div>
+          <div class="tp-sc-item">
+            <span class="tp-sc-lbl">PAYOUT</span>
+            <span class="tp-sc-val">USD ➔ INR</span>
+          </div>
+        </div>
+      </div>
+    `;
+    
+    return html;
+  }
+
   function render(structural) {
     const f = getFocused();
     P_.scope.textContent = (f && f !== 'brain') ? DEPTS[f].name : 'WHOLE OFFICE';
@@ -802,9 +882,19 @@ export function initTasks(ctx) {
     const before = structural ? {} : rects();
     P_.rows.innerHTML = filter === 'sched'
       ? ((scopedRoutines().sort(byNext).map(rowHTMLr).join('') + scoped().filter(t => t.state === 'scheduled').sort((a, b) => a.dueAt - b.dueAt).map(rowHTMLp).join('')) || `<div class="tp-empty">No routines yet. Type one with a time in it — "every weekday at 8am, …" — or press REPEAT. Press <b>P</b> for the calendar to schedule a task for a date.${RT_DEPTS.includes(dept) ? '' : ' Routines: Emails, Accounting and Sales this release.'}</div>`)
-      : (list.map(rowHTMLp).join('') || `<div class="tp-empty">Nothing here right now.</div>`);
+      : (list.map(rowHTMLp).join('') || (filter === 'all' ? renderAllEmptyState() : `<div class="tp-empty">Nothing here right now.</div>`));
     renderNext();
     P_.rows.querySelectorAll('.tp-act button').forEach(b => b.addEventListener('click', e => { e.stopPropagation(); const row = b.closest('.tp-row'); if (row.dataset.rid) rtAct(row.dataset.rid, b.dataset.act); else if (b.dataset.act === 'cancel') cancelScheduled(tasks.find(t => String(t.id) === row.dataset.id)); else if (b.dataset.act === 'calendar' && calendar) calendar.open(); }));
+    P_.rows.querySelectorAll('.tp-pb-card').forEach(card => {
+      card.addEventListener('click', () => {
+        const cmd = card.dataset.cmd;
+        if (cmd && P_.in) {
+          P_.in.value = cmd;
+          P_.in.dispatchEvent(new Event('input', { bubbles: true }));
+          if (P_.add) P_.add.click();
+        }
+      });
+    });
     P_.rows.querySelectorAll('.tp-row.waiting').forEach(n => n.addEventListener('click', () => zoomToApproval(n.dataset.dept)));
     P_.rows.querySelectorAll('.tp-row.live.done').forEach(n => n.addEventListener('click', () => openAgent && openAgent(n.dataset.agent, 'chat')));
     if (!structural) flip(before);
@@ -1043,6 +1133,6 @@ export function initTasks(ctx) {
   }
   const calendar = initCalendar({ tasks, routines, agentOf, DEPTS, DEPT_KEYS, RT_DEPTS, rtRefuse, create: createScheduled, createRoutine: createRoutineAt, cancelTask: cancelScheduled, rtAct, openAgent: (id, tab) => openAgent && openAgent(id, tab), esc, isLive: () => live, officeModel: () => officeModel, MODEL_KEYS, modelName, business: () => document.title.replace(/ — Agents Office$/, ''), currentDept: () => dept });
   return { tick, toggle, open, close, openFor, isOpen, boardWidth, onFocusChange, onStuck, onResolve, calendar, createScheduled, cancelScheduled,
-           handleChat, addTask, revise, rowHTML, setDept, tasks, panelWidth: () => panel.offsetWidth, isLive: () => live,
+           handleChat, addTask, revise, rowHTML, setDept, tasks, panelWidth: () => (typeof document !== 'undefined' && document.body.classList.contains('panelCollapsed')) ? 0 : panel.offsetWidth, isLive: () => live,
            routines, addRoutine, rtAct, railFor, syncPills, refresh: poll, resolveLive, pendingReject, rejectLive, officeModel: () => officeModel, chosenModel, chosenEffort };
 }

@@ -35,10 +35,11 @@ const CAM_DIST = 220;
 // float above their back rows instead of being shoved out to the screen edges.
 // V3.3: the Task Status panel owns the right ~430px at every zoom, so the overview target slides
 // along screen-right by half the panel width — the scene sits centred in what is left.
-const OVERVIEW = { base: [-9, 0, -9], zoom: 0.8 }; // (-9,-9) shifts the scene straight DOWN the screen, no sideways drift
+const OVERVIEW = { base: [-8, 0, -8], zoom: 0.72 }; // (-8,-8) beautifully frames all 6 department pods + Brain with balanced margins
 const SR_ = new THREE.Vector3(1, 0, -1).normalize();
 function overviewPos() {
-  const pw = (tasks ? tasks.panelWidth() : 400) + 30;
+  const isCollapsed = typeof document !== 'undefined' && document.body.classList.contains('panelCollapsed');
+  const pw = isCollapsed ? 0 : ((tasks ? tasks.panelWidth() : 400) + 30);
   const ppw = OVERVIEW.zoom * innerHeight / (2 * FR);
   const sh = (pw / 2) / ppw;
   return [OVERVIEW.base[0] + SR_.x * sh, 0, OVERVIEW.base[2] + SR_.z * sh];

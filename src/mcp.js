@@ -283,7 +283,7 @@ export function initMcp({ scene, hud, LAYOUT, DEPTS, FR, R, connectors = null })
   const topmodels = document.getElementById('topmodels');
   const modelImgs = {};
   if (topmodels) {
-    topmodels.innerHTML = `<span class="tc-lab"><span class="dot"></span>RUNS HEADLESS ON</span>`;
+    topmodels.innerHTML = `<span class="tc-lab"><span class="dot"></span>AI ENGINE</span>`;
     Object.keys(MODELS).forEach((k, i) => {
       const img = document.createElement('img');
       img.src = LOGOS[k].img;
@@ -330,7 +330,7 @@ export function initMcp({ scene, hud, LAYOUT, DEPTS, FR, R, connectors = null })
       usageEl.className = 'tm-usage off';
       usageEl.innerHTML = `<span>THIS WINDOW</span><b>${tok}</b><span>TOKENS</span><span class="sep">·</span><b>${w.runs || 0}</b><span>RUNS</span>` + (w.resetsAt ? `<span class="sep">·</span><span>RESETS</span><b>${new Date(w.resetsAt).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })}</b>` : '');
       usageEl.title = `Claude's usage gauge is unavailable (${u.reason || 'no answer'}). This is the office's own count for the current five-hour window.`;
-    } else { usageEl.className = 'tm-usage off'; usageEl.innerHTML = '<span>USAGE UNAVAILABLE</span>'; usageEl.title = (u && u.reason) || ''; }
+    } else { usageEl.className = 'tm-usage off'; usageEl.innerHTML = '<span>CLOUD RUNTIME · AUTONOMOUS</span>'; usageEl.title = (u && u.reason) || 'Running autonomously on Vercel Cloud'; }
   }
   function modelPulse(k, strong = false) {
     if (!modelImgs[k]) return; // a tile that has gone (ChatGPT in a live office) has no wire to pulse

@@ -155,9 +155,9 @@
   .connl .dot { width: 7px; height: 7px; border-radius: 50%; display: inline-block; }
   /* top-bar connector strip — the demo hook: familiar brand logos ARE the header, with
      data beaming from them down into the departments */
-  #topconn { display: flex; align-items: center; gap: 7px; margin-left: 4px; }
+  #topconn { display: none; align-items: center; gap: 7px; margin-left: 4px; }
   /* V3.5: inside a department the strip centres in the bar and names the dept it feeds */
-  #topconn.focus { position: absolute; left: 50%; transform: translateX(-50%); margin: 0; }
+  #topconn.focus { display: flex; position: absolute; left: 50%; transform: translateX(-50%); margin: 0; z-index: 10; }
   /* V3.1: the model layer — Claude + ChatGPT run the office headless; wired to the Brain */
   #topmodels { display: flex; align-items: center; gap: 7px; margin-right: 14px; }
   #topmodels .tc-lab .dot { background: var(--ink); }
@@ -1042,19 +1042,277 @@
     text-shadow: 0 0 6px var(--cream), 0 0 12px var(--cream), 0 0 2px var(--cream);
     will-change: transform, opacity;
   }
+
+  /* ---------- Modern Topbar Elements ---------- */
+  .top-brand-wrap {
+    display: flex; align-items: center; gap: 10px; flex: none;
+  }
+  .agent-live-badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-size: 9.5px; font-weight: 700; letter-spacing: .08em;
+    background: rgba(34,197,94,0.12); color: #16a34a;
+    border: 1px solid rgba(34,197,94,0.28); border-radius: 99px;
+    padding: 3px 9px; text-transform: uppercase;
+  }
+  body.dark .agent-live-badge {
+    background: rgba(34,197,94,0.18); color: #4ade80; border-color: rgba(34,197,94,0.35);
+  }
+  .pulse-dot {
+    width: 6px; height: 6px; border-radius: 50%; background: #22c55e;
+    animation: liveBlink 1.4s infinite;
+  }
+  #topStoreBtn {
+    height: 28px; padding: 0 12px; border-radius: 8px;
+    background: #0d5c3a; color: #ffffff !important; text-decoration: none !important;
+    font-family: var(--ui); font-size: 10px; font-weight: 700; letter-spacing: .06em;
+    display: inline-flex; align-items: center; gap: 6px;
+    box-shadow: 0 2px 8px rgba(13,92,58,.25); transition: all .2s var(--ease);
+    flex: none;
+  }
+  #topStoreBtn:hover {
+    background: #09472c; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(13,92,58,.35);
+  }
+  body.dark #topStoreBtn {
+    background: #16a34a; color: #000 !important; box-shadow: 0 2px 10px rgba(34,197,94,.25);
+  }
+  body.dark #topStoreBtn:hover {
+    background: #22c55e;
+  }
+  .top-live-dot {
+    width: 5px; height: 5px; border-radius: 50%; background: #4ade80;
+    box-shadow: 0 0 6px #4ade80;
+  }
+  body.dark .top-live-dot { background: #000; }
+  
+  #topCatalogBtn {
+    height: 28px; padding: 0 11px; border-radius: 8px;
+    background: rgba(245,158,11,0.12); color: #d97706;
+    border: 1px solid rgba(245,158,11,0.3);
+    font-family: var(--ui); font-size: 10px; font-weight: 700; letter-spacing: .06em;
+    display: inline-flex; align-items: center; gap: 6px; cursor: pointer;
+    transition: all .2s var(--ease); flex: none;
+  }
+  #topCatalogBtn:hover {
+    background: rgba(245,158,11,0.22); border-color: #f59e0b; transform: translateY(-1px);
+  }
+  body.dark #topCatalogBtn {
+    background: rgba(245,158,11,0.18); color: #fbbf24; border-color: rgba(245,158,11,0.4);
+  }
+  .badge-pill {
+    background: rgba(245,158,11,0.25); font-size: 9px; padding: 1px 6px; border-radius: 4px; font-weight: 800;
+  }
+
+  #topConnBtn {
+    height: 28px; padding: 0 11px; border-radius: 8px;
+    background: rgba(21,20,20,0.05); color: var(--ink);
+    border: 1px solid var(--hairline);
+    font-family: var(--ui); font-size: 10px; font-weight: 700; letter-spacing: .06em;
+    display: inline-flex; align-items: center; gap: 6px; cursor: pointer;
+    transition: all .2s var(--ease); flex: none;
+  }
+  #topConnBtn:hover {
+    background: var(--ink); color: var(--cream); border-color: var(--ink); transform: translateY(-1px);
+  }
+  body.dark #topConnBtn {
+    background: rgba(255,255,255,0.06); color: var(--ink); border-color: var(--hairline);
+  }
+  body.dark #topConnBtn:hover {
+    background: #fff; color: #000;
+  }
+
+  #themeToggleBtn, #panelToggleBtn {
+    height: 28px; padding: 0 10px; border-radius: 8px;
+    background: none; border: 1px solid var(--hairline); color: var(--grey);
+    font-family: var(--ui); font-size: 10px; font-weight: 700; letter-spacing: .06em;
+    display: inline-flex; align-items: center; gap: 5px; cursor: pointer;
+    transition: all .2s var(--ease); flex: none;
+  }
+  #themeToggleBtn:hover, #panelToggleBtn:hover {
+    border-color: var(--ink); color: var(--ink);
+  }
+  body.dark #themeToggleBtn:hover, body.dark #panelToggleBtn:hover {
+    border-color: #fff; color: #fff;
+  }
+
+  #topCal {
+    font-family: var(--ui); font-size: 10px; letter-spacing: .1em; font-weight: 700;
+    background: none; border: 1px solid var(--hairline); color: var(--ink);
+    border-radius: 8px; padding: 0 11px; height: 28px; cursor: pointer;
+    display: inline-flex; align-items: center; gap: 5px; transition: all .2s var(--ease);
+    flex: none;
+  }
+  #topCal:hover {
+    background: var(--ink); color: var(--cream); border-color: var(--ink);
+  }
+  body.dark #topCal:hover {
+    background: #fff; color: #000; border-color: #fff;
+  }
+
+  /* ---------- Playbooks & Autonomous Dashboard in #tpanel ---------- */
+  #tpanel { transition: transform 0.4s var(--ease), opacity 0.4s var(--ease); }
+  body.panelCollapsed #tpanel { transform: translateX(calc(100% + 35px)); opacity: 0; pointer-events: none; }
+  body.panelCollapsed #zoomCtl { right: 20px !important; }
+  body.panelCollapsed #overviewBtn.right { right: 20px !important; }
+
+  .tp-section-head {
+    display: flex; justify-content: space-between; align-items: center;
+    font-size: 9px; font-weight: 800; letter-spacing: .14em; color: var(--grey);
+    text-transform: uppercase; margin: 8px 2px 6px;
+  }
+  .tp-sh-tag {
+    font-size: 8px; font-weight: 700; background: rgba(21,20,20,0.06);
+    padding: 1px 6px; border-radius: 99px; letter-spacing: .08em;
+  }
+  body.dark .tp-sh-tag { background: rgba(255,255,255,0.1); color: var(--ink); }
+
+  .tp-playbooks {
+    display: flex; flex-direction: column; gap: 8px; margin-bottom: 10px;
+  }
+  .tp-pb-card {
+    display: flex; align-items: center; gap: 10px;
+    background: #fff; border: 1px solid var(--hairline); border-radius: 12px;
+    padding: 10px 12px; cursor: pointer; transition: all .25s var(--ease);
+    box-shadow: 0 2px 6px rgba(0,0,0,.03);
+  }
+  .tp-pb-card:hover {
+    border-color: var(--ink); transform: translateY(-1px);
+    box-shadow: 0 8px 20px rgba(0,0,0,.08);
+  }
+  body.dark .tp-pb-card {
+    background: #181B22; border-color: rgba(255,255,255,0.09);
+  }
+  body.dark .tp-pb-card:hover {
+    border-color: rgba(255,255,255,0.3); box-shadow: 0 8px 24px rgba(0,0,0,.4);
+  }
+  .tp-pb-icon {
+    font-size: 18px; width: 34px; height: 34px; border-radius: 9px;
+    background: rgba(21,20,20,0.04); display: flex; align-items: center; justify-content: center;
+    flex: none;
+  }
+  body.dark .tp-pb-icon { background: rgba(255,255,255,0.06); }
+  .tp-pb-body { flex: 1; min-width: 0; }
+  .tp-pb-title {
+    font-size: 12px; font-weight: 700; color: var(--ink); line-height: 1.25;
+  }
+  .tp-pb-desc {
+    font-size: 10px; color: var(--grey); line-height: 1.35; margin-top: 2px;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .tp-pb-btn {
+    border: 1px solid var(--hairline); background: none; color: var(--ink);
+    font-family: var(--ui); font-size: 8.5px; font-weight: 800; letter-spacing: .12em;
+    padding: 5px 9px; border-radius: 6px; cursor: pointer; transition: all .2s var(--ease);
+    flex: none;
+  }
+  .tp-pb-card:hover .tp-pb-btn {
+    background: var(--ink); color: var(--cream); border-color: var(--ink);
+  }
+  body.dark .tp-pb-card:hover .tp-pb-btn {
+    background: #fff; color: #000; border-color: #fff;
+  }
+
+  /* Live Storefront KPI Box */
+  .tp-store-card {
+    background: linear-gradient(135deg, rgba(13,92,58,0.08) 0%, rgba(34,197,94,0.03) 100%);
+    border: 1px solid rgba(13,92,58,0.2); border-radius: 12px;
+    padding: 12px 14px; margin-top: 4px;
+  }
+  body.dark .tp-store-card {
+    background: linear-gradient(135deg, rgba(34,197,94,0.12) 0%, rgba(13,92,58,0.05) 100%);
+    border-color: rgba(34,197,94,0.25);
+  }
+  .tp-sc-head {
+    display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;
+  }
+  .tp-sc-title {
+    font-size: 10px; font-weight: 800; letter-spacing: .08em; color: var(--ink);
+  }
+  .tp-sc-link {
+    font-size: 9.5px; font-weight: 700; color: #16a34a; text-decoration: none;
+    letter-spacing: .04em;
+  }
+  body.dark .tp-sc-link { color: #4ade80; }
+  .tp-sc-grid {
+    display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px;
+  }
+  .tp-sc-item {
+    background: rgba(255,255,255,0.65); border-radius: 8px; padding: 6px 8px;
+    border: 1px solid rgba(0,0,0,0.04);
+  }
+  body.dark .tp-sc-item {
+    background: rgba(0,0,0,0.3); border-color: rgba(255,255,255,0.06);
+  }
+  .tp-sc-lbl {
+    display: block; font-size: 8px; font-weight: 700; letter-spacing: .12em;
+    color: var(--grey); text-transform: uppercase;
+  }
+  .tp-sc-val {
+    display: block; font-size: 11px; font-weight: 800; color: var(--ink);
+    margin-top: 1px;
+  }
+
+  /* Responsive Viewports */
+  @media (max-width: 1200px) {
+    #topconn { display: none !important; }
+    #wires { display: none !important; }
+    #zoomCtl { bottom: 70px; }
+  }
+  @media (max-width: 900px) {
+    #tpanel {
+      width: min(380px, 92vw);
+      top: 60px;
+      right: 12px;
+      bottom: 12px;
+    }
+    #topbar {
+      padding: 0 12px;
+      gap: 8px;
+    }
+    .agent-live-badge { display: none; }
+    #topmodels { display: none !important; }
+  }
+  @media (max-width: 650px) {
+    #topbar { height: 48px; gap: 5px; padding: 0 8px; }
+    #topbar .brand { font-size: 16px; }
+    #topbar .brand .ver { display: none; }
+    #topStoreBtn, #topCatalogBtn, #topConnBtn, #themeToggleBtn, #panelToggleBtn, #topCal {
+      padding: 0 7px;
+      font-size: 9px;
+      height: 25px;
+    }
+    .badge-pill { display: none; }
+    #clock { display: none; }
+    #zoomCtl { display: none; }
+  }
 </style>
 </head>
 <body>
 <canvas id="scene"></canvas>
 <div id="hud"></div>
 <div id="topbar">
-  <span class="brand">SUNNYEORA <span class="ver">AI</span></span>
+  <div class="top-brand-wrap">
+    <span class="brand">SUNNYEORA <span class="ver">AI SALES OS</span></span>
+    <span class="agent-live-badge"><span class="pulse-dot"></span>35 AGENTS ONLINE</span>
+  </div>
+  <a href="https://sunnyeora.myshopify.com/" target="_blank" rel="noopener" id="topStoreBtn" title="View Live Shopify Storefront (sunnyeora.myshopify.com)">
+    🛍️ STOREFRONT <span class="top-live-dot"></span>
+  </a>
+  <button id="topCatalogBtn" title="Catalog & Winning Products">
+    🔥 CATALOG <span class="badge-pill">31 LIVE</span>
+  </button>
+  <button id="topConnBtn" title="Integrations & Platform Connections Hub">
+    ⚡ INTEGRATIONS
+  </button>
   <div id="topconn"></div>
-  <button id="topConnBtn" title="Integrations & Platform Connections Hub" style="margin-left:8px; height:24px; font-family:var(--ui); font-size:10px; font-weight:700; letter-spacing:0.06em; padding:0 10px; border-radius:6px; border:1px solid rgba(46,139,87,0.5); background:rgba(46,139,87,0.18); color:#4ade80; cursor:pointer; display:flex; align-items:center; gap:5px; transition:all .2s ease;">⚡ CONNECT TOOLS</button>
-  <button id="topCatalogBtn" title="Catalog & Winning Products" style="margin-left:8px; height:24px; font-family:var(--ui); font-size:10px; font-weight:700; letter-spacing:0.06em; padding:0 10px; border-radius:6px; border:1px solid rgba(245,158,11,0.5); background:rgba(245,158,11,0.18); color:#fbbf24; cursor:pointer; display:flex; align-items:center; gap:5px; transition:all .2s ease;">🔥 CATALOG &amp; PRODUCTS <span style="background:rgba(245,158,11,0.3); font-size:9px; padding:1px 5px; border-radius:4px; margin-left:2px;">31 LIVE</span></button>
   <span class="sp"></span>
   <div id="topmodels"></div>
   <button id="topCal" title="the calendar — tasks and routines on their days (P)">◷ CALENDAR</button>
+  <button id="themeToggleBtn" title="Toggle Dark / Light Mode" aria-label="Toggle Theme">
+    <span class="theme-icon">🌓</span> <span class="theme-text">THEME</span>
+  </button>
+  <button id="panelToggleBtn" title="Toggle Task Panel (Full 3D View)" aria-label="Toggle Task Panel">
+    <span class="panel-icon">◫</span> <span class="panel-text">PANEL</span>
+  </button>
   <span id="topAppr" style="display:none">⚠ <span>0</span></span>
   <span id="clock">—</span>
 </div>
@@ -1563,7 +1821,33 @@
           setTimeout(function() { sBtn.textContent = 'UPDATE'; }, 2000);
         });
       }
+
+      // Theme toggle (dark/light)
+      const themeBtn = document.getElementById('themeToggleBtn');
+      if (themeBtn) {
+        themeBtn.addEventListener('click', function() {
+          document.body.classList.toggle('dark');
+          const isDark = document.body.classList.contains('dark');
+          localStorage.setItem('sunnyeora_theme', isDark ? 'dark' : 'light');
+        });
+      }
+
+      // Panel toggle (panoramic 3D view)
+      const panelBtn = document.getElementById('panelToggleBtn');
+      if (panelBtn) {
+        panelBtn.addEventListener('click', function() {
+          document.body.classList.toggle('panelCollapsed');
+          window.dispatchEvent(new Event('resize'));
+        });
+      }
     }
+    // Immediate theme restoration
+    try {
+      if (localStorage.getItem('sunnyeora_theme') === 'dark') {
+        document.body.classList.add('dark');
+      }
+    } catch(e) {}
+
     if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', setupModal);
     else setupModal();
   })();
