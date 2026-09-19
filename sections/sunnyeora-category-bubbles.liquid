@@ -3,7 +3,7 @@
   .sunnyeora-bubbles-container {
     width: 100%;
     background: #FAF9F5;
-    padding: 24px 0;
+    padding: 24px 0 20px;
     border-bottom: 1px solid #E2E8F0;
   }
   .sunnyeora-bubbles-scroll {
@@ -15,6 +15,12 @@
     overflow-x: auto;
     scrollbar-width: none;
     -webkit-overflow-scrolling: touch;
+    justify-content: flex-start;
+  }
+  @media (min-width: 768px) {
+    .sunnyeora-bubbles-scroll {
+      justify-content: center;
+    }
   }
   .sunnyeora-bubbles-scroll::-webkit-scrollbar {
     display: none;
@@ -32,12 +38,12 @@
     transform: translateY(-4px);
   }
   .sunnyeora-bubble-ring {
-    width: 76px;
-    height: 76px;
+    width: 72px;
+    height: 72px;
     border-radius: 50%;
     padding: 3px;
     background: linear-gradient(135deg, #0D5C3A 0%, #34D399 50%, #D97706 100%);
-    box-shadow: 0 4px 12px rgba(13, 92, 58, 0.15);
+    box-shadow: 0 4px 12px rgba(13, 92, 58, 0.12);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -51,7 +57,6 @@
     align-items: center;
     justify-content: center;
     font-size: 1.8rem;
-    color: #0D5C3A;
   }
   .sunnyeora-bubble-text {
     margin-top: 10px;
@@ -70,45 +75,42 @@
 <div class="sunnyeora-bubbles-container">
   <div class="sunnyeora-bubbles-scroll">
     <a href="/collections/all" class="sunnyeora-bubble-card">
-      <div class="sunnyeora-bubble-ring">
-        <div class="sunnyeora-bubble-inner">🔥</div>
-      </div>
+      <div class="sunnyeora-bubble-ring"><div class="sunnyeora-bubble-inner">🔥</div></div>
       <span class="sunnyeora-bubble-text">Hot Hits</span>
     </a>
-
     <a href="/collections/deep-sleep" class="sunnyeora-bubble-card">
-      <div class="sunnyeora-bubble-ring">
-        <div class="sunnyeora-bubble-inner">🛏️</div>
-      </div>
+      <div class="sunnyeora-bubble-ring"><div class="sunnyeora-bubble-inner">🛏️</div></div>
       <span class="sunnyeora-bubble-text">Deep Sleep</span>
     </a>
-
     <a href="/collections/glass-skin" class="sunnyeora-bubble-card">
-      <div class="sunnyeora-bubble-ring">
-        <div class="sunnyeora-bubble-inner">✨</div>
-      </div>
+      <div class="sunnyeora-bubble-ring"><div class="sunnyeora-bubble-inner">✨</div></div>
       <span class="sunnyeora-bubble-text">Glass Skin</span>
     </a>
-
     <a href="/collections/sonic-clean" class="sunnyeora-bubble-card">
-      <div class="sunnyeora-bubble-ring">
-        <div class="sunnyeora-bubble-inner">💎</div>
-      </div>
+      <div class="sunnyeora-bubble-ring"><div class="sunnyeora-bubble-inner">💎</div></div>
       <span class="sunnyeora-bubble-text">Sonic Clean</span>
     </a>
-
     <a href="/pages/track-order" class="sunnyeora-bubble-card">
-      <div class="sunnyeora-bubble-ring">
-        <div class="sunnyeora-bubble-inner">🇺🇸</div>
-      </div>
+      <div class="sunnyeora-bubble-ring"><div class="sunnyeora-bubble-inner">🇺🇸</div></div>
       <span class="sunnyeora-bubble-text">USPS Air</span>
     </a>
-
     <a href="/pages/reviews" class="sunnyeora-bubble-card">
-      <div class="sunnyeora-bubble-ring">
-        <div class="sunnyeora-bubble-inner">⭐</div>
-      </div>
+      <div class="sunnyeora-bubble-ring"><div class="sunnyeora-bubble-inner">⭐</div></div>
       <span class="sunnyeora-bubble-text">5-Star Reviews</span>
     </a>
   </div>
 </div>
+
+{% schema %}
+{
+  "name": "Category Story Bubbles",
+  "tag": "section",
+  "class": "section",
+  "settings": [],
+  "presets": [
+    {
+      "name": "Category Story Bubbles"
+    }
+  ]
+}
+{% endschema %}

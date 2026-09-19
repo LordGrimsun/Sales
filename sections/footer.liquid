@@ -1,149 +1,246 @@
 
 <style>
-  .sunnyeora-footer {
-    background: #092B1C;
-    color: #E2E8F0;
-    padding: 60px 0 30px;
-    font-family: inherit;
-    border-top: 4px solid #0D5C3A;
+  .myntra-footer-container {
+    background: #fafbfc;
+    border-top: 1px solid #eaeaec;
+    padding: 50px 0 30px;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    color: #282c3f;
   }
-  .sunnyeora-footer-inner {
-    max-width: 1400px;
+  .myntra-footer-grid {
+    max-width: 1440px;
     margin: 0 auto;
-    padding: 0 20px;
+    padding: 0 30px;
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    grid-template-columns: 240px 240px 320px 1fr;
     gap: 40px;
   }
-  .sunnyeora-footer-title {
-    color: #FFFFFF;
-    font-size: 1.1rem;
+  @media (max-width: 1024px) {
+    .myntra-footer-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  @media (max-width: 640px) {
+    .myntra-footer-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+  .myntra-col-title {
+    font-size: 0.82rem;
     font-weight: 800;
-    margin-bottom: 20px;
-    letter-spacing: 0.5px;
+    color: #282c3f;
     text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 20px;
   }
-  .sunnyeora-footer-links {
+  .myntra-footer-links {
     list-style: none;
-    padding: 0;
     margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
   }
-  .sunnyeora-footer-links li {
-    margin-bottom: 12px;
-  }
-  .sunnyeora-footer-links a {
-    color: #94A3B8;
+  .myntra-footer-links a {
+    color: #696e79;
     text-decoration: none;
-    font-size: 0.95rem;
+    font-size: 0.9rem;
+    line-height: 1.4;
+    transition: color 0.15s;
+  }
+  .myntra-footer-links a:hover {
+    color: #282c3f;
+    font-weight: 600;
+  }
+  .myntra-app-badges {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+  }
+  .myntra-app-badge-btn {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: #000000;
+    color: #ffffff;
+    padding: 8px 16px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-size: 0.8rem;
+    font-weight: 700;
+  }
+  .myntra-social-row {
+    display: flex;
+    gap: 14px;
+    font-size: 1.25rem;
+    margin-top: 10px;
+  }
+  .myntra-social-row a {
+    color: #696e79;
+    text-decoration: none;
     transition: color 0.2s;
   }
-  .sunnyeora-footer-links a:hover {
-    color: #34D399;
+  .myntra-social-row a:hover {
+    color: #ff3f6c;
   }
-  .sunnyeora-newsletter-box {
+  .myntra-guarantee-box {
     display: flex;
-    gap: 8px;
-    margin-top: 16px;
+    align-items: flex-start;
+    gap: 16px;
+    margin-bottom: 24px;
   }
-  .sunnyeora-newsletter-input {
-    flex: 1;
-    padding: 12px 16px;
-    border-radius: 30px;
-    border: 1px solid #1E293B;
-    background: #113824;
-    color: #FFF;
-    font-size: 0.9rem;
-    outline: none;
+  .myntra-guarantee-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    border: 2px dashed #ff3f6c;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    color: #ff3f6c;
+    flex-shrink: 0;
   }
-  .sunnyeora-newsletter-btn {
-    background: #0D5C3A;
-    color: #FFF;
-    border: none;
-    padding: 12px 24px;
-    border-radius: 30px;
-    font-weight: 800;
-    cursor: pointer;
-    transition: background 0.2s;
+  .myntra-guarantee-text b {
+    display: block;
+    color: #282c3f;
+    font-size: 0.92rem;
+    margin-bottom: 4px;
   }
-  .sunnyeora-newsletter-btn:hover {
-    background: #34D399;
-    color: #092B1C;
+  .myntra-guarantee-text span {
+    font-size: 0.85rem;
+    color: #696e79;
+    line-height: 1.4;
+    display: block;
   }
-  .sunnyeora-footer-bottom {
-    max-width: 1400px;
-    margin: 50px auto 0;
-    padding: 24px 20px 0;
-    border-top: 1px solid rgba(255,255,255,0.1);
+  .myntra-footer-copyright {
+    max-width: 1440px;
+    margin: 40px auto 0;
+    padding: 24px 30px 0;
+    border-top: 1px solid #eaeaec;
     display: flex;
     align-items: center;
     justify-content: space-between;
     flex-wrap: wrap;
-    gap: 20px;
+    gap: 16px;
     font-size: 0.85rem;
-    color: #64748B;
+    color: #94969f;
   }
 </style>
 
-<footer class="sunnyeora-footer">
-  <div class="sunnyeora-footer-inner">
+<footer class="myntra-footer-container">
+  <div class="myntra-footer-grid">
+    <!-- Col 1: Online Shopping & Useful Links -->
     <div>
-      <div style="font-size: 1.6rem; font-weight: 900; color: #FFF; margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
-        <span style="color: #34D399;">☀️</span> SUNNYEORA
-      </div>
-      <p style="color: #94A3B8; font-size: 0.95rem; line-height: 1.6; margin-bottom: 20px;">
-        Premium Bio-Tested Wellness, Sleep Ergonomics & Skincare Tech. Shipped fast with USPS Air Express to US, UK, CA & AU.
-      </p>
-      <div style="display: flex; gap: 12px; font-size: 1.2rem;">
-        <span>🇺🇸</span> <span>🇬🇧</span> <span>🇨🇦</span> <span>🇦🇺</span>
-      </div>
-    </div>
+      <div class="myntra-col-title">ONLINE SHOPPING</div>
+      <ul class="myntra-footer-links">
+        <li><a href="/collections/all">Men</a></li>
+        <li><a href="/collections/all">Women</a></li>
+        <li><a href="/collections/all">Kids</a></li>
+        <li><a href="/collections/all">Home</a></li>
+        <li><a href="/collections/glass-skin">Beauty</a></li>
+        <li><a href="/collections/all">Genz</a></li>
+        <li><a href="/collections/all">Gift Cards</a></li>
+        <li><a href="/pages/reviews">Sunnyeora Insider</a></li>
+      </ul>
 
-    <div>
-      <div class="sunnyeora-footer-title">SHOP CATEGORIES</div>
-      <ul class="sunnyeora-footer-links">
-        <li><a href="/collections/deep-sleep">🛏️ Deep Sleep Ergonomic Pillows</a></li>
-        <li><a href="/collections/glass-skin">✨ LuminaGlow Red Light Wands</a></li>
-        <li><a href="/collections/sonic-clean">💎 CrystalSonic Ultrasonic Cleaners</a></li>
-        <li><a href="/collections/all">🔥 All High-Demand Hits</a></li>
+      <div class="myntra-col-title" style="margin-top: 28px;">USEFUL LINKS</div>
+      <ul class="myntra-footer-links">
+        <li><a href="/pages/about">Blog</a></li>
+        <li><a href="/pages/about">Careers</a></li>
+        <li><a href="/collections/all">Site Map</a></li>
+        <li><a href="/pages/about">Corporate Information</a></li>
+        <li><a href="/pages/about">Whitehat</a></li>
+        <li><a href="/pages/about">Cleartrip</a></li>
+        <li><a href="/collections/all">Sunnyeora Global</a></li>
       </ul>
     </div>
 
+    <!-- Col 2: Customer Policies -->
     <div>
-      <div class="sunnyeora-footer-title">CUSTOMER CARE</div>
-      <ul class="sunnyeora-footer-links">
-        <li><a href="/pages/track-order">📦 Track Your Order</a></li>
-        <li><a href="/pages/faq">❓ Help & FAQ</a></li>
-        <li><a href="/pages/contact">✉️ Contact VIP Support</a></li>
-        <li><a href="/pages/about">🌿 About Sunnyeora</a></li>
-        <li><a href="/pages/reviews">⭐ Wall of Love Reviews</a></li>
+      <div class="myntra-col-title">CUSTOMER POLICIES</div>
+      <ul class="myntra-footer-links">
+        <li><a href="/pages/contact">Contact Us</a></li>
+        <li><a href="/pages/faq">FAQ</a></li>
+        <li><a href="/pages/terms">T&C</a></li>
+        <li><a href="/pages/terms">Terms Of Use</a></li>
+        <li><a href="/pages/track-order">Track Orders</a></li>
+        <li><a href="/pages/shipping">Shipping</a></li>
+        <li><a href="/pages/refund">Cancellation</a></li>
+        <li><a href="/pages/privacy">Privacy policy</a></li>
+        <li><a href="/pages/contact">Grievance Redressal</a></li>
+        <li><a href="/pages/about">FSSAI Food Safety</a></li>
+        <li><a href="/pages/about">Connect app</a></li>
       </ul>
     </div>
 
+    <!-- Col 3: Mobile Apps & Social -->
     <div>
-      <div class="sunnyeora-footer-title">JOIN THE FAMILY</div>
-      <p style="color: #94A3B8; font-size: 0.9rem; line-height: 1.5;">
-        Get 15% OFF your first order + VIP access to weekly viral drops.
-      </p>
-      <div class="sunnyeora-newsletter-box">
-        <input type="email" placeholder="Enter your email..." class="sunnyeora-newsletter-input">
-        <button class="sunnyeora-newsletter-btn">JOIN</button>
+      <div class="myntra-col-title">EXPERIENCE SUNNYEORA APP ON MOBILE</div>
+      <div class="myntra-app-badges">
+        <a href="#" class="myntra-app-badge-btn">
+          <span>▶</span>
+          <div>
+            <div style="font-size: 0.65rem; color: #a1a1a1; line-height: 1;">GET IT ON</div>
+            <div style="font-size: 0.85rem; font-weight: 800; line-height: 1.2;">Google Play</div>
+          </div>
+        </a>
+        <a href="#" class="myntra-app-badge-btn">
+          <span>🍏</span>
+          <div>
+            <div style="font-size: 0.65rem; color: #a1a1a1; line-height: 1;">Download on the</div>
+            <div style="font-size: 0.85rem; font-weight: 800; line-height: 1.2;">App Store</div>
+          </div>
+        </a>
       </div>
-      <div style="margin-top: 16px; font-size: 0.8rem; color: #34D399; font-weight: 700;">
-        🛡️ 30-Night Sleep Trial & Money-Back Guarantee
+
+      <div class="myntra-col-title">KEEP IN TOUCH</div>
+      <div class="myntra-social-row">
+        <a href="#">📘</a>
+        <a href="#">🐦</a>
+        <a href="#">▶️</a>
+        <a href="#">📷</a>
+      </div>
+    </div>
+
+    <!-- Col 4: 100% Original Guarantee -->
+    <div>
+      <div class="myntra-guarantee-box">
+        <div class="myntra-guarantee-icon">✔</div>
+        <div class="myntra-guarantee-text">
+          <b>100% ORIGINAL guarantee</b>
+          <span>for all products at sunnyeora.com</span>
+        </div>
+      </div>
+
+      <div class="myntra-guarantee-box">
+        <div class="myntra-guarantee-icon">14</div>
+        <div class="myntra-guarantee-text">
+          <b>Return within 14days</b>
+          <span>of receiving your order</span>
+        </div>
       </div>
     </div>
   </div>
 
-  <div class="sunnyeora-footer-bottom">
-    <div>© 2026 SUNNYEORA Inc. All Rights Reserved.</div>
-    <div style="display: flex; gap: 16px; flex-wrap: wrap;">
-      <a href="/pages/privacy" style="color: #94A3B8; text-decoration: none;">Privacy Policy</a>
-      <a href="/pages/terms" style="color: #94A3B8; text-decoration: none;">Terms of Service</a>
-      <a href="/pages/refund" style="color: #94A3B8; text-decoration: none;">Refund Policy</a>
-      <a href="/pages/shipping" style="color: #94A3B8; text-decoration: none;">Shipping Policy</a>
-    </div>
-    <div style="font-weight: 700; color: #CBD5E1;">
-      💳 SSL 256-BIT SECURE CHECKOUT
-    </div>
+  <div class="myntra-footer-copyright">
+    <div>In case of any concern, <b>Contact Us</b></div>
+    <div>© 2026 www.sunnyeora.com. All rights reserved.</div>
+    <div>A Sunnyeora Enterprise</div>
   </div>
 </footer>
+
+{% schema %}
+{
+  "name": "Myntra Footer",
+  "tag": "footer",
+  "class": "section-footer",
+  "settings": [],
+  "presets": [
+    {
+      "name": "Myntra Footer"
+    }
+  ]
+}
+{% endschema %}

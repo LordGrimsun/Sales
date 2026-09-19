@@ -2,13 +2,13 @@
 <div class="sunnyeora-deals-day page-width" style="max-width: 1400px; margin: 40px auto; padding: 0 20px;">
   <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; flex-wrap: wrap; gap: 16px;">
     <div style="display: flex; align-items: center; gap: 16px;">
-      <h2 style="font-size: 1.8rem; font-weight: 900; color: #282c3f; margin: 0; letter-spacing: -0.5px;">DEAL OF THE DAY</h2>
-      <div style="background: #FFF0F5; border: 1px solid #FFC0CB; color: #ff3f6c; font-weight: 800; font-size: 0.9rem; padding: 6px 14px; border-radius: 20px; display: flex; align-items: center; gap: 6px;">
-        <span>⏰ ENDS IN</span>
+      <h2 style="font-size: 1.8rem; font-weight: 900; color: #1E293B; margin: 0; letter-spacing: -0.5px;">DEAL OF THE DAY</h2>
+      <div style="background: #E8F3EE; border: 1px solid #D1E7DD; color: #0D5C3A; font-weight: 800; font-size: 0.9rem; padding: 6px 14px; border-radius: 20px; display: flex; align-items: center; gap: 6px;">
+        <span>⏰ SPECIAL DISCOUNTS END IN</span>
         <span style="font-family: monospace; font-size: 1.05rem;">04:18:42</span>
       </div>
     </div>
-    <a href="#marketplace-catalog" style="color: #ff3f6c; font-weight: 800; text-decoration: none; font-size: 0.95rem;">VIEW ALL DEALS ➔</a>
+    <a href="/collections/all" style="color: #0D5C3A; font-weight: 800; text-decoration: none; font-size: 0.95rem;">VIEW ALL PRODUCTS ➔</a>
   </div>
 
   <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 20px;">
@@ -89,3 +89,17 @@
     </div>
   </div>
 </div>
+
+{% schema %}
+{
+  "name": "Deals of the Day",
+  "tag": "section",
+  "class": "section",
+  "settings": [],
+  "presets": [
+    {
+      "name": "Deals of the Day"
+    }
+  ]
+}
+{% endschema %}
