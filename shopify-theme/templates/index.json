@@ -1,0 +1,41 @@
+{
+  "sections": {
+    "sunnyeora_marquee": {
+      "type": "sunnyeora-marquee",
+      "settings": {}
+    },
+    "sunnyeora_bubbles": {
+      "type": "sunnyeora-category-bubbles",
+      "settings": {}
+    },
+    "sunnyeora_hero": {
+      "type": "sunnyeora-hero",
+      "settings": {}
+    },
+    "sunnyeora_flash": {
+      "type": "sunnyeora-flash-deals",
+      "settings": {}
+    },
+    "sunnyeora_grid": {
+      "type": "sunnyeora-grid-catalog",
+      "settings": {}
+    },
+    "sunnyeora_comparison": {
+      "type": "sunnyeora-comparison",
+      "settings": {}
+    },
+    "sunnyeora_ugc": {
+      "type": "sunnyeora-ugc",
+      "settings": {}
+    }
+  },
+  "order": [
+    "sunnyeora_marquee",
+    "sunnyeora_bubbles",
+    "sunnyeora_hero",
+    "sunnyeora_flash",
+    "sunnyeora_grid",
+    "sunnyeora_comparison",
+    "sunnyeora_ugc"
+  ]
+}
