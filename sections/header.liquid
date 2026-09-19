@@ -184,20 +184,39 @@
     font-weight: 700;
     gap: 4px;
   }
-  .myntra-action-icon {
-    font-size: 1.25rem;
-    line-height: 1;
+  .myntra-nav-svg {
+    stroke: #282c3f;
+    transition: stroke 0.2s, transform 0.2s;
+    display: block;
+  }
+  .myntra-action-btn:hover .myntra-nav-svg {
+    stroke: #ff3f6c;
+    transform: translateY(-1px);
+  }
+  .myntra-bag-icon-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 22px;
+    height: 22px;
   }
   .myntra-bag-count {
     position: absolute;
-    top: -4px;
-    right: 0;
+    top: -6px;
+    right: -10px;
     background: #ff3f6c;
-    color: #fff;
+    color: #ffffff;
     font-size: 0.65rem;
     font-weight: 800;
-    padding: 2px 6px;
-    border-radius: 10px;
+    width: 17px;
+    height: 17px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 6px rgba(255, 63, 108, 0.4);
+    line-height: 1;
   }
   /* Profile Dropdown */
   .myntra-profile-wrapper {
@@ -535,7 +554,10 @@
       <!-- Profile with Hover Dropdown -->
       <div class="myntra-profile-wrapper">
         <a href="/account" class="myntra-action-btn">
-          <span class="myntra-action-icon">👤</span>
+          <svg class="myntra-nav-svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#282c3f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+            <circle cx="12" cy="7" r="4"></circle>
+          </svg>
           <span>Profile</span>
         </a>
         <div class="myntra-profile-dropdown">
@@ -558,15 +580,23 @@
 
       <!-- Wishlist -->
       <a href="/pages/wishlist" class="myntra-action-btn">
-        <span class="myntra-action-icon">🤍</span>
+        <svg class="myntra-nav-svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#282c3f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+        </svg>
         <span>Wishlist</span>
       </a>
 
       <!-- Bag -->
       <a href="/cart" class="myntra-action-btn" onclick="if(window.openCartDrawer){window.openCartDrawer(); return false;}">
-        <span class="myntra-action-icon">🛍️</span>
+        <div class="myntra-bag-icon-wrapper">
+          <svg class="myntra-nav-svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#282c3f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <path d="M16 10a4 4 0 0 1-8 0"></path>
+          </svg>
+          <span class="myntra-bag-count" id="header-bag-count">0</span>
+        </div>
         <span>Bag</span>
-        <span class="myntra-bag-count" id="header-bag-count">0</span>
       </a>
     </div>
   </div>
