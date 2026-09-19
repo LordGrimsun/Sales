@@ -1,4 +1,3 @@
-
 <style>
   #syCartOverlay {
     position: fixed;
@@ -58,9 +57,9 @@
     color: #282c3f;
   }
   .sy-drawer-badge {
-    background: #0D5C3A;
-    color: #ffffff;
-    font-size: 0.7rem;
+    background: #E8F3EE;
+    color: #0D5C3A;
+    font-size: 0.72rem;
     font-weight: 800;
     padding: 3px 8px;
     border-radius: 12px;
@@ -68,23 +67,22 @@
   .sy-drawer-close-btn {
     background: none;
     border: none;
-    font-size: 1.3rem;
+    font-size: 1.2rem;
+    color: #64748B;
     cursor: pointer;
-    color: #696e79;
-    line-height: 1;
     padding: 4px;
+    line-height: 1;
     transition: color 0.2s;
   }
   .sy-drawer-close-btn:hover {
-    color: #ff3f6c;
+    color: #1E293B;
   }
 
   .sy-progress-strip {
-    padding: 12px 24px;
-    background: #E8F3EE;
-    border-bottom: 1px solid #D1E7DD;
-    font-size: 0.82rem;
-    font-weight: 700;
+    background: #FAF9F5;
+    border-bottom: 1px solid #E2E8F0;
+    padding: 10px 24px;
+    font-size: 0.8rem;
     color: #0D5C3A;
     display: flex;
     align-items: center;
@@ -95,86 +93,79 @@
     flex: 1;
     overflow-y: auto;
     padding: 20px 24px;
-    display: flex;
-    flex-direction: column;
-    gap: 14px;
   }
-
   .sy-item-card {
     display: flex;
-    gap: 14px;
-    padding: 14px;
-    background: #FAF9F5;
-    border: 1px solid #E2E8F0;
-    border-radius: 14px;
+    gap: 16px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid #E2E8F0;
+    align-items: flex-start;
   }
   .sy-item-icon {
-    font-size: 2rem;
-    background: #ffffff;
-    border-radius: 10px;
-    width: 56px;
-    height: 56px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: 1px solid #E2E8F0;
+    width: 64px;
+    height: 64px;
+    border-radius: 8px;
+    background: #f8fafc;
+    overflow: hidden;
     flex-shrink: 0;
+  }
+  .sy-item-icon img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
   }
   .sy-item-info {
     flex: 1;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
   }
   .sy-item-name {
+    font-size: 0.92rem;
     font-weight: 800;
-    font-size: 0.9rem;
     color: #1E293B;
-    line-height: 1.3;
+    margin-bottom: 4px;
+    line-height: 1.35;
   }
   .sy-item-meta {
     font-size: 0.78rem;
     color: #64748B;
-    margin-top: 2px;
+    margin-bottom: 10px;
   }
   .sy-qty-row {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-top: 10px;
   }
   .sy-qty-ctrl {
     display: flex;
     align-items: center;
     border: 1px solid #CBD5E1;
-    background: #ffffff;
     border-radius: 6px;
     overflow: hidden;
   }
   .sy-qty-btn {
+    background: #FAF9F5;
     border: none;
-    background: none;
+    width: 28px;
+    height: 28px;
     font-size: 0.9rem;
+    font-weight: 800;
     cursor: pointer;
-    font-weight: 700;
-    padding: 3px 10px;
     color: #1E293B;
   }
   .sy-qty-val {
-    font-size: 0.82rem;
+    width: 32px;
+    text-align: center;
+    font-size: 0.85rem;
     font-weight: 800;
-    padding: 0 6px;
-    color: #1E293B;
   }
   .sy-item-price {
-    font-weight: 900;
     font-size: 1rem;
-    color: #0D5C3A;
+    font-weight: 900;
+    color: #1E293B;
   }
 
   .sy-drawer-footer {
     padding: 20px 24px;
-    border-top: 1px solid #eaeaec;
+    border-top: 1px solid #E2E8F0;
     background: #ffffff;
   }
   .sy-cost-row {
@@ -218,7 +209,7 @@
         <path d="M16 10a4 4 0 0 1-8 0"></path>
       </svg>
       <h3 class="sy-drawer-title">Your Shopping Bag</h3>
-      <span id="syCartBadgeCount" class="sy-drawer-badge">1 ITEM</span>
+      <span id="syCartBadgeCount" class="sy-drawer-badge">0 ITEMS</span>
     </div>
     <button class="sy-drawer-close-btn" onclick="window.closeCartDrawer()">✕</button>
   </div>
@@ -226,33 +217,44 @@
   <!-- Free Shipping Notification -->
   <div class="sy-progress-strip">
     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#0D5C3A" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block; vertical-align:middle;"><polyline points="20 6 9 17 4 12"></polyline></svg>
-    <span>You unlocked <b>FREE USPS Air Express Shipping</b> (US & UK)!</span>
+    <span>Fast Tracked USPS Doorstep Express Delivery!</span>
   </div>
 
   <!-- Items List -->
   <div class="sy-items-container" id="syCartItemList">
-    <div class="sy-item-card">
-      <div class="sy-item-icon" id="syCartItemIcon"><img src="https://images.unsplash.com/photo-1584100936595-c0654b55a2e2?auto=format&fit=crop&w=120&q=80" style="width: 50px; height: 50px; object-fit: cover; border-radius: 8px;"></div>
+    <div id="syCartEmptyNotice" style="text-align: center; padding: 50px 20px; color: #64748b;">
+      <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="1.6" style="margin: 0 auto 12px auto; display: block;">
+        <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+        <line x1="3" y1="6" x2="21" y2="6"></line>
+        <path d="M16 10a4 4 0 0 1-8 0"></path>
+      </svg>
+      <div style="font-weight: 800; font-size: 1.1rem; color: #1e293b; margin-bottom: 6px;">Your bag is empty</div>
+      <p style="font-size: 0.9rem; margin-bottom: 24px;">Explore our collection to add authentic products.</p>
+      <a href="/collections/all" style="display: inline-block; padding: 12px 28px; border-radius: 25px; text-decoration: none; font-weight: 800; font-size: 0.88rem; background: #0D5C3A; color: #fff;" onclick="window.closeCartDrawer()">BROWSE ALL PRODUCTS ➔</a>
+    </div>
+
+    <div class="sy-item-card" id="syCartItemCard" style="display: none;">
+      <div class="sy-item-icon" id="syCartItemIcon"></div>
       <div class="sy-item-info">
-        <div class="sy-item-name" id="syCartItemTitle">Sunnyeora Deep-Sleep™ Cervical Pillow</div>
-        <div class="sy-item-meta">Color: Ice-Silk White | Size: Universal</div>
+        <div class="sy-item-name" id="syCartItemTitle"></div>
+        <div class="sy-item-meta" id="syCartItemMeta">Authentic Store Product &bull; Verified</div>
         <div class="sy-qty-row">
           <div class="sy-qty-ctrl">
             <button class="sy-qty-btn" onclick="modifyQty(-1)">-</button>
             <span class="sy-qty-val" id="syCartItemQty">1</span>
             <button class="sy-qty-btn" onclick="modifyQty(1)">+</button>
           </div>
-          <div class="sy-item-price" id="syCartItemPrice">$49.99</div>
+          <div class="sy-item-price" id="syCartItemPrice"></div>
         </div>
       </div>
     </div>
   </div>
 
   <!-- Summary & Checkout Footer -->
-  <div class="sy-drawer-footer">
+  <div class="sy-drawer-footer" id="syCartFooter" style="display: none;">
     <div class="sy-cost-row">
       <span>Subtotal</span>
-      <span id="syCartSubtotal" style="font-weight: 800; color: #1E293B;">$49.99</span>
+      <span id="syCartSubtotal" style="font-weight: 800; color: #1E293B;">$0.00</span>
     </div>
     <div class="sy-cost-row">
       <span>Shipping (USPS Air)</span>
@@ -270,7 +272,7 @@
       </span>
       <span style="display: flex; align-items: center; gap: 4px;">
         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg>
-        Stripe & Visa
+        Stripe &amp; Visa
       </span>
       <span style="display: flex; align-items: center; gap: 4px;">
         <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M15.97 6.37c.62-.75 1.04-1.8 0.93-2.85-.9.04-1.99.6-2.63 1.35-.57.65-1.07 1.71-.93 2.73 1.01.08 2.02-.48 2.63-1.23z"/></svg>
@@ -281,17 +283,53 @@
 </div>
 
 <script>
-  window.openCartDrawer = function(title, price, icon) {
+  let cartCurrentItem = null;
+  let cartCurrentPrice = 0;
+
+  window.openCartDrawer = function(title, price, image) {
+    const emptyNotice = document.getElementById('syCartEmptyNotice');
+    const itemCard = document.getElementById('syCartItemCard');
+    const footer = document.getElementById('syCartFooter');
+    const badge = document.getElementById('syCartBadgeCount');
+    const headerCount = document.getElementById('header-bag-count');
+
     if (title) {
+      cartCurrentItem = title;
+      cartCurrentPrice = parseFloat(price) || 0;
+      
       const tEl = document.getElementById('syCartItemTitle');
       const pEl = document.getElementById('syCartItemPrice');
       const iEl = document.getElementById('syCartItemIcon');
       const sub = document.getElementById('syCartSubtotal');
+      const qEl = document.getElementById('syCartItemQty');
+
       if (tEl) tEl.textContent = title;
-      if (pEl) pEl.textContent = '$' + price;
-      if (iEl && icon) iEl.textContent = icon;
-      if (sub) sub.textContent = '$' + price;
+      if (pEl) pEl.textContent = (price.toString().startsWith('$') || price.toString().startsWith('₹') ? '' : '$') + price;
+      if (sub) sub.textContent = (price.toString().startsWith('$') || price.toString().startsWith('₹') ? '' : '$') + price;
+      if (qEl) qEl.textContent = '1';
+
+      if (iEl) {
+        if (image) {
+          iEl.innerHTML = '<img src="' + image + '" alt="' + title.replace(/"/g, '&quot;') + '" style="width:100%; height:100%; object-fit:cover; border-radius:8px;">';
+        } else {
+          iEl.innerHTML = '';
+        }
+      }
+
+      if (emptyNotice) emptyNotice.style.display = 'none';
+      if (itemCard) itemCard.style.display = 'flex';
+      if (footer) footer.style.display = 'block';
+      if (badge) badge.textContent = '1 ITEM';
+      if (headerCount) headerCount.textContent = '1';
+    } else {
+      if (!cartCurrentItem) {
+        if (emptyNotice) emptyNotice.style.display = 'block';
+        if (itemCard) itemCard.style.display = 'none';
+        if (footer) footer.style.display = 'none';
+        if (badge) badge.textContent = '0 ITEMS';
+      }
     }
+
     const d = document.getElementById('syCartDrawer');
     const o = document.getElementById('syCartOverlay');
     if (d) d.classList.add('open');
@@ -309,35 +347,23 @@
 
   function modifyQty(change) {
     const qEl = document.getElementById('syCartItemQty');
+    const sub = document.getElementById('syCartSubtotal');
     if (qEl) {
       let q = parseInt(qEl.textContent) || 1;
       q += change;
       if (q < 1) q = 1;
       qEl.textContent = q;
+      if (sub && cartCurrentPrice > 0) {
+        const total = (cartCurrentPrice * q).toFixed(2);
+        sub.textContent = '$' + total;
+      }
     }
   }
 
-  // Connect click listeners to all ADD TO BAG buttons across the site
-  document.addEventListener('DOMContentLoaded', function() {
-    document.querySelectorAll('.myntra-add-bag-btn, .sy-trigger-cart').forEach(function(btn) {
-      btn.addEventListener('click', function(e) {
-        e.preventDefault();
-        const card = btn.closest('.myntra-product-card');
-        if (card) {
-          const title = card.querySelector('.myntra-product-title')?.textContent?.trim();
-          const priceStr = card.querySelector('.myntra-current-price')?.textContent?.replace('$', '')?.trim();
-          window.openCartDrawer(title, priceStr);
-        } else {
-          window.openCartDrawer();
-        }
-      });
-    });
-
-    document.addEventListener('keydown', function(e) {
-      if (e.key === 'Escape') {
-        window.closeCartDrawer();
-      }
-    });
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+      window.closeCartDrawer();
+    }
   });
 </script>
 

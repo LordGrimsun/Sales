@@ -1,3 +1,4 @@
+{% paginate collection.products by 48 %}
 <style>
   .sunnyeora-collection-page {
     max-width: 1440px;
@@ -6,6 +7,7 @@
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     color: #282c3f;
   }
+
   .sy-col-breadcrumbs {
     display: flex;
     align-items: center;
@@ -22,6 +24,7 @@
   .sy-col-breadcrumbs a:hover {
     color: #ff3f6c;
   }
+
   .sunnyeora-collection-header {
     text-align: center;
     margin-bottom: 32px;
@@ -52,70 +55,41 @@
     margin: 0 auto;
     line-height: 1.5;
   }
-  .sy-gender-tabs {
+
+  /* Filter category pills based on real merchandise */
+  .sy-category-pills {
     display: flex;
     justify-content: center;
     gap: 10px;
-    margin: 28px 0 18px;
+    margin: 24px 0 20px;
     flex-wrap: wrap;
   }
-  .sy-gender-tab {
-    padding: 10px 24px;
-    border-radius: 30px;
+  .sy-cat-pill {
+    padding: 8px 20px;
+    border-radius: 25px;
     background: #f5f5f6;
     border: 1.5px solid transparent;
     color: #282c3f;
-    font-weight: 800;
-    font-size: 0.92rem;
+    font-weight: 700;
+    font-size: 0.88rem;
     cursor: pointer;
-    transition: all 0.2s ease;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
+    text-decoration: none;
+    transition: all 0.2s;
   }
-  .sy-gender-tab:hover {
-    border-color: #ff3f6c;
-    color: #ff3f6c;
-    background: #fff;
-  }
-  .sy-gender-tab.active {
+  .sy-cat-pill:hover, .sy-cat-pill.active {
     background: #ff3f6c;
     color: #ffffff;
     border-color: #ff3f6c;
-    box-shadow: 0 4px 12px rgba(255, 63, 108, 0.3);
+    box-shadow: 0 4px 10px rgba(255, 63, 108, 0.25);
   }
-  .sy-dept-chips {
-    display: flex;
-    justify-content: center;
-    gap: 8px;
-    flex-wrap: wrap;
-    margin-bottom: 28px;
-  }
-  .sy-dept-chip {
-    padding: 7px 16px;
-    border-radius: 20px;
-    background: #ffffff;
-    border: 1px solid #d4d5d9;
-    color: #535766;
-    font-weight: 600;
-    font-size: 0.85rem;
-    cursor: pointer;
-    transition: all 0.2s;
-  }
-  .sy-dept-chip:hover {
-    border-color: #282c3f;
-    color: #282c3f;
-  }
-  .sy-dept-chip.active {
-    background: #282c3f;
-    color: #ffffff;
-    border-color: #282c3f;
-  }
+
+  /* Controls Bar */
   .sy-controls-bar {
     background: #ffffff;
     border: 1px solid #eaeaec;
     border-radius: 12px;
-    padding: 16px 20px;
-    margin-bottom: 28px;
+    padding: 14px 20px;
+    margin-bottom: 24px;
     display: flex;
     flex-wrap: wrap;
     align-items: center;
@@ -151,53 +125,7 @@
     transform: translateY(-50%);
     pointer-events: none;
   }
-  .sy-search-clear-btn {
-    position: absolute;
-    right: 10px;
-    top: 50%;
-    transform: translateY(-50%);
-    background: none;
-    border: none;
-    color: #94969f;
-    font-size: 1.1rem;
-    cursor: pointer;
-    display: none;
-    padding: 0;
-    line-height: 1;
-  }
-  .sy-filters-group {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    flex-wrap: wrap;
-  }
-  .sy-select-wrapper {
-    position: relative;
-  }
-  .sy-select-wrapper select {
-    appearance: none;
-    -webkit-appearance: none;
-    background: #ffffff;
-    border: 1px solid #d4d5d9;
-    padding: 9px 32px 9px 14px;
-    border-radius: 8px;
-    font-size: 0.85rem;
-    font-weight: 600;
-    color: #282c3f;
-    cursor: pointer;
-    outline: none;
-    transition: border-color 0.2s;
-  }
-  .sy-select-wrapper select:focus {
-    border-color: #ff3f6c;
-  }
-  .sy-select-icon {
-    position: absolute;
-    right: 10px;
-    top: 50%;
-    transform: translateY(-50%);
-    pointer-events: none;
-  }
+
   .sy-summary-bar {
     display: flex;
     justify-content: space-between;
@@ -205,23 +133,13 @@
     margin-bottom: 20px;
     font-size: 0.9rem;
     color: #696e79;
-    flex-wrap: wrap;
-    gap: 10px;
   }
   .sy-summary-count strong {
     color: #1e293b;
     font-weight: 800;
   }
-  .sy-reset-all-btn {
-    background: none;
-    border: none;
-    color: #ff3f6c;
-    font-weight: 700;
-    cursor: pointer;
-    text-decoration: underline;
-    font-size: 0.88rem;
-    padding: 0;
-  }
+
+  /* Product Grid */
   .sy-catalog-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -238,13 +156,12 @@
       grid-template-columns: repeat(2, 1fr);
       gap: 14px;
     }
-    .sy-controls-bar {
-      padding: 12px;
-    }
     .sunnyeora-collection-title {
       font-size: 1.75rem;
     }
   }
+
+  /* Product Card */
   .myntra-product-card {
     position: relative;
     background: #ffffff;
@@ -281,22 +198,6 @@
   }
   .myntra-product-card:hover .myntra-card-image-wrap img {
     transform: scale(1.04);
-  }
-  .myntra-rating-chip {
-    position: absolute;
-    bottom: 8px;
-    left: 8px;
-    background: rgba(255, 255, 255, 0.94);
-    backdrop-filter: blur(4px);
-    padding: 3px 7px;
-    border-radius: 4px;
-    font-size: 0.72rem;
-    font-weight: 800;
-    color: #282c3f;
-    display: flex;
-    align-items: center;
-    gap: 3px;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.12);
   }
   .myntra-wishlist-btn {
     position: absolute;
@@ -386,48 +287,39 @@
     border-color: #ff3f6c;
     color: #ffffff;
   }
+
   .sy-pagination-container {
     display: flex;
     justify-content: center;
-    align-items: center;
-    gap: 8px;
-    margin-top: 48px;
-    flex-wrap: wrap;
+    margin-top: 40px;
   }
-  .sy-page-btn {
-    min-width: 40px;
-    height: 40px;
-    padding: 0 12px;
+  .sy-pagination-container .pagination {
+    display: flex;
+    gap: 8px;
+    list-style: none;
+    padding: 0;
+  }
+  .sy-pagination-container a, .sy-pagination-container span {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 38px;
+    height: 38px;
+    padding: 0 10px;
     border-radius: 8px;
     border: 1px solid #d4d5d9;
     background: #ffffff;
     color: #282c3f;
+    text-decoration: none;
     font-weight: 700;
-    font-size: 0.9rem;
-    cursor: pointer;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.2s;
+    font-size: 0.88rem;
   }
-  .sy-page-btn:hover:not(:disabled) {
-    border-color: #ff3f6c;
-    color: #ff3f6c;
-  }
-  .sy-page-btn.active {
+  .sy-pagination-container .current {
     background: #ff3f6c;
     border-color: #ff3f6c;
     color: #ffffff;
   }
-  .sy-page-btn:disabled {
-    opacity: 0.4;
-    cursor: not-allowed;
-  }
-  .sy-page-dots {
-    padding: 0 6px;
-    color: #94969f;
-    font-weight: 700;
-  }
+
   .sy-empty-catalog {
     text-align: center;
     padding: 60px 20px;
@@ -445,433 +337,159 @@
   .sy-empty-catalog p {
     color: #64748b;
     font-size: 0.95rem;
-    margin: 0 0 20px;
-  }
-  .sy-empty-reset-btn {
-    background: #0D5C3A;
-    color: #ffffff;
-    border: none;
-    padding: 10px 24px;
-    border-radius: 20px;
-    font-weight: 800;
-    cursor: pointer;
-    transition: background 0.2s;
-  }
-  .sy-empty-reset-btn:hover {
-    background: #09442a;
   }
 </style>
 
 <div class="sunnyeora-collection-page">
+  <!-- Breadcrumbs -->
   <div class="sy-col-breadcrumbs">
     <a href="/">Home</a>
     <span>/</span>
     <a href="/collections/all">Collections</a>
     <span>/</span>
-    <span id="breadcrumbCurrent" style="color: #1e293b; font-weight: 700;">All Products</span>
+    <span style="color: #1e293b; font-weight: 700;">{{ collection.title | default: 'All Products' }}</span>
   </div>
 
+  <!-- Header -->
   <div class="sunnyeora-collection-header">
-    <span class="sunnyeora-badge-pill">SUNNYEORA MARKETPLACE • CJ DROPSHIPPING VERIFIED</span>
-    <h1 class="sunnyeora-collection-title" id="catalogHeading">Explore Sunnyeora Catalog</h1>
-    <p class="sunnyeora-collection-subtitle" id="catalogSubheading">
-      Discover 2,400+ high-demand essentials across apparel, tech, toys, daily utilities and footwear with USPS Air Express delivery.
+    <span class="sunnyeora-badge-pill">SUNNYEORA STORE COLLECTION</span>
+    <h1 class="sunnyeora-collection-title">{{ collection.title | default: 'Authentic Collection' }}</h1>
+    <p class="sunnyeora-collection-subtitle">
+      Explore our verified store inventory with premium craftsmanship and reliable doorstep delivery.
     </p>
 
-    <div class="sy-gender-tabs">
-      <button class="sy-gender-tab active" data-gender="all" onclick="selectGender('all', this)">All Products</button>
-      <button class="sy-gender-tab" data-gender="men" onclick="selectGender('men', this)">Men (310+)</button>
-      <button class="sy-gender-tab" data-gender="women" onclick="selectGender('women', this)">Women (310+)</button>
-      <button class="sy-gender-tab" data-gender="kids" onclick="selectGender('kids', this)">Kids & Children (305+)</button>
-    </div>
-
-    <div class="sy-dept-chips">
-      <button class="sy-dept-chip active" data-dept="all" onclick="selectDept('all', this)">All Sectors</button>
-      <button class="sy-dept-chip" data-dept="clothing" onclick="selectDept('clothing', this)">Clothing & Apparel</button>
-      <button class="sy-dept-chip" data-dept="shoes" onclick="selectDept('shoes', this)">Shoes & Footwear</button>
-      <button class="sy-dept-chip" data-dept="electronics" onclick="selectDept('electronics', this)">Electronics & Tech</button>
-      <button class="sy-dept-chip" data-dept="toys" onclick="selectDept('toys', this)">Toys & Games</button>
-      <button class="sy-dept-chip" data-dept="accessories" onclick="selectDept('accessories', this)">Accessories & Bags</button>
-      <button class="sy-dept-chip" data-dept="utilities" onclick="selectDept('utilities', this)">Daily Utilities & Home</button>
+    <!-- Quick filter pills for real product categories -->
+    <div class="sy-category-pills">
+      <button class="sy-cat-pill active" onclick="filterByKeyword('', this)">All Items ({{ collection.all_products_count | default: collection.products.size }})</button>
+      <button class="sy-cat-pill" onclick="filterByKeyword('dress', this)">Dresses & Gowns</button>
+      <button class="sy-cat-pill" onclick="filterByKeyword('sweater', this)">Sweaters & Knits</button>
+      <button class="sy-cat-pill" onclick="filterByKeyword('jacket', this)">Jackets & Coats</button>
+      <button class="sy-cat-pill" onclick="filterByKeyword('suit', this)">Suits & Sets</button>
+      <button class="sy-cat-pill" onclick="filterByKeyword('top', this)">Tops & Shirts</button>
+      <button class="sy-cat-pill" onclick="filterByKeyword('skin', this)">Beauty & Skincare</button>
     </div>
   </div>
 
+  <!-- Search & Filter Controls Bar -->
   <div class="sy-controls-bar">
     <div class="sy-search-box">
       <svg class="sy-search-icon-left" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#696e79" stroke-width="2.2">
         <circle cx="11" cy="11" r="8"></circle>
         <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
       </svg>
-      <input type="text" id="catalogSearchInput" placeholder="Search 2,400+ products, brands, titles..." oninput="handleSearchInput(this.value)">
-      <button class="sy-search-clear-btn" id="searchClearBtn" onclick="clearSearchInput()" title="Clear search">✕</button>
+      <input type="text" id="storeSearchInput" placeholder="Filter current items by name..." oninput="handleFilterInput(this.value)">
     </div>
 
-    <div class="sy-filters-group">
-      <div class="sy-select-wrapper">
-        <select id="priceFilterSelect" onchange="handleFilterChange()">
-          <option value="all">Price: All</option>
-          <option value="under-25">Under $25</option>
-          <option value="25-50">$25 to $50</option>
-          <option value="50-100">$50 to $100</option>
-          <option value="over-100">$100 & Above</option>
-        </select>
-        <svg class="sy-select-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#696e79" stroke-width="2.5">
-          <polyline points="6 9 12 15 18 9"></polyline>
-        </svg>
-      </div>
-
-      <div class="sy-select-wrapper">
-        <select id="ratingFilterSelect" onchange="handleFilterChange()">
-          <option value="all">Rating: All</option>
-          <option value="4.5">4.5 ★ & Above</option>
-          <option value="4.0">4.0 ★ & Above</option>
-        </select>
-        <svg class="sy-select-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#696e79" stroke-width="2.5">
-          <polyline points="6 9 12 15 18 9"></polyline>
-        </svg>
-      </div>
-
-      <div class="sy-select-wrapper">
-        <select id="sortSelect" onchange="handleFilterChange()">
-          <option value="recommended">Sort: Recommended</option>
-          <option value="price-asc">Price: Low to High</option>
-          <option value="price-desc">Price: High to Low</option>
-          <option value="rating-desc">Highest Rated</option>
-          <option value="discount-desc">Biggest Savings</option>
-        </select>
-        <svg class="sy-select-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#696e79" stroke-width="2.5">
-          <polyline points="6 9 12 15 18 9"></polyline>
-        </svg>
-      </div>
+    <div style="font-size: 0.88rem; font-weight: 700; color: #64748b;">
+      <span id="visibleCount">{{ collection.products.size }}</span> of {{ collection.all_products_count | default: collection.products.size }} products
     </div>
   </div>
 
-  <div class="sy-summary-bar">
-    <div class="sy-summary-count" id="summaryCountText">
-      Loading products...
-    </div>
-    <button class="sy-reset-all-btn" id="resetAllBtn" onclick="resetAllFilters()" style="display: none;">
-      Clear all filters
-    </button>
+  <!-- Real Products Grid -->
+  <div class="sy-catalog-grid" id="realProductsGrid">
+    {% for product in collection.products %}
+      {% assign p_title_lower = product.title | downcase %}
+      <div class="myntra-product-card" data-title="{{ p_title_lower | escape }}" data-vendor="{{ product.vendor | downcase | escape }}" data-handle="{{ product.handle }}">
+        <a href="{{ product.url }}" class="sy-card-link">
+          <div class="myntra-card-image-wrap">
+            {% if product.featured_image %}
+              <img src="{{ product.featured_image | image_url: width: 600 }}" alt="{{ product.title | escape }}" loading="lazy">
+            {% else %}
+              <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: #f1f5f9; color: #94a3b8;">No Image</div>
+            {% endif %}
+            <button class="myntra-wishlist-btn" onclick="event.preventDefault(); event.stopPropagation(); window.toggleWishlist && window.toggleWishlist('{{ product.handle }}', this);" aria-label="Save to Wishlist">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#282c3f" stroke-width="2">
+                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+              </svg>
+            </button>
+          </div>
+          <div class="myntra-card-details">
+            <div class="myntra-brand-name">{{ product.vendor | default: 'SUNNYEORA' }}</div>
+            <div class="myntra-product-title" title="{{ product.title | escape }}">{{ product.title }}</div>
+            <div class="myntra-price-row">
+              <span class="myntra-current-price">{{ product.price | money }}</span>
+              {% if product.compare_at_price > product.price %}
+                <span class="myntra-mrp-price">{{ product.compare_at_price | money }}</span>
+                {% assign discount_pct = product.compare_at_price | minus: product.price | times: 100.0 | divided_by: product.compare_at_price | round %}
+                <span class="myntra-discount-tag">({{ discount_pct }}% OFF)</span>
+              {% endif %}
+            </div>
+          </div>
+        </a>
+        <div class="sy-card-action-bar">
+          <button class="myntra-add-bag-btn" onclick="event.preventDefault(); if(window.openCartDrawer) { window.openCartDrawer('{{ product.title | escape }}', '{{ product.price | money_without_currency }}', '{% if product.featured_image %}{{ product.featured_image | image_url: width: 120 }}{% endif %}'); }">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+              <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+              <line x1="3" y1="6" x2="21" y2="6"></line>
+              <path d="M16 10a4 4 0 0 1-8 0"></path>
+            </svg>
+            ADD TO BAG
+          </button>
+        </div>
+      </div>
+    {% else %}
+      <div class="sy-empty-catalog">
+        <h3>No products in this collection</h3>
+        <p>Browse our catalog or check back soon for new arrivals.</p>
+      </div>
+    {% endfor %}
   </div>
 
-  <div class="sy-catalog-grid" id="collectionGrid"></div>
-  <div class="sy-pagination-container" id="paginationControls"></div>
+  {% if paginate.pages > 1 %}
+    <div class="sy-pagination-container">
+      {{ paginate | default_pagination }}
+    </div>
+  {% endif %}
 </div>
 
 <script>
-(function() {
-  const PAGE_SIZE = 32;
-  let currentPage = 1;
-  let activeGender = "all";
-  let activeDept = "all";
-  let searchQuery = "";
-  let priceFilter = "all";
-  let ratingFilter = "all";
-  let sortBy = "recommended";
-  let searchDebounceTimer = null;
+  let activeKeyword = '';
+  let activeSearchTerm = '';
 
-  function getFullCatalog() {
-    if (window.SUNNYEORA_CATALOG && Array.isArray(window.SUNNYEORA_CATALOG) && window.SUNNYEORA_CATALOG.length > 0) {
-      return window.SUNNYEORA_CATALOG;
-    }
-    return [];
+  window.filterByKeyword = function(kw, btn) {
+    activeKeyword = kw.toLowerCase();
+    document.querySelectorAll('.sy-cat-pill').forEach(b => b.classList.remove('active'));
+    if (btn) btn.classList.add('active');
+    applyCardFilters();
+  };
+
+  window.handleFilterInput = function(val) {
+    activeSearchTerm = val.toLowerCase().trim();
+    applyCardFilters();
+  };
+
+  function applyCardFilters() {
+    let visible = 0;
+    const cards = document.querySelectorAll('#realProductsGrid .myntra-product-card');
+    cards.forEach(card => {
+      const title = card.dataset.title || '';
+      const vendor = card.dataset.vendor || '';
+      const kwMatch = !activeKeyword || title.includes(activeKeyword) || vendor.includes(activeKeyword);
+      const searchMatch = !activeSearchTerm || title.includes(activeSearchTerm) || vendor.includes(activeSearchTerm);
+
+      if (kwMatch && searchMatch) {
+        card.style.display = 'flex';
+        visible++;
+      } else {
+        card.style.display = 'none';
+      }
+    });
+
+    const countEl = document.getElementById('visibleCount');
+    if (countEl) countEl.textContent = visible;
   }
 
-  function readParamsFromUrl() {
+  // Check URL query on load
+  document.addEventListener('DOMContentLoaded', function() {
     const params = new URLSearchParams(window.location.search);
-    if (params.get("gender")) activeGender = params.get("gender").toLowerCase();
-    if (params.get("dept")) activeDept = params.get("dept").toLowerCase();
-    if (params.get("sector")) activeDept = params.get("sector").toLowerCase();
-    if (params.get("q")) searchQuery = params.get("q").trim();
-    if (params.get("price")) priceFilter = params.get("price");
-    if (params.get("rating")) ratingFilter = params.get("rating");
-    if (params.get("sort")) sortBy = params.get("sort");
-    if (params.get("page")) {
-      const p = parseInt(params.get("page"), 10);
-      if (!isNaN(p) && p > 0) currentPage = p;
+    const q = params.get('q');
+    if (q) {
+      const input = document.getElementById('storeSearchInput');
+      if (input) input.value = q;
+      activeSearchTerm = q.toLowerCase().trim();
+      applyCardFilters();
     }
-
-    const searchInput = document.getElementById("catalogSearchInput");
-    if (searchInput) searchInput.value = searchQuery;
-    const clearBtn = document.getElementById("searchClearBtn");
-    if (clearBtn) clearBtn.style.display = searchQuery ? "block" : "none";
-
-    const priceSelect = document.getElementById("priceFilterSelect");
-    if (priceSelect) priceSelect.value = priceFilter;
-    const ratingSelect = document.getElementById("ratingFilterSelect");
-    if (ratingSelect) ratingSelect.value = ratingFilter;
-    const sortSelect = document.getElementById("sortSelect");
-    if (sortSelect) sortSelect.value = sortBy;
-
-    document.querySelectorAll(".sy-gender-tab").forEach(tab => {
-      tab.classList.toggle("active", tab.dataset.gender === activeGender);
-    });
-    document.querySelectorAll(".sy-dept-chip").forEach(chip => {
-      chip.classList.toggle("active", chip.dataset.dept === activeDept);
-    });
-  }
-
-  function updateUrlParams() {
-    const params = new URLSearchParams();
-    if (activeGender !== "all") params.set("gender", activeGender);
-    if (activeDept !== "all") params.set("dept", activeDept);
-    if (searchQuery) params.set("q", searchQuery);
-    if (priceFilter !== "all") params.set("price", priceFilter);
-    if (ratingFilter !== "all") params.set("rating", ratingFilter);
-    if (sortBy !== "recommended") params.set("sort", sortBy);
-    if (currentPage > 1) params.set("page", currentPage);
-    const newSearch = params.toString();
-    const newUrl = window.location.pathname + (newSearch ? "?" + newSearch : "");
-    window.history.replaceState(null, "", newUrl);
-  }
-
-  function filterCatalog() {
-    const catalog = getFullCatalog();
-    return catalog.filter(item => {
-      if (activeGender !== "all") {
-        const g = (item.gender || "").toLowerCase();
-        const s = (item.sector || "").toLowerCase();
-        if (activeGender === "men" && g !== "men" && s !== "men") return false;
-        if (activeGender === "women" && g !== "women" && s !== "women") return false;
-        if (activeGender === "kids" && g !== "kids" && s !== "kids" && g !== "children") return false;
-      }
-      if (activeDept !== "all") {
-        const d = (item.department || "").toLowerCase();
-        const s = (item.sector || "").toLowerCase();
-        if (d !== activeDept && s !== activeDept) return false;
-      }
-      if (searchQuery) {
-        const q = searchQuery.toLowerCase();
-        const titleMatch = (item.title || "").toLowerCase().includes(q);
-        const brandMatch = (item.brand || "").toLowerCase().includes(q);
-        const tagsMatch = (item.tags || "").toLowerCase().includes(q);
-        const deptMatch = (item.department || "").toLowerCase().includes(q);
-        if (!titleMatch && !brandMatch && !tagsMatch && !deptMatch) return false;
-      }
-      const price = parseFloat(item.price);
-      if (priceFilter === "under-25" && price >= 25) return false;
-      if (priceFilter === "25-50" && (price < 25 || price > 50)) return false;
-      if (priceFilter === "50-100" && (price < 50 || price > 100)) return false;
-      if (priceFilter === "over-100" && price < 100) return false;
-      const rating = parseFloat(item.ratingVal || 4.5);
-      if (ratingFilter === "4.5" && rating < 4.5) return false;
-      if (ratingFilter === "4.0" && rating < 4.0) return false;
-      return true;
-    });
-  }
-
-  function sortCatalog(items) {
-    const list = items.slice();
-    if (sortBy === "price-asc") {
-      list.sort((a, b) => parseFloat(a.price) - parseFloat(b.price));
-    } else if (sortBy === "price-desc") {
-      list.sort((a, b) => parseFloat(b.price) - parseFloat(a.price));
-    } else if (sortBy === "rating-desc") {
-      list.sort((a, b) => parseFloat(b.ratingVal || 0) - parseFloat(a.ratingVal || 0));
-    } else if (sortBy === "discount-desc") {
-      list.sort((a, b) => (parseFloat(b.discountPct || 0)) - (parseFloat(a.discountPct || 0)));
-    }
-    return list;
-  }
-
-  function renderHeaderTitles(totalCount) {
-    let title = "Sunnyeora Marketplace Catalog";
-    let breadcrumb = "All Products";
-    if (activeGender === "men") { title = "Men's Collection & Lifestyle"; breadcrumb = "Men's Fashion"; }
-    else if (activeGender === "women") { title = "Women's Collection & Style"; breadcrumb = "Women's Fashion"; }
-    else if (activeGender === "kids") { title = "Kids & Children's Essentials"; breadcrumb = "Kids & Children"; }
-    if (activeDept !== "all") {
-      const deptNames = { clothing: "Clothing & Apparel", shoes: "Shoes & Footwear", electronics: "Electronics & Smart Tech", toys: "Toys & Interactive Games", accessories: "Accessories & Bags", utilities: "Daily Utilities & Home Care" };
-      const deptTitle = deptNames[activeDept] || activeDept;
-      if (activeGender !== "all") title += " — " + deptTitle;
-      else title = deptTitle;
-      breadcrumb = deptTitle;
-    }
-    const h = document.getElementById("catalogHeading");
-    if (h) h.textContent = title;
-    const b = document.getElementById("breadcrumbCurrent");
-    if (b) b.textContent = breadcrumb;
-    document.title = title + " (" + totalCount + " Products) | Sunnyeora";
-  }
-
-  function renderGrid() {
-    const grid = document.getElementById("collectionGrid");
-    const summaryCount = document.getElementById("summaryCountText");
-    const resetBtn = document.getElementById("resetAllBtn");
-    const paginationBox = document.getElementById("paginationControls");
-    if (!grid) return;
-    const filtered = filterCatalog();
-    const sorted = sortCatalog(filtered);
-    const totalCount = sorted.length;
-    renderHeaderTitles(totalCount);
-    const hasActiveFilters = (activeGender !== "all" || activeDept !== "all" || searchQuery || priceFilter !== "all" || ratingFilter !== "all" || sortBy !== "recommended");
-    if (resetBtn) resetBtn.style.display = hasActiveFilters ? "inline-block" : "none";
-    if (totalCount === 0) {
-      if (summaryCount) summaryCount.innerHTML = "Showing <strong>0</strong> products";
-      if (paginationBox) paginationBox.innerHTML = "";
-      grid.innerHTML = '<div class="sy-empty-catalog"><svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#64748B" stroke-width="1.8" style="margin: 0 auto; display: block;"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line><line x1="8" y1="11" x2="14" y2="11"></line></svg><h3>No matching products found</h3><p>Try adjusting your search query, price filter, or category selection.</p><button class="sy-empty-reset-btn" onclick="resetAllFilters()">Reset All Filters</button></div>';
-      return;
-    }
-    const totalPages = Math.ceil(totalCount / PAGE_SIZE);
-    if (currentPage > totalPages) currentPage = totalPages;
-    if (currentPage < 1) currentPage = 1;
-    const startIdx = (currentPage - 1) * PAGE_SIZE;
-    const endIdx = Math.min(startIdx + PAGE_SIZE, totalCount);
-    const pageItems = sorted.slice(startIdx, endIdx);
-    if (summaryCount) summaryCount.innerHTML = "Showing <strong>" + (startIdx + 1) + " – " + endIdx + "</strong> of <strong>" + totalCount.toLocaleString() + "</strong> verified products";
-    let html = "";
-    const wishlist = JSON.parse(localStorage.getItem("sy_wishlist") || "[]");
-    pageItems.forEach(item => {
-      const isFav = wishlist.includes(item.handle);
-      const ratingText = item.rating || (item.ratingVal ? item.ratingVal + " ★" : "4.8 ★");
-      const reviews = item.reviewsCount ? " | " + item.reviewsCount : "";
-      const compareHtml = item.comparePrice ? '<span class="myntra-mrp-price">$' + item.comparePrice + '</span>' : "";
-      const discountTag = item.discount ? '<span class="myntra-discount-tag">(' + item.discount.replace("SAVE ", "") + ')</span>' : "";
-      const safeTitle = (item.title || "").replace(/"/g, "&quot;");
-      const safeTitleForClick = (item.title || "").replace(/'/g, "\\'");
-      html += '<div class="myntra-product-card" data-handle="' + item.handle + '"><a href="/products/' + item.handle + '" class="sy-card-link"><div class="myntra-card-image-wrap"><img src="' + item.image + '" alt="' + safeTitle + '" loading="lazy"><span class="myntra-rating-chip">' + ratingText + reviews + '</span><button class="myntra-wishlist-btn" onclick="event.preventDefault(); event.stopPropagation(); toggleCardWishlist(\'' + item.handle + '\', this);" aria-label="Add to Wishlist"><svg width="16" height="16" viewBox="0 0 24 24" fill="' + (isFav ? "#ff3f6c" : "none") + '" stroke="' + (isFav ? "#ff3f6c" : "#282c3f") + '" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg></button></div><div class="myntra-card-details"><div class="myntra-brand-name">' + item.brand + '</div><div class="myntra-product-title" title="' + safeTitle + '">' + safeTitle + '</div><div class="myntra-price-row"><span class="myntra-current-price">$' + item.price + '</span>' + compareHtml + discountTag + '</div></div></a><div class="sy-card-action-bar"><button class="myntra-add-bag-btn" onclick="event.preventDefault(); handleCardAddToBag(\'' + safeTitleForClick + '\', \'' + item.price + '\', \'' + item.image + '\');"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>ADD TO BAG</button></div></div>';
-    });
-    grid.innerHTML = html;
-    renderPagination(totalPages);
-    updateUrlParams();
-  }
-
-  function renderPagination(totalPages) {
-    const box = document.getElementById("paginationControls");
-    if (!box) return;
-    if (totalPages <= 1) { box.innerHTML = ""; return; }
-    let phtml = '<button class="sy-page-btn" ' + (currentPage === 1 ? 'disabled' : '') + ' onclick="goToPage(' + (currentPage - 1) + ')" aria-label="Previous Page">❮ Prev</button>';
-    const delta = 2;
-    const range = [];
-    const rangeWithDots = [];
-    let l;
-    for (let i = 1; i <= totalPages; i++) {
-      if (i === 1 || i === totalPages || (i >= currentPage - delta && i <= currentPage + delta)) range.push(i);
-    }
-    for (const i of range) {
-      if (l) {
-        if (i - l === 2) rangeWithDots.push(l + 1);
-        else if (i - l !== 1) rangeWithDots.push("...");
-      }
-      rangeWithDots.push(i);
-      l = i;
-    }
-    rangeWithDots.forEach(p => {
-      if (p === "...") phtml += '<span class="sy-page-dots">...</span>';
-      else phtml += '<button class="sy-page-btn ' + (p === currentPage ? 'active' : '') + '" onclick="goToPage(' + p + ')">' + p + '</button>';
-    });
-    phtml += '<button class="sy-page-btn" ' + (currentPage === totalPages ? 'disabled' : '') + ' onclick="goToPage(' + (currentPage + 1) + ')" aria-label="Next Page">Next ❯</button>';
-    box.innerHTML = phtml;
-  }
-
-  window.selectGender = function(gender, btn) {
-    activeGender = gender;
-    currentPage = 1;
-    document.querySelectorAll(".sy-gender-tab").forEach(b => b.classList.remove("active"));
-    if (btn) btn.classList.add("active");
-    renderGrid();
-  };
-
-  window.selectDept = function(dept, btn) {
-    activeDept = dept;
-    currentPage = 1;
-    document.querySelectorAll(".sy-dept-chip").forEach(b => b.classList.remove("active"));
-    if (btn) btn.classList.add("active");
-    renderGrid();
-  };
-
-  window.handleSearchInput = function(val) {
-    clearTimeout(searchDebounceTimer);
-    searchDebounceTimer = setTimeout(() => {
-      searchQuery = val.trim();
-      currentPage = 1;
-      const clearBtn = document.getElementById("searchClearBtn");
-      if (clearBtn) clearBtn.style.display = searchQuery ? "block" : "none";
-      renderGrid();
-    }, 200);
-  };
-
-  window.clearSearchInput = function() {
-    const input = document.getElementById("catalogSearchInput");
-    if (input) input.value = "";
-    searchQuery = "";
-    const clearBtn = document.getElementById("searchClearBtn");
-    if (clearBtn) clearBtn.style.display = "none";
-    currentPage = 1;
-    renderGrid();
-  };
-
-  window.handleFilterChange = function() {
-    priceFilter = document.getElementById("priceFilterSelect").value;
-    ratingFilter = document.getElementById("ratingFilterSelect").value;
-    sortBy = document.getElementById("sortSelect").value;
-    currentPage = 1;
-    renderGrid();
-  };
-
-  window.goToPage = function(page) {
-    currentPage = page;
-    renderGrid();
-    const grid = document.getElementById("collectionGrid");
-    if (grid) grid.scrollIntoView({ behavior: "smooth", block: "start" });
-  };
-
-  window.resetAllFilters = function() {
-    activeGender = "all";
-    activeDept = "all";
-    searchQuery = "";
-    priceFilter = "all";
-    ratingFilter = "all";
-    sortBy = "recommended";
-    currentPage = 1;
-    const input = document.getElementById("catalogSearchInput");
-    if (input) input.value = "";
-    const clearBtn = document.getElementById("searchClearBtn");
-    if (clearBtn) clearBtn.style.display = "none";
-    document.getElementById("priceFilterSelect").value = "all";
-    document.getElementById("ratingFilterSelect").value = "all";
-    document.getElementById("sortSelect").value = "recommended";
-    document.querySelectorAll(".sy-gender-tab").forEach(b => b.classList.toggle("active", b.dataset.gender === "all"));
-    document.querySelectorAll(".sy-dept-chip").forEach(b => b.classList.toggle("active", b.dataset.dept === "all"));
-    renderGrid();
-  };
-
-  window.toggleCardWishlist = function(handle, btn) {
-    let wishlist = JSON.parse(localStorage.getItem("sy_wishlist") || "[]");
-    const idx = wishlist.indexOf(handle);
-    const svg = btn.querySelector("svg");
-    if (idx === -1) {
-      wishlist.push(handle);
-      if (svg) { svg.style.fill = "#ff3f6c"; svg.style.stroke = "#ff3f6c"; }
-    } else {
-      wishlist.splice(idx, 1);
-      if (svg) { svg.style.fill = "none"; svg.style.stroke = "#282c3f"; }
-    }
-    localStorage.setItem("sy_wishlist", JSON.stringify(wishlist));
-  };
-
-  window.handleCardAddToBag = function(title, price, image) {
-    if (window.openCartDrawer) window.openCartDrawer(title, price, image);
-    else window.location.href = "/cart";
-  };
-
-  function init() {
-    readParamsFromUrl();
-    renderGrid();
-  }
-
-  if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", init);
-  } else {
-    init();
-  }
-
-  window.addEventListener("popstate", () => {
-    readParamsFromUrl();
-    renderGrid();
   });
-})();
 </script>
 
 {% schema %}
@@ -887,3 +505,4 @@
   ]
 }
 {% endschema %}
+{% endpaginate %}

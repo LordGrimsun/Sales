@@ -1,60 +1,57 @@
-
 <div class="sunnyeora-deals-day page-width" style="max-width: 1400px; margin: 40px auto; padding: 0 20px;">
   <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; flex-wrap: wrap; gap: 16px;">
     <div style="display: flex; align-items: center; gap: 16px;">
-      <h2 style="font-size: 1.8rem; font-weight: 900; color: #1E293B; margin: 0; letter-spacing: -0.5px;">DEAL OF THE DAY</h2>
+      <h2 style="font-size: 1.8rem; font-weight: 900; color: #1E293B; margin: 0; letter-spacing: -0.5px;">FEATURED ARRIVALS</h2>
       <div style="background: #E8F3EE; border: 1px solid #D1E7DD; color: #0D5C3A; font-weight: 800; font-size: 0.9rem; padding: 6px 14px; border-radius: 20px; display: flex; align-items: center; gap: 6px;">
-        <span>⏰ SPECIAL DISCOUNTS END IN</span>
-        <span style="font-family: monospace; font-size: 1.05rem;">04:18:42</span>
+        <span>VERIFIED INVENTORY</span>
       </div>
     </div>
     <a href="/collections/all" style="color: #0D5C3A; font-weight: 800; text-decoration: none; font-size: 0.95rem;">VIEW ALL PRODUCTS ➔</a>
   </div>
 
   <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 20px;">
-    <!-- Deal 1 -->
-    <div class="myntra-product-card">
-      <a href="/products/crystal-sonic-cleaner" style="text-decoration:none; color:inherit; display:block;">
-        <div class="myntra-card-image-wrap">
-          <img src="https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=600&q=80" alt="CrystalSonic Ultrasonic Cleaner">
-          <span class="myntra-rating-chip">4.9 ★ | 15.2k</span>
-          <button class="myntra-wishlist-btn" onclick="event.preventDefault(); event.stopPropagation(); window.toggleWishlist('crystal-sonic-cleaner', this);" aria-label="Save to Wishlist"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#282c3f" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg></button>
-        </div>
-        <div class="myntra-card-details">
-          <div class="myntra-brand-name">SUNNYEORA TECH</div>
-          <div class="myntra-product-title">CrystalSonic™ 45,000Hz Ultrasonic Cleaner</div>
-          <div class="myntra-price-row">
-            <span class="myntra-current-price">$39.99</span>
-            <span class="myntra-mrp-price">$69.99</span>
-            <span class="myntra-discount-tag">(43% OFF)</span>
+    {% for product in collections['all'].products limit: 4 %}
+      <div class="myntra-product-card">
+        <a href="{{ product.url }}" style="text-decoration:none; color:inherit; display:block;">
+          <div class="myntra-card-image-wrap">
+            {% if product.featured_image %}
+              <img src="{{ product.featured_image | image_url: width: 600 }}" alt="{{ product.title | escape }}" loading="lazy">
+            {% else %}
+              <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: #f1f5f9; color: #94a3b8;">No Image</div>
+            {% endif %}
+            <button class="myntra-wishlist-btn" onclick="event.preventDefault(); event.stopPropagation(); window.toggleWishlist && window.toggleWishlist('{{ product.handle }}', this);" aria-label="Save to Wishlist">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#282c3f" stroke-width="2">
+                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+              </svg>
+            </button>
           </div>
+          <div class="myntra-card-details">
+            <div class="myntra-brand-name">{{ product.vendor | default: 'SUNNYEORA' }}</div>
+            <div class="myntra-product-title" title="{{ product.title | escape }}">{{ product.title }}</div>
+            <div class="myntra-price-row">
+              <span class="myntra-current-price">{{ product.price | money }}</span>
+              {% if product.compare_at_price > product.price %}
+                <span class="myntra-mrp-price">{{ product.compare_at_price | money }}</span>
+                {% assign discount_pct = product.compare_at_price | minus: product.price | times: 100.0 | divided_by: product.compare_at_price | round %}
+                <span class="myntra-discount-tag">({{ discount_pct }}% OFF)</span>
+              {% endif %}
+            </div>
+          </div>
+        </a>
+        <div style="padding: 0 16px 16px 16px;">
+          <button class="myntra-add-bag-btn" onclick="event.preventDefault(); if(window.openCartDrawer) { window.openCartDrawer('{{ product.title | escape }}', '{{ product.price | money_without_currency }}', '{% if product.featured_image %}{{ product.featured_image | image_url: width: 120 }}{% endif %}'); }">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" style="margin-right: 4px;">
+              <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+              <line x1="3" y1="6" x2="21" y2="6"></line>
+              <path d="M16 10a4 4 0 0 1-8 0"></path>
+            </svg>
+            ADD TO BAG
+          </button>
         </div>
-      </a>
-      <div style="padding: 0 16px 16px 16px;">
-        <button class="myntra-add-bag-btn" onclick="event.preventDefault(); window.openCartDrawer('Sunnyeora CrystalSonic™ Ultrasonic Cleaner', '39.99', 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=120&q=80')">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" style="margin-right: 4px;"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>ADD TO BAG
-        </button>
       </div>
-    </div>
-
-    <!-- Deal 4 -->
-    <div class="myntra-product-card">
-      <div class="myntra-card-image-wrap">
-        <img src="https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&w=600&q=80" alt="Aromatherapy Diffuser">
-        <span class="myntra-rating-chip">4.9 ★ | 6.1k</span>
-        <button class="myntra-wishlist-btn" aria-label="Save to Wishlist"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#282c3f" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg></button>
-      </div>
-      <div class="myntra-card-details">
-        <div class="myntra-brand-name">SUNNYEORA LIFESTYLE</div>
-        <div class="myntra-product-title">AromaMist™ Flame Essential Oil Diffuser</div>
-        <div class="myntra-price-row">
-          <span class="myntra-current-price">$29.99</span>
-          <span class="myntra-mrp-price">$59.99</span>
-          <span class="myntra-discount-tag">(50% OFF)</span>
-        </div>
-        <button class="myntra-add-bag-btn"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" style="margin-right: 4px;"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>ADD TO BAG</button>
-      </div>
-    </div>
+    {% else %}
+      <p style="color: #64748b; grid-column: 1 / -1; text-align: center;">No products available right now.</p>
+    {% endfor %}
   </div>
 </div>
 
