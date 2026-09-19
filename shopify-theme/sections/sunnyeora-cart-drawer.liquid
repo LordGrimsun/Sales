@@ -212,7 +212,11 @@
   <!-- Header -->
   <div class="sy-drawer-header">
     <div class="sy-drawer-title-box">
-      <span style="font-size: 1.25rem;">🛍️</span>
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0D5C3A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+        <line x1="3" y1="6" x2="21" y2="6"></line>
+        <path d="M16 10a4 4 0 0 1-8 0"></path>
+      </svg>
       <h3 class="sy-drawer-title">Your Shopping Bag</h3>
       <span id="syCartBadgeCount" class="sy-drawer-badge">1 ITEM</span>
     </div>
@@ -221,14 +225,14 @@
 
   <!-- Free Shipping Notification -->
   <div class="sy-progress-strip">
-    <span>🎉</span>
+    <span style="color: #0D5C3A; font-weight: 800;">✓</span>
     <span>You unlocked <b>FREE USPS Air Express Shipping</b> (US & UK)!</span>
   </div>
 
   <!-- Items List -->
   <div class="sy-items-container" id="syCartItemList">
     <div class="sy-item-card">
-      <div class="sy-item-icon" id="syCartItemIcon">🛏️</div>
+      <div class="sy-item-icon" id="syCartItemIcon"><img src="https://images.unsplash.com/photo-1584100936595-c0654b55a2e2?auto=format&fit=crop&w=120&q=80" style="width: 50px; height: 50px; object-fit: cover; border-radius: 8px;"></div>
       <div class="sy-item-info">
         <div class="sy-item-name" id="syCartItemTitle">Sunnyeora Deep-Sleep™ Cervical Pillow</div>
         <div class="sy-item-meta">Color: Ice-Silk White | Size: Universal</div>
@@ -314,7 +318,7 @@
         if (card) {
           const title = card.querySelector('.myntra-product-title')?.textContent?.trim();
           const priceStr = card.querySelector('.myntra-current-price')?.textContent?.replace('$', '')?.trim();
-          window.openCartDrawer(title, priceStr, '🛍️');
+          window.openCartDrawer(title, priceStr);
         } else {
           window.openCartDrawer();
         }
