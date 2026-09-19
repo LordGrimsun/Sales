@@ -1,146 +1,745 @@
-
 <style>
-  .sy-hero-carousel-wrap {
+  .sy-carousel-section {
     width: 100%;
-    margin-bottom: 30px;
+    margin-bottom: 35px;
     background: #FAF9F5;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    position: relative;
+    user-select: none;
   }
-  .sy-hero-carousel-box {
+  .sy-carousel-container {
     max-width: 1400px;
     margin: 0 auto;
-    padding: 20px;
+    padding: 10px 20px 0;
     position: relative;
   }
-  .sy-hero-gradient-card {
-    background: linear-gradient(135deg, #0D5C3A 0%, #083823 60%, #1E293B 100%);
-    border-radius: 24px;
-    padding: 50px 44px;
-    color: #fff;
+  .sy-carousel-viewport {
+    position: relative;
+    overflow: hidden;
+    border-radius: 28px;
+    box-shadow: 0 20px 50px -10px rgba(0, 0, 0, 0.18);
+  }
+  .sy-carousel-track {
+    display: flex;
+    transition: transform 0.55s cubic-bezier(0.25, 1, 0.5, 1);
+    width: 100%;
+  }
+  .sy-slide {
+    min-width: 100%;
+    box-sizing: border-box;
+    padding: 55px 65px;
+    color: #ffffff;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 40px;
-    flex-wrap: wrap;
-    box-shadow: 0 15px 40px rgba(13,92,58,0.18);
+    gap: 48px;
+    position: relative;
   }
-  .sy-hero-text-col {
+  @media (max-width: 990px) {
+    .sy-slide {
+      flex-direction: column;
+      padding: 40px 24px 50px;
+      gap: 30px;
+      text-align: center;
+    }
+  }
+
+  /* Distinctive luxury backgrounds for each slide */
+  .sy-slide-1 {
+    background: linear-gradient(135deg, #052317 0%, #0D5C3A 55%, #144931 100%);
+  }
+  .sy-slide-2 {
+    background: linear-gradient(135deg, #300817 0%, #681533 55%, #3B0E20 100%);
+  }
+  .sy-slide-3 {
+    background: linear-gradient(135deg, #081B33 0%, #154378 55%, #0B2547 100%);
+  }
+  .sy-slide-4 {
+    background: linear-gradient(135deg, #18181B 0%, #27272A 55%, #18181B 100%);
+  }
+
+  /* Content Column */
+  .sy-slide-content {
     flex: 1;
-    min-width: 300px;
+    max-width: 650px;
+    z-index: 2;
   }
-  .sy-hero-tag {
-    background: rgba(52, 211, 153, 0.2);
-    color: #34D399;
-    border: 1px solid rgba(52, 211, 153, 0.4);
-    padding: 6px 16px;
-    border-radius: 20px;
-    font-weight: 800;
-    font-size: 0.85rem;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    display: inline-block;
-  }
-  .sy-hero-title {
-    font-size: clamp(2.2rem, 4vw, 3.2rem);
-    font-weight: 900;
-    margin: 16px 0;
-    line-height: 1.15;
-    color: #fff;
-  }
-  .sy-hero-desc {
-    font-size: 1.15rem;
-    color: #D1FAE5;
-    margin-bottom: 24px;
-    max-width: 550px;
-    line-height: 1.6;
-  }
-  .sy-hero-btn {
-    background: #34D399;
-    color: #092B1C;
-    text-decoration: none;
-    padding: 16px 36px;
+  .sy-slide-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 7px 18px;
     border-radius: 30px;
+    font-size: 0.82rem;
+    font-weight: 800;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    margin-bottom: 18px;
+    backdrop-filter: blur(8px);
+  }
+  .sy-tag-green {
+    background: rgba(52, 211, 153, 0.18);
+    color: #6EE7B7;
+    border: 1px solid rgba(52, 211, 153, 0.35);
+  }
+  .sy-tag-rose {
+    background: rgba(244, 114, 182, 0.18);
+    color: #FBCFE8;
+    border: 1px solid rgba(244, 114, 182, 0.35);
+  }
+  .sy-tag-blue {
+    background: rgba(96, 165, 250, 0.18);
+    color: #BAE6FD;
+    border: 1px solid rgba(96, 165, 250, 0.35);
+  }
+  .sy-tag-gold {
+    background: rgba(251, 191, 36, 0.18);
+    color: #FDE68A;
+    border: 1px solid rgba(251, 191, 36, 0.35);
+  }
+
+  .sy-slide-title {
+    font-size: clamp(2.2rem, 4.2vw, 3.4rem);
+    font-weight: 900;
+    line-height: 1.12;
+    margin: 0 0 16px;
+    color: #ffffff;
+    letter-spacing: -0.5px;
+    text-shadow: 0 2px 10px rgba(0,0,0,0.25);
+  }
+  .sy-slide-desc {
+    font-size: clamp(1rem, 1.4vw, 1.18rem);
+    color: rgba(255, 255, 255, 0.88);
+    line-height: 1.6;
+    margin-bottom: 24px;
+    font-weight: 400;
+  }
+
+  /* Price highlight inside slide */
+  .sy-slide-price-row {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 24px;
+  }
+  @media (max-width: 990px) {
+    .sy-slide-price-row {
+      justify-content: center;
+    }
+  }
+  .sy-price-val {
+    font-size: 2rem;
+    font-weight: 900;
+    color: #ffffff;
+  }
+  .sy-price-cut {
+    font-size: 1.2rem;
+    color: rgba(255, 255, 255, 0.55);
+    text-decoration: line-through;
+  }
+  .sy-price-badge {
+    background: #FEF08A;
+    color: #854D0E;
+    font-weight: 900;
+    font-size: 0.82rem;
+    padding: 4px 12px;
+    border-radius: 20px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  /* Action Buttons & Trust */
+  .sy-slide-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  @media (max-width: 990px) {
+    .sy-slide-actions {
+      align-items: center;
+    }
+  }
+  .sy-cta-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 16px 38px;
+    border-radius: 40px;
     font-size: 1.05rem;
     font-weight: 900;
-    display: inline-block;
-    box-shadow: 0 6px 20px rgba(52,211,153,0.3);
-    transition: transform 0.2s, background 0.2s;
+    text-decoration: none;
+    letter-spacing: 0.3px;
+    transition: all 0.25s ease;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+    width: fit-content;
   }
-  .sy-hero-btn:hover {
-    transform: translateY(-2px);
+  .sy-cta-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
+  }
+  .sy-btn-green {
+    background: #34D399;
+    color: #062316;
+  }
+  .sy-btn-green:hover {
     background: #6EE7B7;
   }
-  /* Right Hero Image Card with real studio photography */
-  .sy-hero-visual-col {
+  .sy-btn-rose {
+    background: #F472B6;
+    color: #300817;
+  }
+  .sy-btn-rose:hover {
+    background: #FBCFE8;
+  }
+  .sy-btn-blue {
+    background: #60A5FA;
+    color: #081B33;
+  }
+  .sy-btn-blue:hover {
+    background: #93C5FD;
+  }
+  .sy-btn-gold {
+    background: #FBBF24;
+    color: #18181B;
+  }
+  .sy-btn-gold:hover {
+    background: #FDE68A;
+  }
+
+  .sy-trust-features {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    flex-wrap: wrap;
+    font-size: 0.88rem;
+    color: rgba(255, 255, 255, 0.8);
+    font-weight: 600;
+  }
+  @media (max-width: 990px) {
+    .sy-trust-features {
+      justify-content: center;
+    }
+  }
+  .sy-trust-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .sy-trust-item span.icon {
+    color: #34D399;
+    font-weight: 900;
+  }
+
+  /* Right Visual Card with 3D Depth & Glass Highlights */
+  .sy-slide-visual {
     position: relative;
     width: 440px;
     max-width: 100%;
-    border-radius: 20px;
+    border-radius: 24px;
     overflow: hidden;
-    box-shadow: 0 15px 35px rgba(0,0,0,0.3);
     background: #ffffff;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    flex-shrink: 0;
+    transition: transform 0.3s ease;
   }
-  .sy-hero-visual-col img {
+  .sy-slide-visual:hover {
+    transform: translateY(-4px) scale(1.01);
+  }
+  .sy-slide-img-box {
+    position: relative;
     width: 100%;
-    height: 320px;
+    height: 330px;
+    overflow: hidden;
+    background: #f1f5f9;
+  }
+  .sy-slide-img-box img {
+    width: 100%;
+    height: 100%;
     object-fit: cover;
     display: block;
+    transition: transform 0.6s ease;
   }
-  .sy-hero-img-badge {
+  .sy-slide-visual:hover .sy-slide-img-box img {
+    transform: scale(1.05);
+  }
+
+  /* Floating Glass Badges */
+  .sy-floating-badge-tl {
     position: absolute;
-    top: 14px;
-    left: 14px;
-    background: #0D5C3A;
+    top: 16px;
+    left: 16px;
+    background: rgba(15, 23, 42, 0.8);
+    backdrop-filter: blur(10px);
     color: #ffffff;
-    font-size: 0.78rem;
+    font-size: 0.76rem;
     font-weight: 800;
-    padding: 5px 12px;
+    padding: 6px 14px;
     border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+    z-index: 3;
   }
-  .sy-hero-img-caption {
-    padding: 16px 20px;
+  .sy-floating-badge-tr {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    background: #EF4444;
+    color: #ffffff;
+    font-size: 0.76rem;
+    font-weight: 900;
+    padding: 6px 12px;
+    border-radius: 20px;
+    box-shadow: 0 4px 12px rgba(239, 68, 68, 0.35);
+    letter-spacing: 0.5px;
+    z-index: 3;
+  }
+  .sy-visual-caption {
+    padding: 18px 24px;
     background: #ffffff;
-    color: #1E293B;
+    color: #0F172A;
     display: flex;
-    justify-content: space-between;
     align-items: center;
+    justify-content: space-between;
+  }
+  .sy-caption-name {
+    font-size: 1.05rem;
+    font-weight: 900;
+    color: #0F172A;
+    margin-bottom: 3px;
+  }
+  .sy-caption-sub {
+    font-size: 0.8rem;
+    color: #64748B;
+    font-weight: 600;
+  }
+  .sy-caption-price-now {
+    font-size: 1.25rem;
+    font-weight: 900;
+    color: #0D5C3A;
+    text-align: right;
+  }
+  .sy-caption-price-save {
+    font-size: 0.76rem;
+    font-weight: 800;
+    color: #D97706;
+    text-align: right;
+  }
+
+  /* Carousel Arrow Controls (Glassmorphism) */
+  .sy-nav-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.22);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 10;
+    transition: all 0.25s ease;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+  }
+  .sy-nav-arrow:hover {
+    background: #ffffff;
+    color: #0D5C3A;
+    transform: translateY(-50%) scale(1.12);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.35);
+  }
+  .sy-nav-prev {
+    left: 20px;
+  }
+  .sy-nav-next {
+    right: 20px;
+  }
+  @media (max-width: 600px) {
+    .sy-nav-arrow {
+      display: none; /* Swipe on mobile */
+    }
+  }
+
+  /* Bottom Navigation Dots / Pills */
+  .sy-carousel-dots {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    z-index: 10;
+  }
+  .sy-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.35);
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+    border: none;
+    padding: 0;
+  }
+  .sy-dot:hover {
+    background: rgba(255, 255, 255, 0.7);
+  }
+  .sy-dot.active {
+    width: 34px;
+    background: #ffffff;
+    box-shadow: 0 2px 10px rgba(255, 255, 255, 0.8);
+  }
+
+  /* Slim Auto-Play Progress Indicator */
+  .sy-progress-bar {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 4px;
+    background: rgba(255, 255, 255, 0.85);
+    width: 0%;
+    z-index: 10;
+    transition: width 0.1s linear;
   }
 </style>
 
-<div class="sy-hero-carousel-wrap">
-  <div class="sy-hero-carousel-box">
-    <div class="sy-hero-gradient-card">
-      <div class="sy-hero-text-col">
-        <span class="sy-hero-tag">🌿 PREMIUM BIO-TESTED WELLNESS</span>
-        <h1 class="sy-hero-title">FEEL RESTED, REJUVENATED & CONFIDENT</h1>
-        <p class="sy-hero-desc">Comfort-crafted cervical sleep pillows, therapeutic red light wands, and sonic cleaners designed to transform your daily routine.</p>
+<div class="sy-carousel-section" id="syHeroCarousel">
+  <div class="sy-carousel-container">
+    <div class="sy-carousel-viewport" id="syCarouselViewport">
+      
+      <!-- Arrow Buttons -->
+      <button class="sy-nav-arrow sy-nav-prev" id="syPrevBtn" aria-label="Previous Slide">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="15 18 9 12 15 6"></polyline>
+        </svg>
+      </button>
+      <button class="sy-nav-arrow sy-nav-next" id="syNextBtn" aria-label="Next Slide">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="9 18 15 12 9 6"></polyline>
+        </svg>
+      </button>
+
+      <!-- Carousel Track -->
+      <div class="sy-carousel-track" id="syCarouselTrack">
         
-        <div style="display: flex; align-items: center; gap: 16px; flex-wrap: wrap;">
-          <a href="/collections/all" class="sy-hero-btn">
-            SHOP ALL CATEGORIES ➔
-          </a>
-          <span style="font-size: 0.95rem; color: #A7F3D0; font-weight: 700;">🇺🇸 Free USPS Air Express Delivery</span>
+        <!-- SLIDE 1: Deep Sleep Cervical Pillow -->
+        <div class="sy-slide sy-slide-1">
+          <div class="sy-slide-content">
+            <div class="sy-slide-tag sy-tag-green">🌿 100% ORTHOPEDIC MEDICAL-GRADE FOAM</div>
+            <h1 class="sy-slide-title">WAKE UP PAIN-FREE.<br>SLEEP LIKE ROYALTY.</h1>
+            <p class="sy-slide-desc">Doctor-recommended ergonomic contour cervical design. Gently aligns your head, neck and spine to eliminate stiffness, numbness & morning tension headaches.</p>
+            
+            <div class="sy-slide-price-row">
+              <span class="sy-price-val">$49.99</span>
+              <span class="sy-price-cut">$89.99</span>
+              <span class="sy-price-badge">SAVE $40 • 45% OFF</span>
+            </div>
+
+            <div class="sy-slide-actions">
+              <a href="/collections/all" class="sy-cta-btn sy-btn-green">
+                ORDER DEEP-SLEEP™ PILLOW ➔
+              </a>
+              <div class="sy-trust-features">
+                <div class="sy-trust-item"><span class="icon">✓</span> 30-Night Rest Easy Guarantee</div>
+                <div class="sy-trust-item"><span class="icon">✓</span> Free USPS Air Express</div>
+                <div class="sy-trust-item"><span class="icon">✓</span> Breathable Tencel™ Cover</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="sy-slide-visual">
+            <span class="sy-floating-badge-tl">⭐ 4.9/5 (1,480+ Reviews)</span>
+            <span class="sy-floating-badge-tr">🔥 TOP VIRAL HIT</span>
+            <div class="sy-slide-img-box">
+              <img src="https://images.unsplash.com/photo-1584100936595-c0654b55a2e2?auto=format&fit=crop&w=900&q=85" alt="Sunnyeora Deep-Sleep Ergonomic Cervical Pillow" loading="eager">
+            </div>
+            <div class="sy-visual-caption">
+              <div>
+                <div class="sy-caption-name">Sunnyeora Deep-Sleep™</div>
+                <div class="sy-caption-sub">Contour Cervical Memory Foam</div>
+              </div>
+              <div>
+                <div class="sy-caption-price-now">$49.99</div>
+                <div class="sy-caption-price-save">SAVE $40</div>
+              </div>
+            </div>
+          </div>
         </div>
+
+        <!-- SLIDE 2: DermaGlow 4-in-1 Red Light Wand -->
+        <div class="sy-slide sy-slide-2">
+          <div class="sy-slide-content">
+            <div class="sy-slide-tag sy-tag-rose">✨ CLINICAL 660nm PHOTOTHERAPY</div>
+            <h2 class="sy-slide-title">THE 5-MINUTE DAILY<br>SALON FACIAL GLOW.</h2>
+            <p class="sy-slide-desc">Therapeutic medical-grade red light, microcurrent waves & thermal warmth stimulate cellular collagen, depuff under-eyes, and sculpt youthful glass-skin radiance.</p>
+            
+            <div class="sy-slide-price-row">
+              <span class="sy-price-val">$68.00</span>
+              <span class="sy-price-cut">$120.00</span>
+              <span class="sy-price-badge">LAUNCH DEAL • 43% OFF</span>
+            </div>
+
+            <div class="sy-slide-actions">
+              <a href="/collections/all" class="sy-cta-btn sy-btn-rose">
+                DISCOVER DERMAGLOW™ ➔
+              </a>
+              <div class="sy-trust-features">
+                <div class="sy-trust-item"><span class="icon">✓</span> Noticeable Glow in 14 Days</div>
+                <div class="sy-trust-item"><span class="icon">✓</span> USB-C Fast Recharge</div>
+                <div class="sy-trust-item"><span class="icon">✓</span> Dermatologist Tested</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="sy-slide-visual">
+            <span class="sy-floating-badge-tl">⭐ 4.8/5 (920+ Reviews)</span>
+            <span class="sy-floating-badge-tr">💎 GLASS SKIN</span>
+            <div class="sy-slide-img-box">
+              <img src="https://images.unsplash.com/photo-1598440947619-2c35fc9aa908?auto=format&fit=crop&w=900&q=85" alt="Sunnyeora DermaGlow Red Light Wand" loading="lazy">
+            </div>
+            <div class="sy-visual-caption">
+              <div>
+                <div class="sy-caption-name">DermaGlow™ 4-in-1 Wand</div>
+                <div class="sy-caption-sub">Red Light & Microcurrent Facial</div>
+              </div>
+              <div>
+                <div class="sy-caption-price-now">$68.00</div>
+                <div class="sy-caption-price-save">SAVE $52</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- SLIDE 3: SonicShine 48,000Hz Ultrasonic Cleaner -->
+        <div class="sy-slide sy-slide-3">
+          <div class="sy-slide-content">
+            <div class="sy-slide-tag sy-tag-blue">⚡ 48,000Hz HIGH-PRECISION CAVITATION</div>
+            <h2 class="sy-slide-title">RESTORE BRILLIANCE.<br>LIKE BRAND NEW.</h2>
+            <p class="sy-slide-desc">Millions of microscopic sonic bubbles safely dissolve years of stubborn tarnish, oils, and makeup from diamond rings, luxury watches, and eyeglasses in just 180 seconds.</p>
+            
+            <div class="sy-slide-price-row">
+              <span class="sy-price-val">$38.00</span>
+              <span class="sy-price-cut">$75.00</span>
+              <span class="sy-price-badge">FLAT 50% SAVINGS</span>
+            </div>
+
+            <div class="sy-slide-actions">
+              <a href="/collections/all" class="sy-cta-btn sy-btn-blue">
+                SHOP SONICSHINE™ ➔
+              </a>
+              <div class="sy-trust-features">
+                <div class="sy-trust-item"><span class="icon">✓</span> Auto 3-Min Shut-Off Timer</div>
+                <div class="sy-trust-item"><span class="icon">✓</span> 100% Chemical-Free Cleaning</div>
+                <div class="sy-trust-item"><span class="icon">✓</span> Stainless Steel Chamber</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="sy-slide-visual">
+            <span class="sy-floating-badge-tl">⭐ 4.9/5 (680+ Reviews)</span>
+            <span class="sy-floating-badge-tr">⚡ 180s RESTORE</span>
+            <div class="sy-slide-img-box">
+              <img src="https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?auto=format&fit=crop&w=900&q=85" alt="Sunnyeora SonicShine Ultrasonic Cleaner" loading="lazy">
+            </div>
+            <div class="sy-visual-caption">
+              <div>
+                <div class="sy-caption-name">SonicShine™ 48kHz Cleaner</div>
+                <div class="sy-caption-sub">Ultrasonic Jewelry & Optical Bath</div>
+              </div>
+              <div>
+                <div class="sy-caption-price-now">$38.00</div>
+                <div class="sy-caption-price-save">SAVE $37</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- SLIDE 4: Storewide Mega Celebration -->
+        <div class="sy-slide sy-slide-4">
+          <div class="sy-slide-content">
+            <div class="sy-slide-tag sy-tag-gold">🎉 GRAND STOREWIDE CELEBRATION</div>
+            <h2 class="sy-slide-title">UP TO 60% OFF<br>ALL BESTSELLERS.</h2>
+            <p class="sy-slide-desc">Explore America's favorite bio-tested comfort, restorative sleep and daily grooming collection. Use code SUNNY15 at checkout for an extra 15% discount on all orders.</p>
+            
+            <div class="sy-slide-price-row">
+              <span class="sy-price-val">EXTRA 15% OFF</span>
+              <span class="sy-price-badge">PROMO CODE: SUNNY15</span>
+            </div>
+
+            <div class="sy-slide-actions">
+              <a href="/collections/all" class="sy-cta-btn sy-btn-gold">
+                EXPLORE COMPLETE CATALOG ➔
+              </a>
+              <div class="sy-trust-features">
+                <div class="sy-trust-item"><span class="icon">✓</span> 100% Original Guarantee</div>
+                <div class="sy-trust-item"><span class="icon">✓</span> Fast Priority Dispatch</div>
+                <div class="sy-trust-item"><span class="icon">✓</span> 30-Day Hassle-Free Returns</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="sy-slide-visual">
+            <span class="sy-floating-badge-tl">⭐ 12,000+ Customers</span>
+            <span class="sy-floating-badge-tr">🏷️ VIP OFFER</span>
+            <div class="sy-slide-img-box">
+              <img src="https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=900&q=85" alt="Sunnyeora Bestselling Multi-Category Essentials" loading="lazy">
+            </div>
+            <div class="sy-visual-caption">
+              <div>
+                <div class="sy-caption-name">Sunnyeora Curated Vault</div>
+                <div class="sy-caption-sub">Multi-Category Lifestyle Hits</div>
+              </div>
+              <div>
+                <div class="sy-caption-price-now">FROM $18.99</div>
+                <div class="sy-caption-price-save">UP TO 60% OFF</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
       </div>
 
-      <!-- Right Visual Card with real photography -->
-      <div class="sy-hero-visual-col">
-        <span class="sy-hero-img-badge">🔥 TOP VIRAL HIT</span>
-        <img src="https://images.unsplash.com/photo-1584100936595-c0654b55a2e2?auto=format&fit=crop&w=800&q=80" alt="Sunnyeora Deep-Sleep Ergonomic Pillow">
-        <div class="sy-hero-img-caption">
-          <div>
-            <div style="font-weight: 800; font-size: 0.95rem;">Sunnyeora Deep-Sleep™</div>
-            <div style="font-size: 0.8rem; color: #64748B;">Orthopedic Cervical Contour Memory Foam</div>
-          </div>
-          <div style="text-align: right;">
-            <div style="font-weight: 900; font-size: 1.15rem; color: #0D5C3A;">$49.99</div>
-            <div style="font-size: 0.75rem; color: #D97706; font-weight: 800;">SAVE $40</div>
-          </div>
-        </div>
+      <!-- Navigation Dots -->
+      <div class="sy-carousel-dots" id="syCarouselDots">
+        <button class="sy-dot active" data-index="0" aria-label="Go to slide 1"></button>
+        <button class="sy-dot" data-index="1" aria-label="Go to slide 2"></button>
+        <button class="sy-dot" data-index="2" aria-label="Go to slide 3"></button>
+        <button class="sy-dot" data-index="3" aria-label="Go to slide 4"></button>
       </div>
+
+      <!-- Auto Progress Bar -->
+      <div class="sy-progress-bar" id="syProgressBar"></div>
+
     </div>
   </div>
 </div>
+
+<script>
+  (function() {
+    var track = document.getElementById('syCarouselTrack');
+    var viewport = document.getElementById('syCarouselViewport');
+    var prevBtn = document.getElementById('syPrevBtn');
+    var nextBtn = document.getElementById('syNextBtn');
+    var dots = document.querySelectorAll('#syCarouselDots .sy-dot');
+    var progressBar = document.getElementById('syProgressBar');
+    
+    if (!track || !viewport) return;
+
+    var currentIndex = 0;
+    var totalSlides = 4;
+    var slideDuration = 5500; // 5.5 seconds per slide
+    var progressInterval = null;
+    var slideTimeout = null;
+    var progressStartTime = 0;
+    var isPaused = false;
+    var touchStartX = 0;
+    var touchEndX = 0;
+
+    function goToSlide(index) {
+      if (index < 0) index = totalSlides - 1;
+      if (index >= totalSlides) index = 0;
+      currentIndex = index;
+      
+      track.style.transform = 'translateX(-' + (currentIndex * 100) + '%)';
+      
+      dots.forEach(function(dot, i) {
+        if (i === currentIndex) {
+          dot.classList.add('active');
+        } else {
+          dot.classList.remove('active');
+        }
+      });
+
+      startProgress();
+    }
+
+    function startProgress() {
+      clearInterval(progressInterval);
+      clearTimeout(slideTimeout);
+      if (progressBar) progressBar.style.width = '0%';
+      progressStartTime = Date.now();
+
+      progressInterval = setInterval(function() {
+        if (!isPaused) {
+          var elapsed = Date.now() - progressStartTime;
+          var percent = Math.min((elapsed / slideDuration) * 100, 100);
+          if (progressBar) progressBar.style.width = percent + '%';
+          if (elapsed >= slideDuration) {
+            clearInterval(progressInterval);
+            goToSlide(currentIndex + 1);
+          }
+        } else {
+          progressStartTime += 50;
+        }
+      }, 50);
+    }
+
+    if (prevBtn) {
+      prevBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        goToSlide(currentIndex - 1);
+      });
+    }
+
+    if (nextBtn) {
+      nextBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        goToSlide(currentIndex + 1);
+      });
+    }
+
+    dots.forEach(function(dot) {
+      dot.addEventListener('click', function() {
+        var idx = parseInt(this.getAttribute('data-index'), 10);
+        goToSlide(idx);
+      });
+    });
+
+    viewport.addEventListener('mouseenter', function() {
+      isPaused = true;
+    });
+    viewport.addEventListener('mouseleave', function() {
+      isPaused = false;
+    });
+
+    viewport.addEventListener('touchstart', function(e) {
+      touchStartX = e.changedTouches[0].screenX;
+      isPaused = true;
+    }, { passive: true });
+
+    viewport.addEventListener('touchend', function(e) {
+      touchEndX = e.changedTouches[0].screenX;
+      isPaused = false;
+      handleSwipe();
+    }, { passive: true });
+
+    function handleSwipe() {
+      var diff = touchStartX - touchEndX;
+      if (Math.abs(diff) > 45) {
+        if (diff > 0) {
+          goToSlide(currentIndex + 1);
+        } else {
+          goToSlide(currentIndex - 1);
+        }
+      }
+    }
+
+    window.addEventListener('keydown', function(e) {
+      if (e.key === 'ArrowLeft') {
+        goToSlide(currentIndex - 1);
+      } else if (e.key === 'ArrowRight') {
+        goToSlide(currentIndex + 1);
+      }
+    });
+
+    startProgress();
+  })();
+</script>
 
 {% schema %}
 {
