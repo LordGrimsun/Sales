@@ -102,16 +102,18 @@ export default async function handler(req, res) {
     // 1. Health
     if (pathname === '/api/health') {
       const pInfo = getProviderInfo();
+      const hasComposio = !!(process.env.COMPOSIO_API_KEY && process.env.COMPOSIO_API_KEY.length > 5);
       return json(res, 200, {
         ok: true,
         version: '3.2.1-sales-pro',
         backend: pInfo.provider,
         providerConfigured: pInfo.isConfigured,
+        composioConfigured: hasComposio,
         model: baseCfg.model || 'sonnet',
         modelName: modelName(baseCfg.model || 'sonnet'),
         models: MODEL_KEYS,
         efforts: EFFORT_KEYS,
-        name: baseCfg.name || 'Sales',
+        name: baseCfg.name || 'Sunnyeora',
         brain: 'Sunnyeora Brain',
         notes: 35,
         depts: DEPT_KEYS,
