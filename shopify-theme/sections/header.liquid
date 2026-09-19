@@ -1,686 +1,583 @@
-<link rel="stylesheet" href="{{ 'component-list-menu.css' | asset_url }}" media="print" onload="this.media='all'">
-<link rel="stylesheet" href="{{ 'component-search.css' | asset_url }}" media="print" onload="this.media='all'">
-<link rel="stylesheet" href="{{ 'component-menu-drawer.css' | asset_url }}" media="print" onload="this.media='all'">
-<link
-  rel="stylesheet"
-  href="{{ 'component-cart-notification.css' | asset_url }}"
-  media="print"
-  onload="this.media='all'"
->
-
-{%- if settings.predictive_search_enabled -%}
-  <link rel="stylesheet" href="{{ 'component-price.css' | asset_url }}" media="print" onload="this.media='all'">
-{%- endif -%}
-
-{%- if section.settings.menu_type_desktop == 'mega' -%}
-  <link rel="stylesheet" href="{{ 'component-mega-menu.css' | asset_url }}" media="print" onload="this.media='all'">
-{%- endif -%}
 
 <style>
-  header-drawer {
-    justify-self: start;
-    margin-left: -1.2rem;
+  .myntra-header-wrapper {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    background: #ffffff;
+    box-shadow: 0 4px 12px 0 rgba(0, 0, 0, 0.05);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    color: #282c3f;
   }
-
-  {%- if section.settings.sticky_header_type == 'reduce-logo-size' -%}
-    .scrolled-past-header .header__heading-logo-wrapper {
-      width: 75%;
-    }
-  {%- endif -%}
-
-  {%- if section.settings.menu_type_desktop != "drawer" -%}
-    @media screen and (min-width: 990px) {
-      header-drawer {
-        display: none;
-      }
-    }
-  {%- endif -%}
-
-  .menu-drawer-container {
-    display: flex;
-  }
-
-  .list-menu {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-  }
-
-  .list-menu--inline {
-    display: inline-flex;
-    flex-wrap: wrap;
-  }
-
-  summary.list-menu__item {
-    padding-right: 2.7rem;
-  }
-
-  .list-menu__item {
+  .myntra-header-inner {
+    max-width: 1440px;
+    margin: 0 auto;
+    padding: 0 24px;
+    height: 80px;
     display: flex;
     align-items: center;
-    line-height: calc(1 + 0.3 / var(--font-body-scale));
+    justify-content: space-between;
+    gap: 30px;
   }
-
-  .list-menu__item--link {
+  .myntra-logo-area {
+    display: flex;
+    align-items: center;
+    gap: 12px;
     text-decoration: none;
-    padding-bottom: 1rem;
-    padding-top: 1rem;
-    line-height: calc(1 + 0.8 / var(--font-body-scale));
   }
-
-  @media screen and (min-width: 750px) {
-    .list-menu__item--link {
-      padding-bottom: 0.5rem;
-      padding-top: 0.5rem;
-    }
-  }
-
-  shopify-account.header__icon {
-    --shopify-account-font-heading: var(--font-heading-family);
-    --shopify-account-font-heading-weight: var(--font-heading-weight);
-    --shopify-account-font-body: var(--font-body-family);
-    --shopify-account-font-body-weight: var(--font-body-weight);
-    --shopify-account-radius-base: var(--popup-corner-radius);
-    --shopify-account-radius-button: var(--buttons-radius);
-    --shopify-account-radius-button-small: var(--buttons-radius);
-    --shopify-account-radius-input: var(--inputs-radius);
-    --shopify-account-color-background: rgb(var(--color-background));
-    --shopify-account-color-text: rgb(var(--color-foreground));
-    --shopify-account-color-accent: rgb(var(--color-button));
-    --shopify-account-color-accent-text: rgb(var(--color-button-text));
-    --shopify-account-dialog-position-top: var(--account-dialog-top, var(--header-height, 0px));
-  }
-
-  shopify-account.header__icon:not(:defined) {
+  .myntra-logo-badge {
+    width: 46px;
+    height: 38px;
+    background: linear-gradient(135deg, #ff3f6c 0%, #ff905a 50%, #ff2459 100%);
+    border-radius: 8px;
     display: flex;
     align-items: center;
     justify-content: center;
-    min-width: 4.4rem;
-    height: 4.4rem;
+    color: #ffffff;
+    font-weight: 900;
+    font-size: 1.4rem;
+    letter-spacing: -1px;
+    box-shadow: 0 4px 10px rgba(255, 63, 108, 0.35);
+  }
+  .myntra-logo-text {
+    font-weight: 900;
+    font-size: 1.35rem;
+    color: #282c3f;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+  }
+  .myntra-nav-list {
+    display: flex;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    height: 80px;
+  }
+  .myntra-nav-item {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+  .myntra-nav-link {
+    display: flex;
+    align-items: center;
+    height: 100%;
+    padding: 0 16px;
+    font-size: 0.88rem;
+    font-weight: 700;
+    color: #282c3f;
+    text-decoration: none;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    border-bottom: 4px solid transparent;
+    transition: border-color 0.2s, color 0.2s;
+  }
+  .myntra-nav-item:hover > .myntra-nav-link {
+    color: #ff3f6c;
+    border-bottom-color: #ff3f6c;
+  }
+  .myntra-studio-badge {
+    color: #ff3f6c;
+    font-size: 0.65rem;
+    font-weight: 800;
+    vertical-align: super;
+    margin-left: 2px;
+  }
+  /* Mega Menu Dropdown */
+  .myntra-mega-menu {
+    position: absolute;
+    top: 80px;
+    left: 0;
+    background: #ffffff;
+    box-shadow: 0 15px 30px rgba(0,0,0,0.12);
+    display: none;
+    padding: 24px 32px;
+    width: 960px;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 20px;
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;
+    z-index: 999;
+  }
+  .myntra-nav-item:hover .myntra-mega-menu {
+    display: grid;
+  }
+  .myntra-mega-col {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .myntra-mega-block-title {
+    font-size: 0.85rem;
+    font-weight: 800;
+    color: #ff3f6c;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+    letter-spacing: 0.3px;
+  }
+  .myntra-mega-links {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+  }
+  .myntra-mega-links a {
+    text-decoration: none;
+    color: #282c3f;
+    font-size: 0.82rem;
+    line-height: 1.4;
+    transition: color 0.15s;
+  }
+  .myntra-mega-links a:hover {
+    color: #ff3f6c;
+    font-weight: 600;
+  }
+  /* Search Bar */
+  .myntra-search-bar {
+    flex: 1;
+    max-width: 500px;
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+  .myntra-search-input {
+    width: 100%;
+    height: 42px;
+    background: #f5f5f6;
+    border: 1px solid #f5f5f6;
+    border-radius: 4px;
+    padding: 0 16px 0 42px;
+    font-size: 0.88rem;
+    color: #696e79;
+    outline: none;
+    transition: background 0.2s, border-color 0.2s;
+  }
+  .myntra-search-input:focus {
+    background: #ffffff;
+    border-color: #d4d5d9;
+    color: #282c3f;
+  }
+  .myntra-search-icon {
+    position: absolute;
+    left: 14px;
+    color: #696e79;
+    font-size: 1rem;
+    pointer-events: none;
+  }
+  /* Action Icons */
+  .myntra-actions {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+  }
+  .myntra-action-btn {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-decoration: none;
+    color: #282c3f;
+    cursor: pointer;
+    font-size: 0.72rem;
+    font-weight: 700;
+    gap: 4px;
+  }
+  .myntra-action-icon {
+    font-size: 1.25rem;
+    line-height: 1;
+  }
+  .myntra-bag-count {
+    position: absolute;
+    top: -4px;
+    right: 0;
+    background: #ff3f6c;
+    color: #fff;
+    font-size: 0.65rem;
+    font-weight: 800;
+    padding: 2px 6px;
+    border-radius: 10px;
+  }
+  /* Profile Dropdown */
+  .myntra-profile-wrapper {
+    position: relative;
+  }
+  .myntra-profile-dropdown {
+    position: absolute;
+    top: 50px;
+    right: -30px;
+    width: 280px;
+    background: #ffffff;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+    border-radius: 4px;
+    padding: 20px;
+    display: none;
+    z-index: 1000;
+  }
+  .myntra-profile-wrapper:hover .myntra-profile-dropdown {
+    display: block;
+  }
+  .myntra-profile-title {
+    font-weight: 800;
+    font-size: 0.95rem;
+    color: #282c3f;
+  }
+  .myntra-profile-subtitle {
+    font-size: 0.8rem;
+    color: #696e79;
+    margin: 4px 0 16px;
+  }
+  .myntra-login-btn {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    text-align: center;
+    border: 1px solid #ff3f6c;
+    color: #ff3f6c;
+    font-weight: 800;
+    font-size: 0.85rem;
+    text-decoration: none;
+    border-radius: 4px;
+    transition: all 0.2s;
+  }
+  .myntra-login-btn:hover {
+    background: #ff3f6c;
+    color: #ffffff;
+  }
+  .myntra-profile-divider {
+    height: 1px;
+    background: #eaeaec;
+    margin: 14px 0;
+  }
+  .myntra-profile-link {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 6px 0;
+    color: #282c3f;
+    text-decoration: none;
+    font-size: 0.85rem;
+  }
+  .myntra-profile-link:hover {
+    font-weight: 700;
+    color: #ff3f6c;
   }
 </style>
 
-{%- style -%}
-  .header {
-    padding: {{ section.settings.padding_top | times: 0.5 | round: 0 }}px 3rem {{ section.settings.padding_bottom | times: 0.5 | round: 0 }}px 3rem;
-  }
+<div class="myntra-header-wrapper">
+  <div class="myntra-header-inner">
+    <!-- Brand Logo -->
+    <a href="/" class="myntra-logo-area">
+      <div class="myntra-logo-badge">S</div>
+      <div class="myntra-logo-text">SUNNYEORA</div>
+    </a>
 
-  .section-header {
-    position: sticky; /* This is for fixing a Safari z-index issue. PR #2147 */
-    margin-bottom: {{ section.settings.margin_bottom | times: 0.75 | round: 0 }}px;
-  }
-
-  @media screen and (min-width: 750px) {
-    .section-header {
-      margin-bottom: {{ section.settings.margin_bottom }}px;
-    }
-  }
-
-  @media screen and (min-width: 990px) {
-    .header {
-      padding-top: {{ section.settings.padding_top }}px;
-      padding-bottom: {{ section.settings.padding_bottom }}px;
-    }
-  }
-{%- endstyle -%}
-
-<script src="{{ 'cart-notification.js' | asset_url }}" defer="defer"></script>
-
-{%- liquid
-  for block in section.blocks
-    if block.type == '@app'
-      assign has_app_block = true
-    endif
-  endfor
--%}
-
-{% liquid
-  assign header_tag = 'div'
-
-  if section.settings.sticky_header_type != 'none'
-    assign header_tag = 'sticky-header'
-  endif
-%}
-
-<{{ header_tag }}
-  {% if header_tag == 'sticky-header' %}
-    data-sticky-type="{{ section.settings.sticky_header_type }}"
-  {% endif %}
-  class="header-wrapper color-{{ section.settings.color_scheme }} gradient{% if section.settings.show_line_separator %} header-wrapper--border-bottom{% endif %}"
->
-  {%- liquid
-    assign social_links = false
-    if settings.social_twitter_link != blank or settings.social_facebook_link != blank or settings.social_pinterest_link != blank or settings.social_instagram_link != blank or settings.social_youtube_link != blank or settings.social_vimeo_link != blank or settings.social_tiktok_link != blank or settings.social_tumblr_link != blank or settings.social_snapchat_link != blank
-      assign social_links = true
-    endif
-
-    assign country_selector = false
-    if section.settings.enable_country_selector and localization.available_countries.size > 1
-      assign country_selector = true
-    endif
-
-    assign language_selector = false
-    if section.settings.enable_language_selector and localization.available_languages.size > 1
-      assign language_selector = true
-    endif
-  -%}
-  <header class="header header--{{ section.settings.logo_position }} header--mobile-{{ section.settings.mobile_logo_position }} page-width{% if section.settings.menu_type_desktop == 'drawer' %} drawer-menu{% endif %}{% if section.settings.menu != blank %} header--has-menu{% endif %}{% if has_app_block %} header--has-app{% endif %}{% if social_links %} header--has-social{% endif %}{% if shop.customer_accounts_enabled %} header--has-account{% endif %}{% if country_selector or language_selector %} header--has-localizations{% endif %}">
-    {%- liquid
-      assign render_search_left = false
-      if section.settings.logo_position == 'top-center' or section.settings.menu == blank or shop.customer_accounts_enabled
-        assign render_search_left = true
-      endif
-
-      if section.settings.menu != blank
-        render 'header-drawer', show_country_selector: country_selector, show_language_selector: language_selector, show_social_links: social_links
-      endif
-
-      if render_search_left
-        render 'header-search', input_id: 'Search-In-Modal-1'
-      endif
-    -%}
-
-    {%- if section.settings.logo_position != 'middle-center' -%}
-      {%- if request.page_type == 'index' -%}
-        <h1 class="header__heading">
-      {%- endif -%}
-      <a href="{{ routes.root_url }}" class="header__heading-link link link--text focus-inset">
-        {%- if settings.logo != blank -%}
-          <div class="header__heading-logo-wrapper">
-            {%- assign logo_alt = settings.logo.alt | default: shop.name | escape -%}
-            {%- assign logo_height = settings.logo_width | divided_by: settings.logo.aspect_ratio -%}
-            {% capture sizes %}(max-width: {{ settings.logo_width | times: 2 }}px) 50vw, {{ settings.logo_width }}px{% endcapture %}
-            {% capture widths %}{{ settings.logo_width }}, {{ settings.logo_width | times: 1.5 | round }}, {{ settings.logo_width | times: 2 }}{% endcapture %}
-            {{
-              settings.logo
-              | image_url: width: 600
-              | image_tag:
-                class: 'header__heading-logo motion-reduce',
-                widths: widths,
-                height: logo_height,
-                width: settings.logo_width,
-                alt: logo_alt,
-                sizes: sizes,
-                preload: true
-            }}
+    <!-- Top Category Navigation with Mega Menu -->
+    <ul class="myntra-nav-list">
+      <!-- MEN -->
+      <li class="myntra-nav-item">
+        <a href="/collections/all" class="myntra-nav-link">MEN</a>
+        <div class="myntra-mega-menu">
+          <div class="myntra-mega-col">
+            <div class="myntra-mega-block-title">Topwear</div>
+            <ul class="myntra-mega-links">
+              <li><a href="/collections/all">T-Shirts</a></li>
+              <li><a href="/collections/all">Casual Shirts</a></li>
+              <li><a href="/collections/all">Formal Shirts</a></li>
+              <li><a href="/collections/all">Sweatshirts</a></li>
+              <li><a href="/collections/all">Sweaters & Jackets</a></li>
+            </ul>
+            <div class="myntra-mega-block-title">Indian & Festive</div>
+            <ul class="myntra-mega-links">
+              <li><a href="/collections/all">Kurtas & Kurta Sets</a></li>
+              <li><a href="/collections/all">Sherwanis & Jackets</a></li>
+            </ul>
           </div>
-        {%- else -%}
-          <span class="h2">{{ shop.name }}</span>
-        {%- endif -%}
-      </a>
-      {%- if request.page_type == 'index' -%}
-        </h1>
-      {%- endif -%}
-    {%- endif -%}
-
-    {%- liquid
-      if section.settings.menu != blank
-        if section.settings.menu_type_desktop == 'dropdown'
-          render 'header-dropdown-menu'
-        elsif section.settings.menu_type_desktop != 'drawer'
-          render 'header-mega-menu'
-        endif
-      endif
-    %}
-
-    {%- if section.settings.logo_position == 'middle-center' -%}
-      {%- if request.page_type == 'index' -%}
-        <h1 class="header__heading">
-      {%- endif -%}
-      <a href="{{ routes.root_url }}" class="header__heading-link link link--text focus-inset">
-        {%- if settings.logo != blank -%}
-          <div class="header__heading-logo-wrapper">
-            {%- assign logo_alt = settings.logo.alt | default: shop.name | escape -%}
-            {%- assign logo_height = settings.logo_width | divided_by: settings.logo.aspect_ratio -%}
-            {% capture sizes %}(min-width: 750px) {{ settings.logo_width }}px, 50vw{% endcapture %}
-            {% capture widths %}{{ settings.logo_width }}, {{ settings.logo_width | times: 1.5 | round }}, {{ settings.logo_width | times: 2 }}{% endcapture %}
-            {{
-              settings.logo
-              | image_url: width: 600
-              | image_tag:
-                class: 'header__heading-logo',
-                widths: widths,
-                height: logo_height,
-                width: settings.logo_width,
-                alt: logo_alt,
-                sizes: sizes,
-                preload: true
-            }}
+          <div class="myntra-mega-col">
+            <div class="myntra-mega-block-title">Bottomwear</div>
+            <ul class="myntra-mega-links">
+              <li><a href="/collections/all">Jeans</a></li>
+              <li><a href="/collections/all">Casual Trousers</a></li>
+              <li><a href="/collections/all">Shorts & Track Pants</a></li>
+            </ul>
+            <div class="myntra-mega-block-title">Innerwear & Sleep</div>
+            <ul class="myntra-mega-links">
+              <li><a href="/collections/deep-sleep">Deep Sleep Memory Pillows</a></li>
+              <li><a href="/collections/deep-sleep">Ergonomic Sleepwear</a></li>
+            </ul>
           </div>
-        {%- else -%}
-          <span class="h2">{{ shop.name }}</span>
-        {%- endif -%}
-      </a>
-      {%- if request.page_type == 'index' -%}
-        </h1>
-      {%- endif -%}
-    {%- endif -%}
+          <div class="myntra-mega-col">
+            <div class="myntra-mega-block-title">Footwear</div>
+            <ul class="myntra-mega-links">
+              <li><a href="/collections/all">Casual Shoes</a></li>
+              <li><a href="/collections/all">Sports Shoes</a></li>
+              <li><a href="/collections/all">Sneakers & Loafers</a></li>
+            </ul>
+            <div class="myntra-mega-block-title">Grooming & Tech</div>
+            <ul class="myntra-mega-links">
+              <li><a href="/collections/sonic-clean">Sonic Shaver Cleaners</a></li>
+              <li><a href="/collections/glass-skin">Red Light Therapy Wands</a></li>
+            </ul>
+          </div>
+          <div class="myntra-mega-col">
+            <div class="myntra-mega-block-title">Sports & Active</div>
+            <ul class="myntra-mega-links">
+              <li><a href="/collections/all">Active T-Shirts</a></li>
+              <li><a href="/collections/all">Tracksuits</a></li>
+            </ul>
+            <div class="myntra-mega-block-title">Gadgets</div>
+            <ul class="myntra-mega-links">
+              <li><a href="/collections/sonic-clean">Smart Ultrasonic Cleaners</a></li>
+              <li><a href="/collections/glass-skin">Facial Massagers</a></li>
+            </ul>
+          </div>
+          <div class="myntra-mega-col">
+            <div class="myntra-mega-block-title">Accessories</div>
+            <ul class="myntra-mega-links">
+              <li><a href="/collections/all">Wallets & Belts</a></li>
+              <li><a href="/collections/all">Watches & Sunglasses</a></li>
+              <li><a href="/collections/all">Caps & Hats</a></li>
+              <li><a href="/collections/all">Bags & Backpacks</a></li>
+            </ul>
+          </div>
+        </div>
+      </li>
 
-    <div class="header__icons{% if section.settings.enable_country_selector or section.settings.enable_language_selector %} header__icons--localization header-localization{% endif %}">
-      <div class="desktop-localization-wrapper">
-        {%- if section.settings.enable_country_selector and localization.available_countries.size > 1 -%}
-          <localization-form class="small-hide medium-hide" data-prevent-hide>
-            {%- form 'localization', id: 'HeaderCountryForm', class: 'localization-form' -%}
-              <div>
-                <h2 class="visually-hidden" id="HeaderCountryLabel">{{ 'localization.country_label' | t }}</h2>
-                {%- render 'country-localization', localPosition: 'HeaderCountry' -%}
-              </div>
-            {%- endform -%}
-          </localization-form>
-        {% endif %}
+      <!-- WOMEN -->
+      <li class="myntra-nav-item">
+        <a href="/collections/all" class="myntra-nav-link">WOMEN</a>
+        <div class="myntra-mega-menu">
+          <div class="myntra-mega-col">
+            <div class="myntra-mega-block-title">Indian & Fusion</div>
+            <ul class="myntra-mega-links">
+              <li><a href="/collections/all">Kurtas & Suits</a></li>
+              <li><a href="/collections/all">Sarees & Lehengas</a></li>
+              <li><a href="/collections/all">Ethnic Wear</a></li>
+            </ul>
+            <div class="myntra-mega-block-title">Western Wear</div>
+            <ul class="myntra-mega-links">
+              <li><a href="/collections/all">Dresses & Jumpsuits</a></li>
+              <li><a href="/collections/all">Tops & T-Shirts</a></li>
+            </ul>
+          </div>
+          <div class="myntra-mega-col">
+            <div class="myntra-mega-block-title">Beauty & Skincare</div>
+            <ul class="myntra-mega-links">
+              <li><a href="/collections/glass-skin">LuminaGlow Red Light Wand</a></li>
+              <li><a href="/collections/glass-skin">7-in-1 Phototherapy Tech</a></li>
+              <li><a href="/collections/glass-skin">Anti-Aging Facial Sculpting</a></li>
+            </ul>
+            <div class="myntra-mega-block-title">Sleep & Wellness</div>
+            <ul class="myntra-mega-links">
+              <li><a href="/collections/deep-sleep">Deep-Sleep Cervical Pillow</a></li>
+              <li><a href="/collections/deep-sleep">Contour Neck Rest Tech</a></li>
+            </ul>
+          </div>
+          <div class="myntra-mega-col">
+            <div class="myntra-mega-block-title">Jewelry & Care</div>
+            <ul class="myntra-mega-links">
+              <li><a href="/collections/sonic-clean">CrystalSonic Jewelry Cleaner</a></li>
+              <li><a href="/collections/sonic-clean">45,000Hz Ultrasonic Baths</a></li>
+              <li><a href="/collections/all">Rings, Necklaces & Care</a></li>
+            </ul>
+          </div>
+          <div class="myntra-mega-col">
+            <div class="myntra-mega-block-title">Footwear</div>
+            <ul class="myntra-mega-links">
+              <li><a href="/collections/all">Flats & Casuals</a></li>
+              <li><a href="/collections/all">Heels & Wedges</a></li>
+              <li><a href="/collections/all">Sports & Sneakers</a></li>
+            </ul>
+          </div>
+          <div class="myntra-mega-col">
+            <div class="myntra-mega-block-title">Bags & Accessories</div>
+            <ul class="myntra-mega-links">
+              <li><a href="/collections/all">Handbags & Totes</a></li>
+              <li><a href="/collections/all">Clutches & Wallets</a></li>
+              <li><a href="/collections/all">Sunglasses & Frames</a></li>
+            </ul>
+          </div>
+        </div>
+      </li>
 
-        {%- if section.settings.enable_language_selector and localization.available_languages.size > 1 -%}
-          <localization-form class="small-hide medium-hide" data-prevent-hide>
-            {%- form 'localization', id: 'HeaderLanguageForm', class: 'localization-form' -%}
-              <div>
-                <h2 class="visually-hidden" id="HeaderLanguageLabel">{{ 'localization.language_label' | t }}</h2>
-                {%- render 'language-localization', localPosition: 'HeaderLanguage' -%}
-              </div>
-            {%- endform -%}
-          </localization-form>
-        {%- endif -%}
+      <!-- KIDS -->
+      <li class="myntra-nav-item">
+        <a href="/collections/all" class="myntra-nav-link">KIDS</a>
+        <div class="myntra-mega-menu" style="width: 600px; grid-template-columns: repeat(3, 1fr);">
+          <div class="myntra-mega-col">
+            <div class="myntra-mega-block-title">Boys Clothing</div>
+            <ul class="myntra-mega-links">
+              <li><a href="/collections/all">T-Shirts & Shirts</a></li>
+              <li><a href="/collections/all">Shorts & Jeans</a></li>
+            </ul>
+          </div>
+          <div class="myntra-mega-col">
+            <div class="myntra-mega-block-title">Girls Clothing</div>
+            <ul class="myntra-mega-links">
+              <li><a href="/collections/all">Dresses & Frocks</a></li>
+              <li><a href="/collections/all">Tops & Leggings</a></li>
+            </ul>
+          </div>
+          <div class="myntra-mega-col">
+            <div class="myntra-mega-block-title">Kids Care & Rest</div>
+            <ul class="myntra-mega-links">
+              <li><a href="/collections/deep-sleep">Gentle Sleep Pillows</a></li>
+              <li><a href="/collections/all">Accessories & Care</a></li>
+            </ul>
+          </div>
+        </div>
+      </li>
+
+      <!-- HOME -->
+      <li class="myntra-nav-item">
+        <a href="/collections/all" class="myntra-nav-link">HOME</a>
+        <div class="myntra-mega-menu" style="width: 700px; grid-template-columns: repeat(3, 1fr);">
+          <div class="myntra-mega-col">
+            <div class="myntra-mega-block-title">Sleep & Bedding</div>
+            <ul class="myntra-mega-links">
+              <li><a href="/collections/deep-sleep">Deep-Sleep Cervical Pillows</a></li>
+              <li><a href="/collections/deep-sleep">Orthopedic Neck Protectors</a></li>
+              <li><a href="/collections/deep-sleep">Memory Foam Pillows</a></li>
+            </ul>
+          </div>
+          <div class="myntra-mega-col">
+            <div class="myntra-mega-block-title">Sonic Tech & Clean</div>
+            <ul class="myntra-mega-links">
+              <li><a href="/collections/sonic-clean">CrystalSonic Ultrasonic Baths</a></li>
+              <li><a href="/collections/sonic-clean">Glasses & Ring Cleaners</a></li>
+            </ul>
+          </div>
+          <div class="myntra-mega-col">
+            <div class="myntra-mega-block-title">Aroma & Ambiance</div>
+            <ul class="myntra-mega-links">
+              <li><a href="/collections/all">AromaMist Flame Diffusers</a></li>
+              <li><a href="/collections/all">Essential Oils & Relaxers</a></li>
+            </ul>
+          </div>
+        </div>
+      </li>
+
+      <!-- BEAUTY -->
+      <li class="myntra-nav-item">
+        <a href="/collections/glass-skin" class="myntra-nav-link">BEAUTY</a>
+        <div class="myntra-mega-menu" style="width: 700px; grid-template-columns: repeat(3, 1fr);">
+          <div class="myntra-mega-col">
+            <div class="myntra-mega-block-title">Phototherapy Tech</div>
+            <ul class="myntra-mega-links">
+              <li><a href="/collections/glass-skin">LuminaGlow 7-in-1 Wand</a></li>
+              <li><a href="/collections/glass-skin">630nm Red Light Facial Tech</a></li>
+              <li><a href="/collections/glass-skin">Microcurrent Sculptors</a></li>
+            </ul>
+          </div>
+          <div class="myntra-mega-col">
+            <div class="myntra-mega-block-title">Skin & Glow Care</div>
+            <ul class="myntra-mega-links">
+              <li><a href="/collections/glass-skin">Hydrating Serums</a></li>
+              <li><a href="/collections/glass-skin">Facial Massagers</a></li>
+            </ul>
+          </div>
+          <div class="myntra-mega-col">
+            <div class="myntra-mega-block-title">Ultrasonic Devices</div>
+            <ul class="myntra-mega-links">
+              <li><a href="/collections/sonic-clean">Makeup Brush Cleaners</a></li>
+              <li><a href="/collections/sonic-clean">Sonic Sanitizers</a></li>
+            </ul>
+          </div>
+        </div>
+      </li>
+
+      <!-- GENZ -->
+      <li class="myntra-nav-item">
+        <a href="/collections/all" class="myntra-nav-link">GENZ</a>
+        <div class="myntra-mega-menu" style="width: 600px; grid-template-columns: repeat(3, 1fr);">
+          <div class="myntra-mega-col">
+            <div class="myntra-mega-block-title">Viral Hits</div>
+            <ul class="myntra-mega-links">
+              <li><a href="/collections/all">🔥 As Seen on TikTok</a></li>
+              <li><a href="/collections/all">Instagram Viral Trends</a></li>
+            </ul>
+          </div>
+          <div class="myntra-mega-col">
+            <div class="myntra-mega-block-title">Bio-Hacking</div>
+            <ul class="myntra-mega-links">
+              <li><a href="/collections/deep-sleep">Cervical Sleep Aligners</a></li>
+              <li><a href="/collections/glass-skin">Red Light Therapy</a></li>
+            </ul>
+          </div>
+          <div class="myntra-mega-col">
+            <div class="myntra-mega-block-title">Daily Gadgets</div>
+            <ul class="myntra-mega-links">
+              <li><a href="/collections/sonic-clean">Ultrasonic Bubble Cleaners</a></li>
+              <li><a href="/collections/all">Flame Diffusers</a></li>
+            </ul>
+          </div>
+        </div>
+      </li>
+
+      <!-- STUDIO -->
+      <li class="myntra-nav-item">
+        <a href="/pages/reviews" class="myntra-nav-link">STUDIO <span class="myntra-studio-badge">NEW</span></a>
+      </li>
+    </ul>
+
+    <!-- Centered Search Bar -->
+    <div class="myntra-search-bar">
+      <span class="myntra-search-icon">🔍</span>
+      <input type="text" class="myntra-search-input" placeholder="Search for products, brands and more">
+    </div>
+
+    <!-- Right Actions: Profile, Wishlist, Bag -->
+    <div class="myntra-actions">
+      <!-- Profile with Hover Dropdown -->
+      <div class="myntra-profile-wrapper">
+        <a href="/account" class="myntra-action-btn">
+          <span class="myntra-action-icon">👤</span>
+          <span>Profile</span>
+        </a>
+        <div class="myntra-profile-dropdown">
+          <div class="myntra-profile-title">Welcome</div>
+          <div class="myntra-profile-subtitle">To access account and manage orders</div>
+          <a href="/account/login" class="myntra-login-btn">LOGIN / SIGNUP</a>
+          <div class="myntra-profile-divider"></div>
+          <a href="/pages/track-order" class="myntra-profile-link"><span>Orders</span></a>
+          <a href="/pages/wishlist" class="myntra-profile-link"><span>Wishlist</span></a>
+          <a href="/collections/all" class="myntra-profile-link"><span>Gift Cards</span></a>
+          <a href="/pages/contact" class="myntra-profile-link"><span>Contact Us</span></a>
+          <a href="/pages/reviews" class="myntra-profile-link"><span>Sunnyeora Insider <span style="background: #ff3f6c; color: #fff; font-size: 0.65rem; padding: 2px 6px; border-radius: 4px; font-weight: 800;">New</span></span></a>
+          <div class="myntra-profile-divider"></div>
+          <a href="/pages/faq" class="myntra-profile-link"><span>Sunnyeora Credit</span></a>
+          <a href="/collections/all" class="myntra-profile-link"><span>Coupons</span></a>
+          <a href="/pages/shipping" class="myntra-profile-link"><span>Saved Cards</span></a>
+          <a href="/pages/track-order" class="myntra-profile-link"><span>Saved Addresses</span></a>
+        </div>
       </div>
-      {% render 'header-search', input_id: 'Search-In-Modal' %}
 
-      {%- if shop.customer_accounts_enabled -%}
-        <shopify-account
-          menu="{{ settings.customer_account_menu | default: 'customer-account-main-menu' }}"
-          class="header__icon header__icon--account link focus-inset"
-        >
-          <span slot="signed-out-avatar" class="svg-wrapper">{{ 'icon-account.svg' | inline_asset_content }}</span>
-          <span slot="signed-out-avatar" class="visually-hidden">{{ 'customer.log_in' | t }}</span>
-        </shopify-account>
-      {%- endif -%}
+      <!-- Wishlist -->
+      <a href="/pages/wishlist" class="myntra-action-btn">
+        <span class="myntra-action-icon">🤍</span>
+        <span>Wishlist</span>
+      </a>
 
-      {%- for block in section.blocks -%}
-        {%- case block.type -%}
-          {%- when '@app' -%}
-            {% render block %}
-        {%- endcase -%}
-      {%- endfor -%}
-
-      <a href="{{ routes.cart_url }}" class="header__icon header__icon--cart link focus-inset" id="cart-icon-bubble">
-        {% if cart == empty %}
-          <span class="svg-wrapper">{{ 'icon-cart-empty.svg' | inline_asset_content }}</span>
-        {% else %}
-          <span class="svg-wrapper">{{ 'icon-cart.svg' | inline_asset_content }}</span>
-        {% endif %}
-        <span class="visually-hidden">{{ 'templates.cart.cart' | t }}</span>
-        {%- if cart != empty -%}
-          <div class="cart-count-bubble">
-            {%- if cart.item_count < 100 -%}
-              <span aria-hidden="true">{{ cart.item_count }}</span>
-            {%- endif -%}
-            <span class="visually-hidden">{{ 'sections.header.cart_count' | t: count: cart.item_count }}</span>
-          </div>
-        {%- endif -%}
+      <!-- Bag -->
+      <a href="/cart" class="myntra-action-btn" onclick="if(window.openCartDrawer){window.openCartDrawer(); return false;}">
+        <span class="myntra-action-icon">🛍️</span>
+        <span>Bag</span>
+        <span class="myntra-bag-count" id="header-bag-count">0</span>
       </a>
     </div>
-  </header>
-</{{ header_tag }}>
-
-{%- if settings.cart_type == 'notification' -%}
-  {%- render 'cart-notification',
-    color_scheme: section.settings.color_scheme,
-    desktop_menu_type: section.settings.menu_type_desktop
-  -%}
-{%- endif -%}
-
-{% javascript %}
-  class StickyHeader extends HTMLElement {
-    constructor() {
-      super();
-      this.setHeaderHeight = this.setHeaderHeight.bind(this);
-    }
-
-    connectedCallback() {
-      this.header = document.querySelector('.section-header');
-      this.mobileMediaQuery = window.matchMedia('(max-width: 990px)');
-      this.headerIsAlwaysSticky =
-        this.getAttribute('data-sticky-type') === 'always' ||
-        this.getAttribute('data-sticky-type') === 'reduce-logo-size';
-      this.headerBounds = {};
-
-      this.setHeaderHeight();
-
-      this.mobileMediaQuery.addEventListener('change', this.setHeaderHeight);
-
-      if (this.headerIsAlwaysSticky) {
-        this.header.classList.add('shopify-section-header-sticky');
-      }
-
-      this.currentScrollTop = 0;
-      this.preventReveal = false;
-      this.predictiveSearches = this.querySelectorAll('predictive-search');
-
-      this.onScrollHandler = this.onScroll.bind(this);
-      this.hideHeaderOnScrollUp = () => (this.preventReveal = true);
-
-      this.addEventListener('preventHeaderReveal', this.hideHeaderOnScrollUp);
-      window.addEventListener('scroll', this.onScrollHandler, false);
-
-      this.createObserver();
-    }
-
-    setHeaderHeight() {
-      document.documentElement.style.setProperty('--header-height', `${this.header.offsetHeight}px`);
-    }
-
-    disconnectedCallback() {
-      this.mobileMediaQuery.removeEventListener('change', this.setHeaderHeight);
-      this.removeEventListener('preventHeaderReveal', this.hideHeaderOnScrollUp);
-      window.removeEventListener('scroll', this.onScrollHandler);
-    }
-
-    createObserver() {
-      let observer = new IntersectionObserver((entries, observer) => {
-        this.headerBounds = entries[0].intersectionRect;
-        observer.disconnect();
-      });
-
-      observer.observe(this.header);
-    }
-
-    onScroll() {
-      const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-
-      if ([...this.predictiveSearches].some((predictiveSearch) => predictiveSearch.isOpen)) return;
-
-      if (scrollTop > this.currentScrollTop && scrollTop > this.headerBounds.bottom) {
-        this.header.classList.add('scrolled-past-header');
-        if (this.preventHide) return;
-        requestAnimationFrame(this.hide.bind(this));
-      } else if (scrollTop < this.currentScrollTop && scrollTop > this.headerBounds.bottom) {
-        this.header.classList.add('scrolled-past-header');
-        if (!this.preventReveal) {
-          requestAnimationFrame(this.reveal.bind(this));
-        } else {
-          window.clearTimeout(this.isScrolling);
-
-          this.isScrolling = setTimeout(() => {
-            this.preventReveal = false;
-          }, 66);
-
-          requestAnimationFrame(this.hide.bind(this));
-        }
-      } else if (scrollTop <= this.headerBounds.top) {
-        this.header.classList.remove('scrolled-past-header');
-        requestAnimationFrame(this.reset.bind(this));
-      }
-
-      this.currentScrollTop = scrollTop;
-    }
-
-    hide() {
-      if (this.headerIsAlwaysSticky) return;
-      this.header.classList.add('shopify-section-header-hidden', 'shopify-section-header-sticky');
-      this.closeMenuDisclosure();
-      this.closeSearchModal();
-    }
-
-    reveal() {
-      if (this.headerIsAlwaysSticky) return;
-      this.header.classList.add('shopify-section-header-sticky', 'animate');
-      this.header.classList.remove('shopify-section-header-hidden');
-    }
-
-    reset() {
-      if (this.headerIsAlwaysSticky) return;
-      this.header.classList.remove('shopify-section-header-hidden', 'shopify-section-header-sticky', 'animate');
-    }
-
-    closeMenuDisclosure() {
-      this.disclosures = this.disclosures || this.header.querySelectorAll('header-menu');
-      this.disclosures.forEach((disclosure) => disclosure.close());
-    }
-
-    closeSearchModal() {
-      this.searchModals = this.searchModals || this.header.querySelectorAll('details-modal');
-      this.searchModals.forEach((searchModal) => searchModal.close(false));
-    }
-  }
-
-  // The account `open` event is composed but does not bubble, so listen during capture.
-  // Anchor the dialog to the bottom of the account button itself. The header group can be
-  // much taller than the button's row (for example, a top-left logo pushes the menu to a
-  // second row), so anchoring to the section bottom drops the dialog too low.
-  document.addEventListener(
-    'open',
-    (event) => {
-      if (!(event.target instanceof HTMLElement) || !event.target.matches('shopify-account')) return;
-
-      const bottom = Math.max(0, Math.round(event.target.getBoundingClientRect().bottom));
-      event.target.style.setProperty('--account-dialog-top', `${bottom}px`);
-    },
-    true
-  );
-
-  customElements.define('sticky-header', StickyHeader);
-{% endjavascript %}
-
-<script type="application/ld+json">
-  {
-    "@context": "http://schema.org",
-    "@type": "Organization",
-    "name": {{ shop.name | json }},
-    {% if settings.logo %}
-      "logo": {{ settings.logo | image_url: width: 500 | prepend: "https:" | json }},
-    {% endif %}
-    "sameAs": [
-      {{ settings.social_twitter_link | json }},
-      {{ settings.social_facebook_link | json }},
-      {{ settings.social_pinterest_link | json }},
-      {{ settings.social_instagram_link | json }},
-      {{ settings.social_tiktok_link | json }},
-      {{ settings.social_tumblr_link | json }},
-      {{ settings.social_snapchat_link | json }},
-      {{ settings.social_youtube_link | json }},
-      {{ settings.social_vimeo_link | json }}
-    ],
-    "url": {{ request.origin | append: page.url | json }}
-  }
-</script>
-
-{%- if request.page_type == 'index' -%}
-  {% assign potential_action_target = request.origin | append: routes.search_url | append: '?q={search_term_string}' %}
-  <script type="application/ld+json">
-    {
-      "@context": "http://schema.org",
-      "@type": "WebSite",
-      "name": {{ shop.name | json }},
-      "potentialAction": {
-        "@type": "SearchAction",
-        "target": {{ potential_action_target | json }},
-        "query-input": "required name=search_term_string"
-      },
-      "url": {{ request.origin | append: page.url | json }}
-    }
-  </script>
-{%- endif -%}
+  </div>
+</div>
 
 {% schema %}
 {
-  "name": "t:sections.header.name",
+  "name": "Myntra Header",
+  "tag": "header",
   "class": "section-header",
-  "max_blocks": 3,
-  "settings": [
+  "settings": [],
+  "presets": [
     {
-      "type": "select",
-      "id": "logo_position",
-      "options": [
-        {
-          "value": "top-left",
-          "label": "t:sections.header.settings.logo_position.options__2.label"
-        },
-        {
-          "value": "top-center",
-          "label": "t:sections.header.settings.logo_position.options__3.label"
-        },
-        {
-          "value": "middle-left",
-          "label": "t:sections.header.settings.logo_position.options__1.label"
-        },
-        {
-          "value": "middle-center",
-          "label": "t:sections.header.settings.logo_position.options__4.label"
-        }
-      ],
-      "default": "middle-left",
-      "label": "t:sections.header.settings.logo_position.label",
-      "info": "t:sections.header.settings.logo_help.content"
-    },
-    {
-      "type": "select",
-      "id": "mobile_logo_position",
-      "options": [
-        {
-          "value": "center",
-          "label": "t:sections.header.settings.mobile_logo_position.options__1.label"
-        },
-        {
-          "value": "left",
-          "label": "t:sections.header.settings.mobile_logo_position.options__2.label"
-        }
-      ],
-      "default": "center",
-      "label": "t:sections.header.settings.mobile_logo_position.label"
-    },
-    {
-      "type": "link_list",
-      "id": "menu",
-      "default": "main-menu",
-      "label": "t:sections.header.settings.menu.label"
-    },
-    {
-      "type": "select",
-      "id": "menu_type_desktop",
-      "options": [
-        {
-          "value": "dropdown",
-          "label": "t:sections.header.settings.menu_type_desktop.options__1.label"
-        },
-        {
-          "value": "mega",
-          "label": "t:sections.header.settings.menu_type_desktop.options__2.label"
-        },
-        {
-          "value": "drawer",
-          "label": "t:sections.header.settings.menu_type_desktop.options__3.label"
-        }
-      ],
-      "default": "dropdown",
-      "label": "t:sections.header.settings.menu_type_desktop.label"
-    },
-    {
-      "type": "select",
-      "id": "sticky_header_type",
-      "options": [
-        {
-          "value": "none",
-          "label": "t:sections.header.settings.sticky_header_type.options__1.label"
-        },
-        {
-          "value": "on-scroll-up",
-          "label": "t:sections.header.settings.sticky_header_type.options__2.label"
-        },
-        {
-          "value": "always",
-          "label": "t:sections.header.settings.sticky_header_type.options__3.label"
-        },
-        {
-          "value": "reduce-logo-size",
-          "label": "t:sections.header.settings.sticky_header_type.options__4.label"
-        }
-      ],
-      "default": "on-scroll-up",
-      "label": "t:sections.header.settings.sticky_header_type.label"
-    },
-    {
-      "type": "checkbox",
-      "id": "show_line_separator",
-      "default": true,
-      "label": "t:sections.header.settings.show_line_separator.label"
-    },
-    {
-      "type": "header",
-      "content": "t:sections.header.settings.header__1.content"
-    },
-    {
-      "type": "color_scheme",
-      "id": "color_scheme",
-      "label": "t:sections.all.colors.label",
-      "default": "scheme-1"
-    },
-    {
-      "type": "color_scheme",
-      "id": "menu_color_scheme",
-      "label": "t:sections.header.settings.menu_color_scheme.label",
-      "default": "scheme-1"
-    },
-    {
-      "type": "header",
-      "content": "t:sections.header.settings.header__utilities.content"
-    },
-    {
-      "type": "checkbox",
-      "id": "enable_country_selector",
-      "default": true,
-      "label": "t:sections.header.settings.enable_country_selector.label",
-      "info": "t:sections.header.settings.enable_country_selector.info"
-    },
-    {
-      "type": "checkbox",
-      "id": "enable_language_selector",
-      "default": true,
-      "label": "t:sections.header.settings.enable_language_selector.label",
-      "info": "t:sections.header.settings.enable_language_selector.info"
-    },
-    {
-      "type": "paragraph",
-      "content": "t:sections.header.settings.customer_account_menu.content"
-    },
-    {
-      "type": "header",
-      "content": "t:sections.all.spacing"
-    },
-    {
-      "type": "range",
-      "id": "margin_bottom",
-      "min": 0,
-      "max": 100,
-      "step": 4,
-      "unit": "px",
-      "label": "t:sections.header.settings.margin_bottom.label",
-      "default": 0
-    },
-    {
-      "type": "header",
-      "content": "t:sections.all.padding.section_padding_heading"
-    },
-    {
-      "type": "range",
-      "id": "padding_top",
-      "min": 0,
-      "max": 36,
-      "step": 4,
-      "unit": "px",
-      "label": "t:sections.all.padding.padding_top",
-      "default": 20
-    },
-    {
-      "type": "range",
-      "id": "padding_bottom",
-      "min": 0,
-      "max": 36,
-      "step": 4,
-      "unit": "px",
-      "label": "t:sections.all.padding.padding_bottom",
-      "default": 20
-    }
-  ],
-  "blocks": [
-    {
-      "type": "@app"
+      "name": "Myntra Header"
     }
   ]
 }
