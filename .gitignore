@@ -1,18 +1,12 @@
-node_modules/
-dist/*
-!dist/command-centre-v2.html
-!dist/index.html
-!dist/dark.html
-data/
-office.config.local.json
-office.agents.local.json
-brain/Agents Office/
+# OS generated files #
+######################
 .DS_Store
-*.backup-*
-
-.vercel
-.env
-.env.*
-.env.local
-
-.env*
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+.shopify
+node_modules
+*.zip
