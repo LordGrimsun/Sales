@@ -614,7 +614,8 @@ else {
       });
     } else ok('live: skipped', 'set CHECK_LIVE=1 to route one task and one chat through Claude');
   }
-  srv.kill();
+  try { srv.kill(); } catch {}
+  await new Promise(r => setTimeout(r, 200));
 }
 
 /* ---------- summary ---------- */

@@ -78,11 +78,23 @@ export default async function handler(req, res) {
 
   const host = req.headers.host || 'localhost';
   const rawUrl = new URL(req.url, `http://${host}`);
-  const xMatched = req.headers['x-matched-path'] || req.headers['x-forwarded-uri'];
-  let pathname = xMatched ? new URL(xMatched, `http://${host}`).pathname : rawUrl.pathname;
-  if (pathname.includes('[...path]')) {
-    const sub = rawUrl.searchParams.get('...path') || rawUrl.searchParams.get('path');
-    if (sub) pathname = '/api/' + sub.replace(/^\/+/, '');
+  let pathname = rawUrl.pathname;
+
+  const qId = rawUrl.searchParams.get('id');
+  const qAct = rawUrl.searchParams.get('action');
+  const qRid = rawUrl.searchParams.get('routineId');
+  if (qId) {
+    pathname = `/api/tasks/${qId}` + (qAct ? `/${qAct}` : '');
+  } else if (qRid) {
+    pathname = `/api/routines/${qRid}`;
+  } else if (pathname.includes('[...') || !pathname.startsWith('/api')) {
+    const xMatched = req.headers['x-matched-path'] || req.headers['x-forwarded-uri'];
+    if (xMatched) pathname = new URL(xMatched, `http://${host}`).pathname;
+    if (pathname.includes('[...')) {
+      const sub = rawUrl.searchParams.get('...path') || rawUrl.searchParams.get('path');
+      const prefix = pathname.split('/[...')[0] || '/api';
+      if (sub) pathname = prefix + '/' + sub.replace(/^\/+/, '');
+    }
   }
   const url = rawUrl;
 
@@ -238,9 +250,22 @@ export default async function handler(req, res) {
       const taskId = taskMatch[1];
       const action = taskMatch[2];
       const list = loadTasks();
-      const task = list.find(t => t.id === taskId);
+      const body = (req.method === 'POST') ? await getBody(req) : {};
+      let task = list.find(t => t.id === taskId);
 
-      if (!task && req.method !== 'DELETE') return json(res, 404, { error: 'task not found' });
+      if (!task && req.method !== 'DELETE') {
+        task = {
+          id: taskId,
+          dept: body.dept || 'sales',
+          agent: body.agent || 'lexi',
+          title: body.title || body.text || 'Sales deliverable',
+          text: body.text || body.title || 'Execute sales deliverable',
+          state: 'next',
+          addedAt: Date.now(),
+          by: 'you',
+        };
+        list.push(task);
+      }
 
       if (req.method === 'DELETE') {
         saveTasks(list.filter(t => t.id !== taskId));
@@ -248,7 +273,7 @@ export default async function handler(req, res) {
       }
 
       if (req.method === 'POST' && (action === 'run' || action === 'revise')) {
-        const { feedback } = await getBody(req);
+        const feedback = body.feedback;
         const agent = AGENTS.find(a => a.id === task.agent) || AGENTS[0];
 
         task.state = 'doing';

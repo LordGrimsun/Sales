@@ -132,7 +132,7 @@ export function initTasks(ctx) {
           getFocused, esc, brainWrite, brain, onLive, onTools, requestApproval, setStuck, onUsage } = ctx;
   // LIVE mode (served by serve.mjs): the bar routes through Claude, agents produce real
   // deliverables saved as notes in the brain, and tasks persist. Opened as a file it stays demo.
-  let live = false;
+  let live = false, officeBackend = 'AI';
   const API = '/api';
   const slug = t => String(t).toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 48);
 
@@ -379,7 +379,7 @@ export function initTasks(ctx) {
       const { agent: ra } = route(dept, rt.text || text);
       const need = rt.needsDay ? 'which day? say "every Monday …"' : rt.needsTime ? 'what time? add "at 8am"' : null;
       P_.hint.innerHTML = `<span class="tp-av" style="border-color:${DEPTS[ra.dept].chip};background:${DEPTS[ra.dept].chip}55">⏱</span>Routine · <b>${esc(describe(rt.when) || 'every week')}</b>` +
-        (need ? ` · <span class="tp-amber">${need}</span>` : live ? ' · Claude names the agent when you press Add' : ` · goes to <b>${ra.name}</b>`) + (rt.guessed ? ` · "${esc(rt.guessWord)}" taken as ${rt.when.at}` : '');
+        (need ? ` · <span class="tp-amber">${need}</span>` : live ? ` · ${officeBackend} names the agent when you press Add` : ` · goes to <b>${ra.name}</b>`) + (rt.guessed ? ` · "${esc(rt.guessWord)}" taken as ${rt.when.at}` : '');
       P_.hint.innerHTML += pickBit('routine');
       P_.hint.className = 'tp-hint on'; return;
     }
@@ -392,7 +392,7 @@ export function initTasks(ctx) {
     const busy = agentTasks(a.id, 'doing').length > 0 || R[a.id].state === 'stuck';
     const chip = DEPTS[a.dept].chip;
     P_.hint.innerHTML = `<span class="tp-av" style="border-color:${chip};background:${chip}55">${a.name[0]}</span>` +
-      (live ? `Probably <b>${a.name}</b> · Claude confirms when you press Add`
+      (live ? `Probably <b>${a.name}</b> · ${officeBackend} confirms when you press Add`
             : `Goes to <b>${a.name}</b> · ${busy ? 'starts after their current job' : 'starts straight away'}${matched ? '' : ' · say more and I’ll pick a specialist'}`) +
       pickBit('task');
     P_.hint.className = 'tp-hint on';
@@ -424,7 +424,7 @@ export function initTasks(ctx) {
       const text = title, k = dept;
       P_.input.value = ''; P_.input.disabled = true; P_.add.disabled = true;
       const team = asTeam(text);
-      say(team ? `Routing through Claude — <b>${leadOf(k).name}</b> is reading it for the team…` : `Routing through Claude — ${DEPTS[k].name.toLowerCase()} is reading it…`, 'busy');
+      say(team ? `Routing through ${officeBackend} — <b>${leadOf(k).name}</b> is reading it for the team…` : `Routing through ${officeBackend} — ${DEPTS[k].name.toLowerCase()} is reading it…`, 'busy');
       try {
         const mdl = chosenModel();
         const r = await fetch(API + '/tasks', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ dept: k, text, model: mdl || undefined, effort: effortSend(), team: team || undefined }) });
@@ -437,7 +437,7 @@ export function initTasks(ctx) {
         say(st.team ? `Added — <b>${agentOf(t.agent).name}</b> has it and is splitting it across the team` : `Added — <b>${agentOf(t.agent).name}</b> has it${st.why ? ' · ' + esc(st.why) : ''}`);
         setTimeout(() => { if (!P_.input.value) P_.hint.classList.remove('on'); }, 7000);
       } catch (e) {
-        say(`Claude couldn't take it (${esc(e.message)}). Kept it on the board.`, 'err');
+        say(`${officeBackend} couldn't take it (${esc(e.message)}). Kept it on the board.`, 'err');
         const { agent: a } = route(k, text); addTask(a.id, text, 'you');
       }
       P_.input.disabled = false; P_.add.disabled = false; P_.input.blur(); // hand the keys back to the office
@@ -482,7 +482,7 @@ export function initTasks(ctx) {
     if (!text) { say('What should happen? The sentence has a time but no task.', 'err'); return; }
     if (live) {
       P_.input.disabled = true; P_.add.disabled = true;
-      say('Setting the routine — Claude is naming the agent…', 'busy');
+      say(`Setting the routine — ${officeBackend} is naming the agent…`, 'busy');
       try {
         const r = await fetch(API + '/routines', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ dept: k, text, when: rt.when, needsOk: rt.picker ? P_.okc.checked : undefined, model: chosenModel() || undefined, effort: effortSend() }) });
         const j = await r.json(); if (!r.ok) throw new Error(j.error || r.statusText);
@@ -491,7 +491,7 @@ export function initTasks(ctx) {
         say(`Routine set — <b>${a.name}</b> · ${esc(j.routine.desc)} · next ${esc(untilText(j.routine.nextAt))}${j.routine.needsOk ? ' · waits for your OK' : ' · read-only, no OK needed'}${j.guessed ? ` · "${esc(j.guessed)}" taken as ${j.routine.when.at}` : ''}`);
         P_.input.value = ''; resetModel(); spawnEmote(R[a.id], '⏱'); feedPush(R[a.id], '⏱', `New routine: ${j.routine.title} (${j.routine.desc})`);
         filter = 'sched'; render(true); poll();
-      } catch (e) { say(`Claude couldn't set it (${esc(e.message)}).`, 'err'); }
+      } catch (e) { say(`${officeBackend} couldn't set it (${esc(e.message)}).`, 'err'); }
       P_.input.disabled = false; P_.add.disabled = false; P_.input.blur();
       return;
     }
@@ -674,9 +674,22 @@ export function initTasks(ctx) {
       const h = await (await fetch(API + '/health')).json();
       if (!h.ok) return;
       live = true; setOfficeModel(h.model); setOfficeEffort(h.effort);
+      if (h.backend) {
+        if (h.backend.includes('openai')) officeBackend = 'OpenAI';
+        else if (h.backend.includes('gemini')) officeBackend = 'Gemini';
+        else if (h.backend.includes('anthropic') || h.backend.includes('claude')) officeBackend = 'Claude';
+        else if (h.backend.includes('openrouter')) officeBackend = 'OpenRouter';
+        else officeBackend = h.backend.toUpperCase();
+      }
       if (h.teams) { teamsCfg = { enabled: h.teams.enabled !== false, max: h.teams.max || 4 }; P_.team.hidden = !teamsCfg.enabled; }
       const mode = panel.querySelector('.tp-mode');
-      if (mode) { mode.hidden = false; mode.textContent = 'LIVE · ' + (h.backend === 'anthropic-sdk' ? 'CLAUDE API' : 'CLAUDE'); mode.classList.add('live'); mode.title = `${h.name} · ${h.backend} · ${modelName(h.model)} by default · brain: ${h.brain}`; }
+      if (mode) {
+        const provLabel = (h.backend || 'AI').toUpperCase().replace('-SDK', ' API').replace('-CLI', ' CLI');
+        mode.hidden = false;
+        mode.textContent = 'LIVE · ' + provLabel;
+        mode.classList.add('live');
+        mode.title = `${h.name} · ${h.backend} · ${modelName(h.model)} by default · brain: ${h.brain}`;
+      }
       if (brain) { try { brain.setGraph(await (await fetch(API + '/brain')).json()); } catch {} }
       const list = await (await fetch(API + '/tasks')).json();
       for (const st of list) {
@@ -736,7 +749,7 @@ export function initTasks(ctx) {
         const w = now - t.addedAt;
         return `${who} · ${w < 60000 ? 'just added' : 'waiting ' + span(w)} · ${src}${teamBit(t)}${modelBit(t)}`;
       }
-      case 'doing': return `${who}${t.live ? (t.approved === undefined && t.draftAt ? ' · sending with Claude' : t.team?.members?.length ? ' · leading the team with Claude' : ' · working with Claude') : t.agent === 'vid' ? ' · rendering' : t.teamHold ? ' · waiting on the pieces' : ''}${t.routine ? ' · routine' : ''}${teamBit(t)}${modelBit(t)}`;
+      case 'doing': return `${who}${t.live ? (t.approved === undefined && t.draftAt ? ` · sending with ${officeBackend}` : t.team?.members?.length ? ` · leading the team with ${officeBackend}` : ` · working with ${officeBackend}`) : t.agent === 'vid' ? ' · rendering' : t.teamHold ? ' · waiting on the pieces' : ''}${t.routine ? ' · routine' : ''}${teamBit(t)}${modelBit(t)}`;
       case 'waiting': return `<span class="tp-amber">waiting ${span(now - t.changedAt)} for your tick</span> · ${who}${t.routine ? ' · routine draft' : ''}${teamBit(t)}${modelBit(t)}`;
       case 'scheduled': return `${who} · runs ${esc(untilText(t.dueAt))} · ${new Date(t.dueAt).toLocaleDateString([], { weekday: 'short', day: 'numeric', month: 'short' })} ${timeStr(t.dueAt)}${t.needsOk ? ' · waits for your OK' : ''}${teamBit(t)}${modelBit(t)}`;
       case 'done': return `${who} · done ${timeStr(t.doneAt)}${t.approved ? (t.live ? ' · sent after your OK' : ' · approved') : ''}${t.late ? ' · <span class="tp-late">ran late</span>' : ''}${teamBit(t)}${modelBit(t)}${t.live ? (t.error ? ' · <span class="tp-amber">failed</span>' : ' · <span class="tp-res">result ready →</span>') : ''}`;

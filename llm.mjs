@@ -6,6 +6,26 @@ import fs from 'node:fs';
 
 const CLI_CWD = path.join(os.tmpdir(), 'agents-office-cli');
 
+// Automatically read local .env if present
+try {
+  const envPath = path.join(process.cwd(), '.env');
+  if (fs.existsSync(envPath)) {
+    const lines = fs.readFileSync(envPath, 'utf8').split(/\r?\n/);
+    for (const line of lines) {
+      const trimmed = line.trim();
+      if (!trimmed || trimmed.startsWith('#')) continue;
+      const eq = trimmed.indexOf('=');
+      if (eq > 0) {
+        const k = trimmed.slice(0, eq).trim();
+        const v = trimmed.slice(eq + 1).trim().replace(/^['"]|['"]$/g, '');
+        if (k && v && !process.env[k]) {
+          process.env[k] = v;
+        }
+      }
+    }
+  }
+} catch {}
+
 export function detectProvider() {
   if (process.env.ANTHROPIC_API_KEY) return 'anthropic';
   if (process.env.OPENAI_API_KEY) return 'openai';
