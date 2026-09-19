@@ -103,7 +103,8 @@ scene.add(hemi);
 const key = new THREE.DirectionalLight(0xfff1dd, 2.2);
 key.position.set(-60, 90, 20);
 key.castShadow = true;
-key.shadow.mapSize.set(2048, 2048);
+const isMobile = !matchMedia('(hover: hover)').matches || devicePixelRatio < 2;
+key.shadow.mapSize.set(isMobile ? 1024 : 2048, isMobile ? 1024 : 2048);
 key.shadow.camera.left = -95; key.shadow.camera.right = 95;
 key.shadow.camera.top = 95; key.shadow.camera.bottom = -95;
 key.shadow.camera.far = 400;
@@ -315,8 +316,10 @@ function restoreSceneDim() {
 function tickDim(dt) {
   focusDim += (focusDimTarget - focusDim) * (1 - Math.exp(-dt * 5));
   if (focusDimTarget === 0 && focusDim < 0.02 && dimSwapped.length) restoreSceneDim();
-  for (const m of dimCache.values())
-    m.color.copy(m.userData.baseColor).lerp(m.userData.dimColor, focusDim);
+  if (dimSwapped.length > 0 || focusDim > 0.005) {
+    for (const m of dimCache.values())
+      m.color.copy(m.userData.baseColor).lerp(m.userData.dimColor, focusDim);
+  }
 }
 
 /* ---------- department billboards — v1's exact agreed metric rows + amber approval row ---------- */
@@ -580,8 +583,9 @@ function zoomOut() {
 }
 document.getElementById('overviewBtn').addEventListener('click', zoomOut);
 function syncOverviewBtn() {
-  document.getElementById('overviewBtn').classList.toggle('show',
-    (view.zoom > 1.45 && !(tween && tween.toZ <= OVERVIEW.zoom + 0.05)) || !!focused);
+  const btn = document.getElementById('overviewBtn');
+  const show = (view.zoom > 1.45 && !(tween && tween.toZ <= OVERVIEW.zoom + 0.05)) || !!focused;
+  if (btn._lastShow !== show) { btn._lastShow = show; btn.classList.toggle('show', show); }
 }
 
 /* ---------- focus rail: dept billboard + activity rows; agent CHAT & ACTIVITY slide-over ---------- */
@@ -646,17 +650,25 @@ function renderChat(id) {
   mMsgs.scrollTop = mMsgs.scrollHeight;
 }
 function renderActivity(id) {
-  const r = R[id], v = r.v1;
-  const task = rnd(v.tasks || ['Working through the queue'])
-    .replace('{co}', rnd(P.co)).replace('{person}', person()).replace('{count}', ri(3, 9));
+  const r = R[id], v = r.v1 || {};
+  const tasksArr = (v.tasks && v.tasks.length) ? v.tasks : ['Working through the queue'];
+  const rawTask = rnd(tasksArr) || 'Working through the queue';
+  const task = rawTask
+    .replace('{co}', rnd(P.co) || 'Client')
+    .replace('{person}', person())
+    .replace('{count}', ri(3, 9));
   document.getElementById('mNow').innerHTML = `NOW &nbsp;<b>${esc(task)}</b>`;
   document.getElementById('mStats').innerHTML = (v.stats || []).map(([l, val]) => `
     <div class="st"><div class="st-l">${esc(l)}</div><div class="st-v">${esc(String(typeof val === 'function' ? val() : val))}</div></div>`).join('');
   const chip = DEPTS[r.a.dept].chip;
-  const mx = Math.max(...(v.chart || [1]));
-  document.querySelector('#mChart .ch-lbl').textContent = v.chartLbl || '';
-  document.querySelector('#mChart .ch-bars').innerHTML = (v.chart || []).map(n =>
-    `<i style="height:${Math.round(n / mx * 100)}%;background:${chip}"></i>`).join('');
+  const mx = Math.max(...(v.chart && v.chart.length ? v.chart : [1]));
+  const chLbl = document.querySelector('#mChart .ch-lbl');
+  if (chLbl) chLbl.textContent = v.chartLbl || '';
+  const chBars = document.querySelector('#mChart .ch-bars');
+  if (chBars) {
+    chBars.innerHTML = (v.chart || []).map(n =>
+      `<i style="height:${Math.round(n / mx * 100)}%;background:${chip}"></i>`).join('');
+  }
   document.getElementById('mFeed').innerHTML = r.feed.map(f => `
     <div class="fe"><span class="fi">${f.i}</span><span>${esc(f.text)}</span><span class="ft">${ago(f.ts)}</span></div>`).join('');
 }
@@ -787,9 +799,9 @@ function openAgentRail(id, tab = 'chat', fly = true) {
   document.querySelector('#railAgent .mh-dot').style.background = dept.chip;
   document.querySelector('#railAgent .mh-name').innerHTML =
     (r.a.lead ? '<span class="star">★ </span>' : '') + r.a.name;
-  document.querySelector('#railAgent .mh-role').textContent = `${r.v1.role} · ${dept.name}`;
-  document.querySelector('#railAgent .mh-tag').textContent = r.v1.tagline;
-  document.getElementById('mChips').innerHTML = (r.v1.chips || []).map(c =>
+  document.querySelector('#railAgent .mh-role').textContent = `${r.v1?.role || 'Agent'} · ${dept.name}`;
+  document.querySelector('#railAgent .mh-tag').textContent = r.v1?.tagline || '';
+  document.getElementById('mChips').innerHTML = (r.v1?.chips || []).map(c =>
     `<button>${esc(c)}</button>`).join('');
   document.getElementById('mChips').querySelectorAll('button').forEach(b =>
     b.addEventListener('click', () => sendChat(b.textContent)));
@@ -1067,9 +1079,11 @@ let nextEmoteAt = performance.now() + 2000;
 
 function planMeeting(now) {
   const ids = Object.keys(R).filter(id => R[id].state === 'working');
+  if (ids.length < 2) return;
   const a = R[ids[Math.floor(Math.random() * ids.length)]];
-  let b = a;
-  while (b.a.dept === a.a.dept) b = R[ids[Math.floor(Math.random() * ids.length)]];
+  const diffDept = ids.filter(id => R[id].a.dept !== a.a.dept);
+  if (!diffDept.length) return;
+  const b = R[diffDept[Math.floor(Math.random() * diffDept.length)]];
   for (const [i, r] of [a, b].entries()) {
     const d = deptRT[r.a.dept];
     const stand = new THREE.Vector3(2 + (i ? 3.4 : -3.4), 0.12, 2 + 2.6);
@@ -1284,6 +1298,17 @@ function toScreen(p) {
 }
 function smooth(a, b, x) { const t = clamp((x - a) / (b - a), 0, 1); return t * t * (3 - 2 * t); }
 
+// Cache badge dimensions on resize to avoid forced reflow (offsetHeight/Width) every rAF frame
+const _badgeDims = new Map();
+function cacheBadgeDims() {
+  for (const [k, d] of Object.entries(deptRT)) {
+    _badgeDims.set(k, { w: d.badge.offsetWidth, h: d.badge.offsetHeight });
+  }
+}
+addEventListener('resize', cacheBadgeDims);
+// Initial cache after first paint
+requestAnimationFrame(cacheBadgeDims);
+
 function tickLOD() {
   const z = view.zoom;
   const detail = smooth(1.75, 2.5, z);
@@ -1293,8 +1318,12 @@ function tickLOD() {
   for (const [k, d] of Object.entries(deptRT)) {
     if (focused === k && k !== 'brain') continue; // this billboard is docked in the rail
     let [sx, sy] = toScreen(d.badgeAnchor);
-    // keep billboards fully on screen (camera-readability rule)
-    const bh = d.badge.offsetHeight * badgeScale, bw = d.badge.offsetWidth * badgeScale;
+    let bdim = _badgeDims.get(k);
+    if (!bdim) {
+      bdim = { w: d.badge.offsetWidth || 138, h: d.badge.offsetHeight || 140 };
+      _badgeDims.set(k, bdim);
+    }
+    const bh = bdim.h * badgeScale, bw = bdim.w * badgeScale;
     let xf;
     if (d.sideBadge) { // anchored by an edge, vertically centred (emails/sales/fin/delivery)
       const rightEdge = innerWidth - ((tasks ? tasks.panelWidth() : 400) + 26); // V3.3: never under the panel
@@ -1307,19 +1336,22 @@ function tickLOD() {
       sx = clamp(sx, bw / 2 + 8, rightEdge - bw / 2);
       xf = 'translate(-50%,-100%)';
     }
-    d.badge.style.transform = `translate(${sx}px,${sy}px) ${xf} scale(${badgeScale})`;
-    d.badge.style.opacity = 1 - 0.75 * focusDim; // unfocused boards recede with the scene
-    d.badge.style.pointerEvents = 'auto';
+    const tf = `translate(${sx | 0}px,${sy | 0}px) ${xf} scale(${badgeScale.toFixed(4)})`;
+    const op = (1 - 0.75 * focusDim).toFixed(3);
+    if (d.badge._lastTf !== tf) { d.badge._lastTf = tf; d.badge.style.transform = tf; }
+    if (d.badge._lastOp !== op) { d.badge._lastOp = op; d.badge.style.opacity = op; d.badge.style.pointerEvents = 'auto'; }
   }
   // name pills stay on at EVERY zoom (AJ's call) — smaller when far, full-size when near
   const pillScale = 0.62 + 0.38 * smooth(1.2, 2.4, z);
   for (const r of Object.values(R)) {
     const p = r.person.position;
     const [sx, sy] = toScreen(v3.set(p.x, p.y + 5.9 * (r.a.lead ? 1.12 : 1), p.z).clone());
-    r.pill.style.display = 'block';
-    r.pill.style.transform = `translate(${sx}px,${sy}px) translate(-50%,-100%) scale(${pillScale})`;
+    const tf = `translate(${sx | 0}px,${sy | 0}px) translate(-50%,-100%) scale(${pillScale.toFixed(4)})`;
     const dimmed = focused && focused !== 'brain' && r.a.dept !== focused;
-    r.pill.style.opacity = dimmed ? 1 - 0.85 * focusDim : 1;
+    const op = (dimmed ? 1 - 0.85 * focusDim : 1).toFixed(3);
+    r.pill.style.display = 'block';
+    if (r.pill._lastTf !== tf) { r.pill._lastTf = tf; r.pill.style.transform = tf; }
+    if (r.pill._lastOp !== op) { r.pill._lastOp = op; r.pill.style.opacity = op; }
   }
 }
 
@@ -1383,6 +1415,7 @@ if (HERO && HERO.target) { view.target.set(...HERO.target); view.zoom = HERO.zoo
 
 /* ---------- boot ---------- */
 function resize() {
+  renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
   renderer.setSize(innerWidth, innerHeight);
   applyCamera();
 }

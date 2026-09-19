@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+<head>
 <meta charset="utf-8">
 <title>Sales Operating System — AI Command Centre</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -233,16 +234,10 @@
     0%, 100% { box-shadow: 0 0 0 0 rgba(242,184,75,0); }
     50% { box-shadow: 0 0 0 6px rgba(242,184,75,.25); }
   }
-  #topCal { /* V3.2.1: the calendar button beside the approval counter */
-    display: inline-flex; align-items: center; gap: 5px; cursor: pointer; margin-right: 8px;
-    font-family: var(--ui); font-size: 10px; font-weight: 700; letter-spacing: .14em; color: var(--ink);
-    background: color-mix(in srgb, var(--cream) 94%, transparent); border: 1px solid var(--hairline); border-radius: 99px; padding: 5px 12px;
-    transition: all .3s var(--ease);
-  }
-  #topCal:hover, body.calOpen #topCal { background: var(--ink); color: var(--cream); border-color: var(--ink); }
+  body.calOpen #topCal { background: var(--ink); color: var(--cream); border-color: var(--ink); }
   body.dark #topCal { background: #1B1C21; }
   #topAppr {
-    align-items: center; gap: 5px; cursor: pointer;
+    display: none; align-items: center; gap: 5px; cursor: pointer;
     font-size: 12px; font-weight: 600; letter-spacing: .06em;
     background: rgba(242,184,75,.18); border: 1px solid rgba(242,184,75,.55);
     border-radius: 99px; padding: 4px 12px;
@@ -1264,7 +1259,7 @@
 
   /* Responsive Viewports */
   @media (max-width: 1200px) {
-    #topconn { display: none !important; }
+    body:not(.railLeft) #topconn { display: none; }
     #wires { display: none !important; }
     #zoomCtl { bottom: 70px; }
   }
@@ -1282,18 +1277,46 @@
     .agent-live-badge { display: none; }
     #topmodels { display: none !important; }
   }
-  @media (max-width: 650px) {
-    #topbar { height: 48px; gap: 5px; padding: 0 8px; }
-    #topbar .brand { font-size: 16px; }
-    #topbar .brand .ver { display: none; }
-    #topStoreBtn, #topCatalogBtn, #topConnBtn, #themeToggleBtn, #panelToggleBtn, #topCal {
-      padding: 0 7px;
-      font-size: 9px;
-      height: 25px;
+  @media (max-width: 900px) {
+    #tpanel {
+      width: min(380px, 92vw);
+      top: 60px;
+      right: 12px;
+      bottom: 12px;
     }
+    #topbar {
+      padding: 0 12px;
+      gap: 8px;
+    }
+    .agent-live-badge { display: none; }
+    #topmodels { display: none !important; }
+  }
+  @media (max-width: 650px) {
+    #topbar { height: 48px; gap: 4px; padding: 0 8px; }
+    #topbar .brand { font-size: 16px; }
+    #topbar .brand .ver, #topbar .brand .co { display: none; }
+    /* On mobile, keep only: brand, Storefront, Theme toggle, Panel toggle */
+    #topCatalogBtn, #topConnBtn, #topCal { display: none !important; }
+    #topStoreBtn { padding: 0 8px; font-size: 9px; height: 26px; }
+    #themeToggleBtn .theme-text, #panelToggleBtn .panel-text { display: none; }
+    #themeToggleBtn, #panelToggleBtn { padding: 0 8px; height: 26px; }
     .badge-pill { display: none; }
     #clock { display: none; }
     #zoomCtl { display: none; }
+    /* Task panel becomes a bottom sheet on phones */
+    #tpanel {
+      width: 100vw; right: 0; left: 0; bottom: 0; top: auto;
+      border-radius: 18px 18px 0 0; border: none;
+      border-top: 1px solid var(--hairline);
+      max-height: 55vh;
+      box-shadow: 0 -12px 40px rgba(21,20,20,.18);
+    }
+    body.panelCollapsed #tpanel {
+      transform: translateY(calc(100% + 20px));
+    }
+    /* Rail takes full width on mobile */
+    #rail { width: 100vw; }
+    #rail.left { border-right: none; box-shadow: 0 6px 30px rgba(21,20,20,.18); }
   }
 </style>
 </head>
@@ -1484,7 +1507,7 @@
           </div>
           <div style="display:flex; gap:8px; align-items:center; background:rgba(0,0,0,0.3); border:1px solid rgba(255,255,255,0.08); border-radius:8px; padding:6px 10px;">
             <span style="font-size:12px; color:#94a3b8; white-space:nowrap; width:100px;">API Token:</span>
-            <input id="shopifyApiToken" type="password" placeholder="shpat_••••••••••••••••••••" style="flex:1; background:transparent; border:none; color:#fff; font-size:12px; font-family:inherit; outline:none;" />
+            <input id="shopifyApiToken" type="password" autocomplete="new-password" spellcheck="false" placeholder="shpat_••••••••••••••••••••" style="flex:1; background:transparent; border:none; color:#fff; font-size:12px; font-family:inherit; outline:none;" />
             <button id="saveShopifyBtn" style="background:#22c55e; border:none; color:#000; font-weight:700; font-size:11px; padding:6px 14px; border-radius:6px; cursor:pointer;">UPDATE</button>
           </div>
         </div>
@@ -1833,12 +1856,17 @@
         });
       }
 
-      // Theme toggle (dark/light)
+      // Theme toggle (dark/light) — must sync both CSS classes AND the Three.js scene
       const themeBtn = document.getElementById('themeToggleBtn');
       if (themeBtn) {
         themeBtn.addEventListener('click', function() {
-          document.body.classList.toggle('dark');
-          const isDark = document.body.classList.contains('dark');
+          const isDark = !document.body.classList.contains('dark');
+          // Use the main.js API so the Three.js scene re-tints (plinths, floors, lights, wires)
+          if (window.CC && window.CC.setDark) {
+            window.CC.setDark(isDark);
+          } else {
+            document.body.classList.toggle('dark', isDark);
+          }
           localStorage.setItem('sunnyeora_theme', isDark ? 'dark' : 'light');
         });
       }
@@ -1852,10 +1880,18 @@
         });
       }
     }
-    // Immediate theme restoration
+    // Immediate theme restoration — apply CSS class before paint for no flash
     try {
       if (localStorage.getItem('sunnyeora_theme') === 'dark') {
         document.body.classList.add('dark');
+        // Defer Three.js scene re-tint until CC (main.js) is fully initialised
+        var _themeRestoreInterval = setInterval(function() {
+          if (window.CC && window.CC.setDark) {
+            clearInterval(_themeRestoreInterval);
+            window.CC.setDark(true);
+          }
+        }, 80);
+        setTimeout(function() { clearInterval(_themeRestoreInterval); }, 5000);
       }
     } catch(e) {}
 
