@@ -439,6 +439,37 @@ const server = http.createServer(async (req, res) => {
     if (url.pathname === '/api/mcp') { if (url.searchParams.get('refresh') === '1') await mcp.discover(); else await discovering; return json(res, 200, { ...mcp.summary(), tools: backend === 'claude-cli' }); }
     if (url.pathname === '/api/brain') return json(res, 200, graph);
     if (url.pathname === '/api/usage') return json(res, 200, await getUsage(url.searchParams.get('refresh') === '1')); // V3.6: the plan's gauge (never a 500: unavailable is an answer)
+    if (url.pathname === '/api/composio') {
+      if (req.method === 'POST') {
+        const b = await body(req);
+        if (b && b.apiKey) {
+          const key = String(b.apiKey).trim();
+          process.env.COMPOSIO_API_KEY = key;
+          try {
+            const envPath = path.join(ROOT, '.env');
+            let envContent = '';
+            try { envContent = fs.readFileSync(envPath, 'utf8'); } catch (e) {}
+            if (envContent.includes('COMPOSIO_API_KEY=')) {
+              envContent = envContent.replace(/COMPOSIO_API_KEY=.*/g, `COMPOSIO_API_KEY=${key}`);
+            } else {
+              envContent = (envContent ? envContent.trim() + '\n' : '') + `COMPOSIO_API_KEY=${key}\n`;
+            }
+            fs.writeFileSync(envPath, envContent, 'utf8');
+          } catch (e) {
+            console.warn('Could not persist to .env:', e.message);
+          }
+        }
+        return json(res, 200, { ok: true, configured: true });
+      }
+      const hasKey = !!(process.env.COMPOSIO_API_KEY && process.env.COMPOSIO_API_KEY.length > 5);
+      const maskedKey = hasKey ? (process.env.COMPOSIO_API_KEY.slice(0, 6) + '...' + process.env.COMPOSIO_API_KEY.slice(-4)) : null;
+      return json(res, 200, {
+        ok: true,
+        configured: hasKey,
+        maskedKey,
+        dashboardUrl: 'https://dashboard.composio.dev/'
+      });
+    }
     if (url.pathname === '/api/tasks' && req.method === 'GET') return json(res, 200, load());
     if (url.pathname === '/api/routines' && req.method === 'GET') return json(res, 200, routinesOut());
     if (url.pathname === '/api/routines' && req.method === 'POST') {

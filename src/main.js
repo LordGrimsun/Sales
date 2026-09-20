@@ -445,7 +445,21 @@ function worldAt(nx, ny) {
 let focused = null; // dept key when zoomed into a dept
 
 addEventListener('wheel', (e) => {
-  if (e.target.closest && e.target.closest('#rail')) return; // let the rail scroll
+  // Let modals, popups, inputs, task panel, and drawer scroll naturally
+  if (e.target.closest && (
+    e.target.closest('#connModal') ||
+    e.target.closest('#catalogModal') ||
+    e.target.closest('#tpanel') ||
+    e.target.closest('#rail') ||
+    e.target.closest('.drawer-menu') ||
+    e.target.closest('.tp-rows') ||
+    e.target.closest('input, textarea, select')
+  )) return;
+  const connM = document.getElementById('connModal');
+  if (connM && connM.style.display !== 'none') return;
+  const catM = document.getElementById('catalogModal');
+  if (catM && catM.style.display !== 'none') return;
+
   e.preventDefault();
   tween = null;
   view.arc = 0;

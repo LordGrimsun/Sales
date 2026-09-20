@@ -231,13 +231,30 @@ export default async function handler(req, res) {
       if (req.method === 'POST') {
         const b = await getBody(req);
         if (b && b.apiKey) {
-          process.env.COMPOSIO_API_KEY = String(b.apiKey).trim();
+          const key = String(b.apiKey).trim();
+          process.env.COMPOSIO_API_KEY = key;
+          try {
+            const envPath = path.join(ROOT, '.env');
+            let envContent = '';
+            try { envContent = fs.readFileSync(envPath, 'utf8'); } catch (e) {}
+            if (envContent.includes('COMPOSIO_API_KEY=')) {
+              envContent = envContent.replace(/COMPOSIO_API_KEY=.*/g, `COMPOSIO_API_KEY=${key}`);
+            } else {
+              envContent = (envContent ? envContent.trim() + '\n' : '') + `COMPOSIO_API_KEY=${key}\n`;
+            }
+            fs.writeFileSync(envPath, envContent, 'utf8');
+          } catch (e) {
+            console.warn('Could not persist to .env:', e.message);
+          }
         }
         return json(res, 200, { ok: true, configured: true });
       }
+      const hasKey = !!(process.env.COMPOSIO_API_KEY && process.env.COMPOSIO_API_KEY.length > 5);
+      const maskedKey = hasKey ? (process.env.COMPOSIO_API_KEY.slice(0, 6) + '...' + process.env.COMPOSIO_API_KEY.slice(-4)) : null;
       return json(res, 200, {
         ok: true,
-        configured: !!(process.env.COMPOSIO_API_KEY && process.env.COMPOSIO_API_KEY.length > 5),
+        configured: hasKey,
+        maskedKey,
         dashboardUrl: 'https://dashboard.composio.dev/'
       });
     }

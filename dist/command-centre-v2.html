@@ -1484,7 +1484,7 @@
 
 <!-- Sunnyeora Integrations & Platform Connections Modal -->
 <div id="connModal" style="display:none; position:fixed; inset:0; z-index:99999; background:rgba(8,10,14,0.85); backdrop-filter:blur(8px); align-items:center; justify-content:center; padding:16px;">
-  <div style="background:#11141a; border:1px solid rgba(255,255,255,0.12); border-radius:16px; max-width:800px; width:100%; max-height:92vh; overflow-y:auto; box-shadow:0 30px 80px rgba(0,0,0,0.7); color:#e2e8f0; padding:28px; position:relative; font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
+  <div id="connModalDialog" style="background:#11141a; border:1px solid rgba(255,255,255,0.12); border-radius:16px; max-width:800px; width:100%; max-height:90vh; overflow-y:auto; overscroll-behavior:contain; -webkit-overflow-scrolling:touch; scrollbar-width:thin; scrollbar-color:rgba(255,255,255,0.3) rgba(0,0,0,0.2); box-shadow:0 30px 80px rgba(0,0,0,0.7); color:#e2e8f0; padding:28px; position:relative; font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
     <button id="connClose" style="position:absolute; top:20px; right:20px; background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.1); color:#94a3b8; border-radius:8px; width:32px; height:32px; cursor:pointer; font-size:16px; display:flex; align-items:center; justify-content:center;">✕</button>
     
     <div style="display:flex; align-items:center; gap:10px; margin-bottom:6px;">
@@ -1506,11 +1506,18 @@
         </div>
         <a href="https://dashboard.composio.dev/settings/api-keys" target="_blank" rel="noopener" style="color:#fde047; font-size:11px; text-decoration:none; font-weight:700;">Get Key from Composio ↗</a>
       </div>
-      <div style="display:flex; gap:8px; align-items:center;">
-        <input id="composioApiKeyInput" type="password" placeholder="Paste your COMPOSIO_API_KEY (comp_... or ck_...)" style="flex:1; background:rgba(0,0,0,0.4); border:1px solid rgba(255,255,255,0.15); border-radius:8px; padding:8px 12px; color:#fff; font-size:12px; font-family:monospace; outline:none;" />
-        <button id="saveComposioBtn" style="background:#eab308; color:#000; font-weight:800; border:none; padding:8px 16px; border-radius:8px; font-size:12px; cursor:pointer;">SAVE KEY</button>
+      <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
+        <div style="flex:1; min-width:260px; position:relative; display:flex; align-items:center;">
+          <input id="composioApiKeyInput" type="text" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Paste your COMPOSIO_API_KEY (comp_... or ck_...)" style="width:100%; background:rgba(0,0,0,0.5); border:1px solid rgba(255,255,255,0.22); border-radius:8px; padding:9px 40px 9px 12px; color:#fff; font-size:12.5px; font-family:monospace; outline:none; user-select:text !important; -webkit-user-select:text !important;" />
+          <button id="toggleKeyVisBtn" type="button" title="Toggle visibility" style="position:absolute; right:8px; background:none; border:none; color:#94a3b8; cursor:pointer; font-size:15px; padding:4px;">👁</button>
+        </div>
+        <button id="pasteComposioBtn" type="button" style="background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2); color:#fff; font-weight:700; padding:9px 14px; border-radius:8px; font-size:12px; cursor:pointer; display:flex; align-items:center; gap:6px;">📋 PASTE</button>
+        <button id="saveComposioBtn" type="button" style="background:#eab308; color:#000; font-weight:800; border:none; padding:10px 18px; border-radius:8px; font-size:12px; cursor:pointer;">SAVE KEY</button>
       </div>
-      <div id="composioKeySavedMsg" style="display:none; color:#4ade80; font-size:11.5px; margin-top:8px; font-weight:700;">✓ Composio API Key active! Agents authorized for autonomous role-based execution.</div>
+      <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; margin-top:8px;">
+        <div id="composioKeySavedMsg" style="display:none; color:#4ade80; font-size:11.5px; font-weight:700;">✓ Composio API Key active! Agents authorized for autonomous role-based execution.</div>
+        <div style="color:#94a3b8; font-size:10.5px;">💡 Tip: You can also paste directly into <code>.env</code> file as <code>COMPOSIO_API_KEY=comp_...</code></div>
+      </div>
     </div>
 
     <!-- Integrations Grid -->
@@ -2112,11 +2119,73 @@
         const compInput = document.getElementById('composioApiKeyInput');
         const compSaveBtn = document.getElementById('saveComposioBtn');
         const compSavedMsg = document.getElementById('composioKeySavedMsg');
+        const toggleKeyVisBtn = document.getElementById('toggleKeyVisBtn');
+        const pasteCompBtn = document.getElementById('pasteComposioBtn');
+        const connModalDialog = document.getElementById('connModalDialog');
+
+        // Ensure mouse wheel always scrolls modal content smoothly
+        if (connModalDialog) {
+          connModalDialog.addEventListener('wheel', function(e) {
+            e.stopPropagation();
+          }, { passive: true });
+        }
+
+        // Toggle visibility between text and password
+        if (toggleKeyVisBtn && compInput) {
+          let isText = true;
+          toggleKeyVisBtn.addEventListener('click', function() {
+            isText = !isText;
+            compInput.type = isText ? 'text' : 'password';
+            toggleKeyVisBtn.textContent = isText ? '👁' : '🔒';
+          });
+        }
+
+        // One-click paste from clipboard
+        if (pasteCompBtn && compInput) {
+          pasteCompBtn.addEventListener('click', async function() {
+            try {
+              if (navigator.clipboard && navigator.clipboard.readText) {
+                const text = await navigator.clipboard.readText();
+                if (text && text.trim()) {
+                  compInput.value = text.trim();
+                  compInput.dispatchEvent(new Event('input', { bubbles: true }));
+                  pasteCompBtn.textContent = 'PASTED ✓';
+                  setTimeout(function() { pasteCompBtn.innerHTML = '📋 PASTE'; }, 1500);
+                  return;
+                }
+              }
+            } catch (err) {}
+            // Fallback: focus and prompt
+            compInput.focus();
+            compInput.select();
+            pasteCompBtn.textContent = 'PRESS CTRL+V';
+            setTimeout(function() { pasteCompBtn.innerHTML = '📋 PASTE'; }, 2000);
+          });
+        }
+
+        // Load saved key from localStorage or backend
         try {
           const savedCompKey = localStorage.getItem('composio_api_key');
           if (savedCompKey && compInput) {
             compInput.value = savedCompKey;
             if (compSavedMsg) compSavedMsg.style.display = 'block';
+          }
+        } catch(e) {}
+
+        // Check backend configuration
+        try {
+          if (location.protocol !== 'file:') {
+            fetch('/api/composio')
+              .then(function(r) { return r.json(); })
+              .then(function(data) {
+                if (data && data.configured) {
+                  if (compSavedMsg) compSavedMsg.style.display = 'block';
+                  if (!compInput.value && data.maskedKey) {
+                    compInput.placeholder = 'Configured (' + data.maskedKey + ')';
+                  }
+                }
+              })
+              .catch(function() {});
           }
         } catch(e) {}
 
@@ -2130,13 +2199,15 @@
             if (compSavedMsg) compSavedMsg.style.display = 'block';
             compSaveBtn.textContent = 'SAVED ✔';
             setTimeout(function() { compSaveBtn.textContent = 'SAVE KEY'; }, 2000);
-            try {
-              fetch('/api/composio', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ apiKey: val })
-              }).catch(function() {});
-            } catch(e) {}
+            if (location.protocol !== 'file:') {
+              try {
+                fetch('/api/composio', {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify({ apiKey: val })
+                }).catch(function() {});
+              } catch(e) {}
+            }
           });
         }
       }
@@ -6736,7 +6807,7 @@ Done today: ${ke[W]}. Say "add task: \u2026" to put something on the list.`}retu
     <div class="b-metrics">${Ta[i].map((r,a)=>`
       <div class="m-row"><span class="m-lab">${r[0]}</span><span class="m-val" data-m="${i}-${a}">${r[1]()}</span></div>`).join("")}
     </div>
-    <div class="b-appr" style="display:none">\u26A0 <span class="ap-n">1</span> WAITING APPROVAL</div>`,n.addEventListener("click",r=>{r.target.closest(".b-appr")?(_f(i),r.stopPropagation()):r.target.closest(".b-tasks")&&et?(et.openFor(i),r.stopPropagation()):Jx(i)}),i==="brain"&&(n.className="badge brainTag",n.innerHTML=`<div class="b-name"><span class="dot" style="background:${e.chip}"></span>THE BRAIN<b>${Dn.state.notes.toLocaleString("en-NZ")}</b>NOTES</div>`,n.onclick=r=>{r.stopPropagation(),Dn.open()},n.title="open the Brain (G)"),Kd.appendChild(n),Ut[i].badge=n,Ut[i].vals=Ta[i].map(r=>String(r[1]())),Ut[i].apprRow=n.querySelector(".b-appr"),Ut[i].apprN=n.querySelector(".ap-n");let s={marketing:[-36,8.6,13.4],emails:[-30,8.6,-32.6],delivery:[0,10.6,-57.6],sales:[48,8.6,-32],ops:[-13.5,4,54],fin:[43.5,4,17],brain:[-5.5,3.2,-5.5]};Ut[i].badgeAnchor=new D(...s[i]),i==="fin"&&(Ut[i].sideBadge=!0),i==="ops"&&(Ut[i].sideBadge=!0,Ut[i].sideLeft=!0)}function DT(){for(let i of Object.keys(Ta))Ta[i].forEach((e,t)=>{let n=String(e[1]());if(n!==Ut[i].vals[t]){Ut[i].vals[t]=n;let s=Ut[i].badge.querySelector(`[data-m="${i}-${t}"]`);if(!s)return;s.textContent=n,s.classList.remove("flash"),s.offsetWidth,s.classList.add("flash");let r=document.querySelector(`[data-rm="${i}-${t}"]`);r&&(r.textContent=n,r.classList.remove("flash"),r.offsetWidth,r.classList.add("flash"))}})}var sc=NT();sc.position.set(2,5.4,2);sc.visible=!1;Nn.add(sc);function NT(){let i=document.createElement("canvas");i.width=i.height=128;let e=i.getContext("2d");e.font="96px serif",e.textAlign="center",e.textBaseline="middle",e.fillText("\u{1F4AC}",64,70);let t=new Rn(i);t.colorSpace=Vt;let n=new Cn(new yn({map:t,depthTest:!1}));return n.scale.set(4,4,1),n}var Tr=new Oo,OT=new gi(new D(0,1,0),0);function Of(i,e){Tr.setFromCamera(new Ne(i,e),Xn);let t=new D;return Tr.ray.intersectPlane(OT,t),t}var ut=null;addEventListener("wheel",i=>{if(i.target.closest&&i.target.closest("#rail"))return;i.preventDefault(),kn=null,Dt.arc=0;let e=i.clientX/innerWidth*2-1,t=-(i.clientY/innerHeight)*2+1,n=Of(e,t);Dt.zoom=Er(Dt.zoom*Math.exp(-i.deltaY*.0032),.72,5.2),Hf();let s=Of(e,t);n&&s&&Dt.target.add(n.sub(s)),Dt.zoom<1.6&&ut&&(ut==="brain"?ut=null:zg(!1)),Cr()},{passive:!1});var hi=null;zf.addEventListener("pointerdown",i=>{hi={x:i.clientX,y:i.clientY,moved:!1}});addEventListener("pointermove",i=>{if(!hi)return;let e=i.clientX-hi.x,t=i.clientY-hi.y;if(Math.abs(e)+Math.abs(t)>4&&(hi.moved=!0),hi.moved){kn=null;let n=Of(hi.x/innerWidth*2-1,-(hi.y/innerHeight)*2+1),s=Of(i.clientX/innerWidth*2-1,-(i.clientY/innerHeight)*2+1);n&&s&&Dt.target.add(n.sub(s)),hi.x=i.clientX,hi.y=i.clientY}});addEventListener("pointerup",i=>{let e=hi&&hi.moved;if(hi=null,e||i.target!==zf)return;let t=i.clientX/innerWidth*2-1,n=-(i.clientY/innerHeight)*2+1;Tr.setFromCamera(new Ne(t,n),Xn);let s=Tr.intersectObjects(Zi.sprites,!1);if(s.length){Zi.showTip(s[0].object,i.clientX,i.clientY,performance.now());return}let r=Tr.intersectObjects(Yx,!1);if(r.length){Vf(r[0].object.userData.agentId,"chat");return}let a=Tr.intersectObjects(Ng,!1);if(a.length){let o=a[0].object.userData.dept;if(o==="brain"){Dn.open();return}o!==ut&&Rr(o)}});addEventListener("keydown",i=>{if(!/^(INPUT|TEXTAREA|SELECT)$/.test(i.target.tagName))if(i.key==="Escape")et&&et.calendar&&et.calendar.isOpen()?et.calendar.popOpen()?et.calendar.closePop():et.calendar.close():Dn.isOpen()?Dn.close():et&&et.isOpen()?et.close():oc();else if(i.key==="p"||i.key==="P")et&&et.calendar&&et.calendar.toggle();else{if(et&&et.calendar&&et.calendar.isOpen())return;if(i.key==="g"||i.key==="G")Dn.toggle();else if(i.key==="b"||i.key==="B")et&&et.toggle();else if(i.key==="+"||i.key==="=")Uf(1.5);else if(i.key==="-"||i.key==="_")Uf(1/1.5);else if(i.key==="0")oc();else if(i.key==="x"||i.key==="X")ys||qT(performance.now());else if(i.key>="1"&&i.key<="6"){let e=["marketing","emails","sales","ops","fin","delivery"][+i.key-1];ut!==e&&Rr(e)}else if(i.key==="c"||i.key==="C"){if(ut&&ut!=="brain"){let e=Jt.find(t=>t.dept===ut&&t.lead)||Jt.find(t=>t.dept===ut);e&&Ir(e.id,"chat")}}else i.key==="v"||i.key==="V"?Fg(!document.body.classList.contains("cam")):i.key==="d"||i.key==="D"?_d(!di):(i.key==="w"||i.key==="W")&&Zd("apay")}});function Fg(i){document.body.classList.toggle("cam",!!i)}var di=!1,zx={plinth:2895147,walkway:3158576,ground:1776666};function UT(i,e,t){let n=new Je(i);return new Je(e).lerp(n,t)}function _d(i){di=!!i,document.body.classList.toggle("dark",di),Og(),Vd.clear(),Nn.traverse(e=>{if(!e.isMesh||!e.userData.part)return;let t=e.material;t.userData.base||(t.userData.base=t.color.clone()),e.userData.part==="plinth"?t.color.set(di?zx.plinth:t.userData.base):e.userData.part==="walkway"?t.color.set(di?zx.walkway:t.userData.base):e.userData.part==="floor"&&t.color.copy(di?UT(e.userData.chip,"#1b1c1a",e.userData.dept==="brain"?.07:.22):t.userData.base)}),Pf.color.set(di?9344419:16646136),Pf.groundColor.set(di?1316122:14210248),Pf.intensity=di?.75:.85,ui.color.set(di?15002098:16773597),ui.intensity=di?1.5:2.2,Yd.material.opacity=di?.35:.13,ut&&ut!=="brain"&&Zx(ut),Dn&&Dn.setTheme(di),Zi.setDark(di)}zf.addEventListener("dblclick",i=>{let e=i.clientX/innerWidth*2-1,t=-(i.clientY/innerHeight)*2+1;Tr.setFromCamera(new Ne(e,t),Xn),Tr.intersectObjects(Ng,!1).length||oc()});function Uf(i){js([Dt.target.x,0,Dt.target.z],Er(Dt.zoom*i,.72,5.2),350),Dt.zoom*i<1.6&&ut&&(ut==="brain"?ut=null:zg(!1)),Cr()}document.getElementById("zIn").addEventListener("click",()=>Uf(1.5));document.getElementById("zOut").addEventListener("click",()=>Uf(1/1.5));document.getElementById("zHome").addEventListener("click",oc);function Jx(i){Rr(i)}function oc(){if(ut&&ut!=="brain"){zg(!0);return}ut=null,js(qd(),Ea.zoom,550),Cr()}document.getElementById("overviewBtn").addEventListener("click",oc);function Cr(){let i=document.getElementById("overviewBtn"),e=Dt.zoom>1.45&&!(kn&&kn.toZ<=Ea.zoom+.05)||!!ut;i._lastShow!==e&&(i._lastShow=e,i.classList.toggle("show",e))}var An={},Ks=document.getElementById("rail"),Qx=document.getElementById("vignette"),ic=document.getElementById("mMsgs"),Ji=null,jd="chat",Ma={marketing:"left",emails:"left",sales:"left",ops:"left",fin:"left",delivery:"left"},Hx=new D(1,0,-1).normalize();function $x(i){if(An[i])return;let e=typeof location<"u"&&(new URLSearchParams(location.search).has("demo")||new URLSearchParams(location.search).get("s")==="check"),t=At[i].a,n=t.role||At[i].v1?.role||"Lead Specialist",s=t.does||At[i].v1?.tagline||"",r=e?At[i].v1?.greeting||`Hey! I'm ${t.name} (${n}).`:`Hey! I'm ${t.name}, ${n} in ${t.dept?.toUpperCase()}.${s?" "+s:""} Ask me anything here, or type a task in the command bar.`;An[i]=[{who:"agent",text:r},{who:"work",i:"\u23FA",text:"session attached \u2014 live work stream below"}],e&&Mr[i]&&!(et&&et.isLive())&&An[i].push({who:"file",...Mr[i]()})}function Pi(i,e){$x(i),An[i].push(e),An[i].length>80&&An[i].splice(2,1),Ji===i&&jd==="chat"&&eb(i)}function eb(i){let e=At[i];ic.innerHTML=An[i].map((t,n)=>t.who==="agent"?`<div class="m-agent">${Ln(t.text)}</div>`:t.who==="user"?`<div class="m-user">${Ln(t.text)}</div>`:t.who==="work"?`<div class="m-work"><span class="wi">${t.i||"\u25B8"}</span>${Ln(t.text)}</div>`:t.who==="file"?`
+    <div class="b-appr" style="display:none">\u26A0 <span class="ap-n">1</span> WAITING APPROVAL</div>`,n.addEventListener("click",r=>{r.target.closest(".b-appr")?(_f(i),r.stopPropagation()):r.target.closest(".b-tasks")&&et?(et.openFor(i),r.stopPropagation()):Jx(i)}),i==="brain"&&(n.className="badge brainTag",n.innerHTML=`<div class="b-name"><span class="dot" style="background:${e.chip}"></span>THE BRAIN<b>${Dn.state.notes.toLocaleString("en-NZ")}</b>NOTES</div>`,n.onclick=r=>{r.stopPropagation(),Dn.open()},n.title="open the Brain (G)"),Kd.appendChild(n),Ut[i].badge=n,Ut[i].vals=Ta[i].map(r=>String(r[1]())),Ut[i].apprRow=n.querySelector(".b-appr"),Ut[i].apprN=n.querySelector(".ap-n");let s={marketing:[-36,8.6,13.4],emails:[-30,8.6,-32.6],delivery:[0,10.6,-57.6],sales:[48,8.6,-32],ops:[-13.5,4,54],fin:[43.5,4,17],brain:[-5.5,3.2,-5.5]};Ut[i].badgeAnchor=new D(...s[i]),i==="fin"&&(Ut[i].sideBadge=!0),i==="ops"&&(Ut[i].sideBadge=!0,Ut[i].sideLeft=!0)}function DT(){for(let i of Object.keys(Ta))Ta[i].forEach((e,t)=>{let n=String(e[1]());if(n!==Ut[i].vals[t]){Ut[i].vals[t]=n;let s=Ut[i].badge.querySelector(`[data-m="${i}-${t}"]`);if(!s)return;s.textContent=n,s.classList.remove("flash"),s.offsetWidth,s.classList.add("flash");let r=document.querySelector(`[data-rm="${i}-${t}"]`);r&&(r.textContent=n,r.classList.remove("flash"),r.offsetWidth,r.classList.add("flash"))}})}var sc=NT();sc.position.set(2,5.4,2);sc.visible=!1;Nn.add(sc);function NT(){let i=document.createElement("canvas");i.width=i.height=128;let e=i.getContext("2d");e.font="96px serif",e.textAlign="center",e.textBaseline="middle",e.fillText("\u{1F4AC}",64,70);let t=new Rn(i);t.colorSpace=Vt;let n=new Cn(new yn({map:t,depthTest:!1}));return n.scale.set(4,4,1),n}var Tr=new Oo,OT=new gi(new D(0,1,0),0);function Of(i,e){Tr.setFromCamera(new Ne(i,e),Xn);let t=new D;return Tr.ray.intersectPlane(OT,t),t}var ut=null;addEventListener("wheel",i=>{if(i.target.closest&&(i.target.closest("#connModal")||i.target.closest("#catalogModal")||i.target.closest("#tpanel")||i.target.closest("#rail")||i.target.closest(".drawer-menu")||i.target.closest(".tp-rows")||i.target.closest("input, textarea, select")))return;let e=document.getElementById("connModal");if(e&&e.style.display!=="none")return;let t=document.getElementById("catalogModal");if(t&&t.style.display!=="none")return;i.preventDefault(),kn=null,Dt.arc=0;let n=i.clientX/innerWidth*2-1,s=-(i.clientY/innerHeight)*2+1,r=Of(n,s);Dt.zoom=Er(Dt.zoom*Math.exp(-i.deltaY*.0032),.72,5.2),Hf();let a=Of(n,s);r&&a&&Dt.target.add(r.sub(a)),Dt.zoom<1.6&&ut&&(ut==="brain"?ut=null:zg(!1)),Cr()},{passive:!1});var hi=null;zf.addEventListener("pointerdown",i=>{hi={x:i.clientX,y:i.clientY,moved:!1}});addEventListener("pointermove",i=>{if(!hi)return;let e=i.clientX-hi.x,t=i.clientY-hi.y;if(Math.abs(e)+Math.abs(t)>4&&(hi.moved=!0),hi.moved){kn=null;let n=Of(hi.x/innerWidth*2-1,-(hi.y/innerHeight)*2+1),s=Of(i.clientX/innerWidth*2-1,-(i.clientY/innerHeight)*2+1);n&&s&&Dt.target.add(n.sub(s)),hi.x=i.clientX,hi.y=i.clientY}});addEventListener("pointerup",i=>{let e=hi&&hi.moved;if(hi=null,e||i.target!==zf)return;let t=i.clientX/innerWidth*2-1,n=-(i.clientY/innerHeight)*2+1;Tr.setFromCamera(new Ne(t,n),Xn);let s=Tr.intersectObjects(Zi.sprites,!1);if(s.length){Zi.showTip(s[0].object,i.clientX,i.clientY,performance.now());return}let r=Tr.intersectObjects(Yx,!1);if(r.length){Vf(r[0].object.userData.agentId,"chat");return}let a=Tr.intersectObjects(Ng,!1);if(a.length){let o=a[0].object.userData.dept;if(o==="brain"){Dn.open();return}o!==ut&&Rr(o)}});addEventListener("keydown",i=>{if(!/^(INPUT|TEXTAREA|SELECT)$/.test(i.target.tagName))if(i.key==="Escape")et&&et.calendar&&et.calendar.isOpen()?et.calendar.popOpen()?et.calendar.closePop():et.calendar.close():Dn.isOpen()?Dn.close():et&&et.isOpen()?et.close():oc();else if(i.key==="p"||i.key==="P")et&&et.calendar&&et.calendar.toggle();else{if(et&&et.calendar&&et.calendar.isOpen())return;if(i.key==="g"||i.key==="G")Dn.toggle();else if(i.key==="b"||i.key==="B")et&&et.toggle();else if(i.key==="+"||i.key==="=")Uf(1.5);else if(i.key==="-"||i.key==="_")Uf(1/1.5);else if(i.key==="0")oc();else if(i.key==="x"||i.key==="X")ys||qT(performance.now());else if(i.key>="1"&&i.key<="6"){let e=["marketing","emails","sales","ops","fin","delivery"][+i.key-1];ut!==e&&Rr(e)}else if(i.key==="c"||i.key==="C"){if(ut&&ut!=="brain"){let e=Jt.find(t=>t.dept===ut&&t.lead)||Jt.find(t=>t.dept===ut);e&&Ir(e.id,"chat")}}else i.key==="v"||i.key==="V"?Fg(!document.body.classList.contains("cam")):i.key==="d"||i.key==="D"?_d(!di):(i.key==="w"||i.key==="W")&&Zd("apay")}});function Fg(i){document.body.classList.toggle("cam",!!i)}var di=!1,zx={plinth:2895147,walkway:3158576,ground:1776666};function UT(i,e,t){let n=new Je(i);return new Je(e).lerp(n,t)}function _d(i){di=!!i,document.body.classList.toggle("dark",di),Og(),Vd.clear(),Nn.traverse(e=>{if(!e.isMesh||!e.userData.part)return;let t=e.material;t.userData.base||(t.userData.base=t.color.clone()),e.userData.part==="plinth"?t.color.set(di?zx.plinth:t.userData.base):e.userData.part==="walkway"?t.color.set(di?zx.walkway:t.userData.base):e.userData.part==="floor"&&t.color.copy(di?UT(e.userData.chip,"#1b1c1a",e.userData.dept==="brain"?.07:.22):t.userData.base)}),Pf.color.set(di?9344419:16646136),Pf.groundColor.set(di?1316122:14210248),Pf.intensity=di?.75:.85,ui.color.set(di?15002098:16773597),ui.intensity=di?1.5:2.2,Yd.material.opacity=di?.35:.13,ut&&ut!=="brain"&&Zx(ut),Dn&&Dn.setTheme(di),Zi.setDark(di)}zf.addEventListener("dblclick",i=>{let e=i.clientX/innerWidth*2-1,t=-(i.clientY/innerHeight)*2+1;Tr.setFromCamera(new Ne(e,t),Xn),Tr.intersectObjects(Ng,!1).length||oc()});function Uf(i){js([Dt.target.x,0,Dt.target.z],Er(Dt.zoom*i,.72,5.2),350),Dt.zoom*i<1.6&&ut&&(ut==="brain"?ut=null:zg(!1)),Cr()}document.getElementById("zIn").addEventListener("click",()=>Uf(1.5));document.getElementById("zOut").addEventListener("click",()=>Uf(1/1.5));document.getElementById("zHome").addEventListener("click",oc);function Jx(i){Rr(i)}function oc(){if(ut&&ut!=="brain"){zg(!0);return}ut=null,js(qd(),Ea.zoom,550),Cr()}document.getElementById("overviewBtn").addEventListener("click",oc);function Cr(){let i=document.getElementById("overviewBtn"),e=Dt.zoom>1.45&&!(kn&&kn.toZ<=Ea.zoom+.05)||!!ut;i._lastShow!==e&&(i._lastShow=e,i.classList.toggle("show",e))}var An={},Ks=document.getElementById("rail"),Qx=document.getElementById("vignette"),ic=document.getElementById("mMsgs"),Ji=null,jd="chat",Ma={marketing:"left",emails:"left",sales:"left",ops:"left",fin:"left",delivery:"left"},Hx=new D(1,0,-1).normalize();function $x(i){if(An[i])return;let e=typeof location<"u"&&(new URLSearchParams(location.search).has("demo")||new URLSearchParams(location.search).get("s")==="check"),t=At[i].a,n=t.role||At[i].v1?.role||"Lead Specialist",s=t.does||At[i].v1?.tagline||"",r=e?At[i].v1?.greeting||`Hey! I'm ${t.name} (${n}).`:`Hey! I'm ${t.name}, ${n} in ${t.dept?.toUpperCase()}.${s?" "+s:""} Ask me anything here, or type a task in the command bar.`;An[i]=[{who:"agent",text:r},{who:"work",i:"\u23FA",text:"session attached \u2014 live work stream below"}],e&&Mr[i]&&!(et&&et.isLive())&&An[i].push({who:"file",...Mr[i]()})}function Pi(i,e){$x(i),An[i].push(e),An[i].length>80&&An[i].splice(2,1),Ji===i&&jd==="chat"&&eb(i)}function eb(i){let e=At[i];ic.innerHTML=An[i].map((t,n)=>t.who==="agent"?`<div class="m-agent">${Ln(t.text)}</div>`:t.who==="user"?`<div class="m-user">${Ln(t.text)}</div>`:t.who==="work"?`<div class="m-work"><span class="wi">${t.i||"\u25B8"}</span>${Ln(t.text)}</div>`:t.who==="file"?`
       <div class="m-file" data-i="${n}">
         <div class="f-head"><span>${t.icon}</span><div><div class="f-name">${Ln(t.name)}</div><div class="f-meta">${Ln(t.meta)}</div></div></div>
         <pre>${Ln(t.content)}</pre>
