@@ -407,17 +407,35 @@ export default async function handler(req, res) {
       const agent = AGENTS.find(a => a.id === agentId) || AGENTS[0];
       const deptName = agent.department?.toUpperCase() || 'SALES';
 
-      const sys = `You are ${agent.name}, ${agent.role} in ${deptName} at ${baseCfg.name || 'Sales'}.\n` +
+      let toolContext = '';
+      let toolExec = null;
+      try {
+        toolExec = await executeComposioTool(text, agent.department, agent);
+        if (toolExec && toolExec.executed) {
+          toolContext = `\n\n[LIVE DATA RETRIEVED VIA TOOL: ${toolExec.toolSlug}]:\n` +
+            JSON.stringify(toolExec.data, null, 2).slice(0, 2000) +
+            `\nConfirm to the user that you accessed their live ${toolExec.platform} account, and use this data to directly answer their request.`;
+        }
+      } catch (err) {
+        console.warn('Chat Composio execution notice:', err.message);
+      }
+
+      const sys = `You are ${agent.name}, ${agent.role} in ${deptName} at ${baseCfg.name || 'Sunnyeora'} (eCommerce store: sunnyeora.myshopify.com).\n` +
         `Your responsibility: ${agent.does || ''}\n` +
-        `Tone: sharp, competent, proactive, direct. Speak in first person as the agent sitting at your desk in the command centre. Always give real, helpful sales domain answers. Speak directly to the user — do NOT include persona notes, bullet lists of your instructions, or thinking steps.`;
+        `Tone: sharp, competent, proactive, direct. Speak in first person as the agent sitting at your desk in the command centre. Always give real, helpful answers. Speak directly to the user — do NOT include persona notes, bullet lists of your instructions, or thinking steps.${toolContext}`;
 
       const messages = history.map(m => `${m.who === 'user' ? 'User' : agent.name}: ${m.text}`).join('\n') + `\nUser: ${text}`;
       const resp = await askLLM(sys, messages, { maxTokens: 1000 });
 
+      let reply = resp.text;
+      if (toolExec && toolExec.executed) {
+        reply = `⚡ *(Accessed ${toolExec.platform} via Composio)*\n\n` + reply;
+      }
+
       return json(res, 200, {
-        reply: resp.text,
+        reply,
         read: [],
-        tools: resp.tools || [],
+        tools: toolExec?.executed ? [toolExec.toolSlug] : (resp.tools || []),
         interview: false,
       });
     }
