@@ -198,16 +198,16 @@ export async function executeComposioTool(taskText, dept, agent) {
     let toolToRun = null;
 
     // Direct platform mappings with department-aware intent priority
-    if (dept === 'emails') {
-      if (textLower.includes('check') || textLower.includes('read') || textLower.includes('fetch') || textLower.includes('inbox') || textLower.includes('unread')) {
+    if (textLower.includes('slack') || textLower.includes('broadcast') || textLower.includes('squad') || textLower.includes('alert') || textLower.includes('briefing')) {
+      toolToRun = 'SLACK_SEND_MESSAGE';
+    } else if (dept === 'emails') {
+      if (/\b(check\s+inbox|check\s+emails?|read\s+emails?|fetch\s+emails?|unread)\b/i.test(taskText)) {
         toolToRun = 'GMAIL_FETCH_EMAILS';
       } else {
         toolToRun = 'GMAIL_CREATE_EMAIL_DRAFT';
       }
-    } else if (textLower.includes('slack') || textLower.includes('broadcast') || textLower.includes('squad alert') || textLower.includes('notify squad')) {
-      toolToRun = 'SLACK_SEND_MESSAGE';
-    } else if (textLower.includes('email') || textLower.includes('mail') || textLower.includes('draft') || textLower.includes('inbox')) {
-      if (textLower.includes('check') || textLower.includes('read') || textLower.includes('fetch')) {
+    } else if (/\b(email|emails|mail|draft|inbox)\b/i.test(taskText)) {
+      if (/\b(check\s+inbox|check\s+emails?|read\s+emails?|fetch\s+emails?)\b/i.test(taskText)) {
         toolToRun = 'GMAIL_FETCH_EMAILS';
       } else {
         toolToRun = 'GMAIL_CREATE_EMAIL_DRAFT';
