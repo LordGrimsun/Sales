@@ -34,6 +34,28 @@ export const AGENT_MCP = {
 };
 applyAgentTools(AGENT_MCP); // INDUSTRY PROFILE (12 Sep 2026): per-industry demo file; no-op otherwise
 
+export const CONNECTOR_URLS = {
+  gemini: 'https://gemini.google.com/',
+  meta: 'https://adsmanager.facebook.com/',
+  canva: 'https://www.canva.com/',
+  loops: 'https://app.loops.so/',
+  beehiiv: 'https://app.beehiiv.com/',
+  hyperframes: 'https://hyperframes.com/',
+  clarity: 'https://clarity.microsoft.com/',
+  fullenrich: 'https://app.fullenrich.com/',
+  imessage: 'messages://',
+  apollo: 'https://app.apollo.io/',
+  pandadoc: 'https://app.pandadoc.com/',
+  xero: 'https://go.xero.com/',
+  stripe: 'https://dashboard.stripe.com/',
+  notion: 'https://www.notion.so/',
+  gmail: 'https://mail.google.com/',
+  shopify: 'https://sunnyeora.myshopify.com/admin',
+  cj: 'https://www.cjdropshipping.com/',
+  claude: 'https://claude.ai/',
+  chatgpt: 'https://chatgpt.com/'
+};
+
 // screen axes in world space (iso azimuth 45°): SR = screen-right, FRONT = toward camera
 const SR = new THREE.Vector3(1, 0, -1).normalize();
 const FRONT = new THREE.Vector3(1, 0, 1).normalize();
@@ -155,6 +177,7 @@ export function initMcp({ scene, hud, LAYOUT, DEPTS, FR, R, connectors = null })
   // at overview all connector traffic originates from the top bar instead.
   // SHARED connectors (gmail: five depts; notion: every dept, V3.1) sit at the far RIGHT end
   // of the strip and each runs its OWN loom (below) instead of joining any dept's cluster/fan
+
   const SHARED = LIVE ? connectors.shared : (profileShared() || { notion: '#151414', gmail: '#EA4335' });
   const uniqKeys = [...new Set(Object.values(BY_DEPT).flat())].filter(k => !SHARED[k]);
   for (const k of ((LIVE && connectors.off) || [])) if (!uniqKeys.includes(k)) uniqKeys.push(k); // present but unusable: shown grey, never wired
@@ -167,6 +190,8 @@ export function initMcp({ scene, hud, LAYOUT, DEPTS, FR, R, connectors = null })
       const img = document.createElement('img');
       img.src = LOGOS[k].img;
       img.alt = img.title = LOGOS[k].name;
+      img.style.cursor = 'pointer';
+      img.title = (LOGOS[k] ? LOGOS[k].name : k) + ' — Connected · Click to open live portal ↗';
       if (STATUS[k] && STATUS[k] !== 'connected') { // real list: a server that is there but not usable
         img.classList.add('off', 'st-' + STATUS[k]);
         img.title = LOGOS[k].name + ' — ' + (k === 'chrome' && STATUS[k] === 'pending' ? 'Claude in Chrome extension not paired on this machine — run `claude --chrome` once, then restart the office' // V3.2 (16 Sep)
@@ -174,7 +199,12 @@ export function initMcp({ scene, hud, LAYOUT, DEPTS, FR, R, connectors = null })
       }
       img.style.setProperty('--d', (0.15 + i * 0.09) + 's'); // staggered pop-in on load
       img.addEventListener('animationend', (e) => { if (e.animationName === 'tcin') img.classList.add('in'); });
-      img.addEventListener('click', () => fireConnector(k)); // presenter cue: click a logo → its dept(s) light up
+      img.addEventListener('click', (e) => {
+        e.stopPropagation();
+        fireConnector(k);
+        const targetUrl = CONNECTOR_URLS[k] || ('https://dashboard.composio.dev/app/' + k);
+        window.open(targetUrl, '_blank', 'noopener,noreferrer');
+      });
       topconn.appendChild(img);
       topImgs[k] = img;
     });
@@ -276,21 +306,30 @@ export function initMcp({ scene, hud, LAYOUT, DEPTS, FR, R, connectors = null })
     shared[key] = { ink, drop, jdot, wires: wiresOf, offset: 0, jy: 92 + si * 10 };
   });
 
-  // ── the MODEL layer (AJ, 5 Sep 2026): Claude + ChatGPT run the office headless ──
+  // ── the MODEL layer: Google Gemini + Claude run the office autonomous brain ──
   // Two logos on the right of the top bar, each wired straight into the Brain pod — the
   // conduits pulse on their own so the thinking is visible even when nothing else fires.
-  const MODELS = { claude: '#D97757', chatgpt: '#151414' };
+  const MODELS = { gemini: '#4E75F8', claude: '#D97757' };
   const topmodels = document.getElementById('topmodels');
   const modelImgs = {};
   if (topmodels) {
-    topmodels.innerHTML = `<span class="tc-lab"><span class="dot"></span>AI ENGINE</span>`;
+    topmodels.innerHTML = `<span class="tc-lab" title="AI Brain running Google Gemini (Gemini 2.5 Flash)"><span class="dot" style="background:linear-gradient(135deg,#4E75F8,#F43F5E)"></span>AI BRAIN · GOOGLE GEMINI</span>`;
     Object.keys(MODELS).forEach((k, i) => {
       const img = document.createElement('img');
-      img.src = LOGOS[k].img;
-      img.alt = img.title = LOGOS[k].name + ' — headless';
+      img.src = LOGOS[k] ? LOGOS[k].img : '';
+      img.alt = (LOGOS[k] ? LOGOS[k].name : k) + ' — Autonomous Brain';
+      img.title = k === 'gemini'
+        ? 'Google Gemini (Gemini 2.5 Flash) — Primary AI Brain & Autonomous Engine · Click to open ↗'
+        : 'Claude — Headless Reasoning Engine · Click to open ↗';
+      img.style.cursor = 'pointer';
       img.style.setProperty('--d', (0.9 + i * 0.12) + 's');
       img.addEventListener('animationend', (e) => { if (e.animationName === 'tcin') img.classList.add('in'); });
-      img.addEventListener('click', () => modelPulse(k, true));
+      img.addEventListener('click', (e) => {
+        e.stopPropagation();
+        modelPulse(k, true);
+        const url = k === 'gemini' ? 'https://gemini.google.com/' : 'https://claude.ai/';
+        window.open(url, '_blank', 'noopener,noreferrer');
+      });
       topmodels.appendChild(img);
       modelImgs[k] = img;
     });
@@ -460,7 +499,7 @@ export function initMcp({ scene, hud, LAYOUT, DEPTS, FR, R, connectors = null })
       m.dot.setAttribute('opacity', (f ? 0.85 : 0.45) * wireA);
     }
     if (now > nextModelPulse) {
-      modelPulse(Math.random() < 0.6 ? 'claude' : 'chatgpt');
+      modelPulse(Math.random() < 0.7 ? 'gemini' : 'claude');
       nextModelPulse = now + 2400 + Math.random() * 3200;
     }
     for (let i = wirePulses.length - 1; i >= 0; i--) {
@@ -604,7 +643,7 @@ export function initMcp({ scene, hud, LAYOUT, DEPTS, FR, R, connectors = null })
     const r = R[agentId]; if (!r || !Array.isArray(keys)) return;
     keys.forEach((key, i) => setTimeout(() => {
       const t = performance.now();
-      if (key === 'web') { modelPulse('claude', true); return; }
+      if (key === 'web') { modelPulse('gemini', true); return; }
       const item = byDeptKey[r.a.dept + ':' + key] || items.find(it => it.key === key);
       if (!item) return;
       pulse(item, t, 0.3);

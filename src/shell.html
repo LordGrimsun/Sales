@@ -221,21 +221,41 @@
     background: rgba(16, 185, 129, 0.08); color: #059669; font-weight: 800; cursor: default;
   }
   body.dark .top-drop-menu .status-item { background: rgba(16, 185, 129, 0.15); color: #34d399; }
-  /* V3.1: the model layer — Claude + ChatGPT run the office headless; wired to the Brain */
-  #topmodels { display: flex; align-items: center; gap: 7px; margin-right: 14px; }
-  #topmodels .tc-lab .dot { background: var(--ink); }
-  #topconn .tc-lab, #topmodels .tc-lab {
+  /* V3.1: the model layer — Google Gemini + Claude run the office autonomous brain; wired to the Brain */
+  #topmodels {
+    display: flex; align-items: center; gap: 7px; margin-right: 14px;
+    background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 20px; padding: 2px 10px 2px 8px;
+  }
+  body:not(.dark) #topmodels {
+    background: rgba(0, 0, 0, 0.04); border: 1px solid rgba(0, 0, 0, 0.08);
+  }
+  #topmodels .tc-lab {
+    display: flex; align-items: center; gap: 6px; margin-right: 4px;
+    font-size: 9.5px; letter-spacing: .14em; font-weight: 800; color: var(--ink);
+    white-space: nowrap;
+  }
+  #topmodels .tc-lab .dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: linear-gradient(135deg, #4E75F8, #F43F5E); display: inline-block;
+    box-shadow: 0 0 6px rgba(78, 117, 248, 0.6);
+  }
+  #topconn .tc-lab {
     display: flex; align-items: center; gap: 6px; margin-right: 4px;
     font-size: 9.5px; letter-spacing: .2em; font-weight: 700; color: var(--grey);
     white-space: nowrap;
   }
-  #topconn .tc-lab .dot, #topmodels .tc-lab .dot {
+  #topconn .tc-lab .dot {
     width: 7px; height: 7px; border-radius: 50%; background: #2E8B57; display: inline-block;
   }
   #topconn img, #topmodels img {
     width: 27px; height: 27px; border-radius: 7px; display: block; cursor: pointer;
     opacity: 0; transform: translateY(-9px) scale(.6);
+    transition: transform .18s ease, filter .18s ease;
     animation: tcin .45s var(--ease) var(--d, 0s) forwards;
+  }
+  #topconn img:hover, #topmodels img:hover {
+    transform: scale(1.18); filter: drop-shadow(0 0 7px rgba(78, 117, 248, 0.7));
   }
   #topconn img.in, #topmodels img.in { animation: none; opacity: 1; transform: none; }
   #topconn img.tpulse, #topmodels img.tpulse { animation: tpulse .6s var(--ease); opacity: 1; }
@@ -1624,6 +1644,26 @@
     <!-- Integrations Grid -->
     <div style="display:flex; flex-direction:column; gap:14px;">
       
+      <!-- 0. Google Gemini (Primary AI Brain) -->
+      <div style="background:linear-gradient(135deg, rgba(78,117,248,0.12), rgba(244,63,94,0.08)); border:1px solid rgba(78,117,248,0.35); border-radius:14px; padding:16px;">
+        <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px;">
+          <div style="display:flex; align-items:center; gap:12px;">
+            <div style="width:40px; height:40px; border-radius:10px; background:linear-gradient(135deg,#4E75F8,#7B61FF,#F43F5E); display:flex; align-items:center; justify-content:center; font-weight:800; font-size:20px; color:#fff; box-shadow:0 0 12px rgba(78,117,248,0.5);">✦</div>
+            <div>
+              <div style="font-weight:700; font-size:14px; color:#fff; display:flex; align-items:center; gap:8px;">
+                Google Gemini (Autonomous Office Brain)
+                <span style="background:rgba(78,117,248,0.25); color:#93c5fd; border:1px solid rgba(78,117,248,0.5); font-size:10px; font-weight:700; padding:2px 8px; border-radius:6px;">AI BRAIN · GEMINI 2.5 FLASH ✔</span>
+              </div>
+              <div style="font-size:12px; color:#cbd5e1;">The central AI intelligence powering all 35 agents, dropshipping unit economics, viral ad generation, and autonomous squad relays.</div>
+            </div>
+          </div>
+          <div style="display:flex; gap:8px;">
+            <a href="https://gemini.google.com/" target="_blank" rel="noopener" style="background:linear-gradient(135deg,#4E75F8,#F43F5E); color:#fff; text-decoration:none; font-weight:700; font-size:12px; padding:8px 14px; border-radius:8px; display:inline-block; box-shadow:0 4px 15px rgba(78,117,248,0.3);">Open Gemini AI ↗</a>
+            <a href="https://ai.google.dev/" target="_blank" rel="noopener" style="background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.18); color:#fff; text-decoration:none; font-weight:700; font-size:12px; padding:8px 14px; border-radius:8px; display:inline-block;">API Studio ↗</a>
+          </div>
+        </div>
+      </div>
+
       <!-- 1. Shopify Storefront -->
       <div style="background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08); border-radius:12px; padding:16px;">
         <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:12px;">
@@ -1637,7 +1677,10 @@
               <div style="font-size:12px; color:#94a3b8;">Where US/UK customers browse and checkout in USD ($).</div>
             </div>
           </div>
-          <a href="https://admin.shopify.com" target="_blank" rel="noopener" style="background:#22c55e; color:#000; text-decoration:none; font-weight:700; font-size:12px; padding:8px 14px; border-radius:8px; display:inline-block;">Open Shopify Admin ↗</a>
+          <div style="display:flex; gap:8px;">
+            <a href="https://admin.shopify.com" target="_blank" rel="noopener" style="background:#22c55e; color:#000; text-decoration:none; font-weight:700; font-size:12px; padding:8px 14px; border-radius:8px; display:inline-block;">Shopify Admin ↗</a>
+            <a href="https://sunnyeora.myshopify.com/" target="_blank" rel="noopener" style="background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.15); color:#fff; text-decoration:none; font-weight:700; font-size:12px; padding:8px 14px; border-radius:8px; display:inline-block;">Storefront ↗</a>
+          </div>
         </div>
         <!-- Interactive Store URL & API Token inputs -->
         <div style="display:flex; flex-direction:column; gap:8px;">
@@ -1683,37 +1726,208 @@
             <div style="font-size:12px; color:#94a3b8;">Emails Pod drafts tracking updates, replies to foreign buyers, and contacts suppliers.</div>
           </div>
         </div>
-        <a href="https://dashboard.composio.dev/app/gmail" target="_blank" rel="noopener" style="background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2); color:#fff; text-decoration:none; font-weight:700; font-size:12px; padding:8px 14px; border-radius:8px; display:inline-block;">Manage in Composio ↗</a>
+        <div style="display:flex; gap:8px;">
+          <a href="https://mail.google.com" target="_blank" rel="noopener" style="background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2); color:#fff; text-decoration:none; font-weight:700; font-size:12px; padding:8px 14px; border-radius:8px; display:inline-block;">Open Gmail ↗</a>
+          <a href="https://dashboard.composio.dev/app/gmail" target="_blank" rel="noopener" style="background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2); color:#fff; text-decoration:none; font-weight:700; font-size:12px; padding:8px 14px; border-radius:8px; display:inline-block;">Composio ↗</a>
+        </div>
       </div>
 
-      <!-- 4. Stripe India & Payments -->
+      <!-- 4. Stripe Global & India -->
       <div style="display:flex; align-items:center; justify-content:space-between; background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08); border-radius:12px; padding:14px 16px;">
         <div style="display:flex; align-items:center; gap:12px;">
           <div style="width:38px; height:38px; border-radius:10px; background:#6366f1; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:18px; color:#fff;">$</div>
           <div>
-            <div style="font-weight:700; font-size:14px; color:#fff;">Stripe India (Global Checkout & Payouts)</div>
+            <div style="font-weight:700; font-size:14px; color:#fff; display:flex; align-items:center; gap:8px;">
+              Stripe India (Global Checkout & Payouts)
+              <span style="background:rgba(34,197,94,0.2); color:#4ade80; font-size:10px; font-weight:700; padding:2px 6px; border-radius:6px;">ACTIVE</span>
+            </div>
             <div style="font-size:12px; color:#94a3b8;">Accepts USD from foreign credit cards; auto-settles INR to Indian bank accounts.</div>
           </div>
         </div>
-        <a href="https://dashboard.stripe.com/register" target="_blank" rel="noopener" style="background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2); color:#fff; text-decoration:none; font-weight:700; font-size:12px; padding:8px 14px; border-radius:8px; display:inline-block;">Stripe Setup ↗</a>
+        <a href="https://dashboard.stripe.com/" target="_blank" rel="noopener" style="background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2); color:#fff; text-decoration:none; font-weight:700; font-size:12px; padding:8px 14px; border-radius:8px; display:inline-block;">Open Stripe ↗</a>
       </div>
 
-      <!-- 5. Meta & Facebook Ads / Organic via Composio -->
+      <!-- 5. Meta & Facebook Ads -->
       <div style="display:flex; align-items:center; justify-content:space-between; background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08); border-radius:12px; padding:14px 16px;">
         <div style="display:flex; align-items:center; gap:12px;">
           <div style="width:38px; height:38px; border-radius:10px; background:#0081fb; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:18px; color:#fff;">∞</div>
           <div>
             <div style="font-weight:700; font-size:14px; color:#fff; display:flex; align-items:center; gap:8px;">
               Facebook &amp; Meta Ads (Marketing Pod)
-              <span id="modalMetaBadge" style="background:rgba(59,130,246,0.2); color:#60a5fa; font-size:10px; padding:2px 6px; border-radius:6px;">COMPOSIO CONNECT</span>
+              <span id="modalMetaBadge" style="background:rgba(59,130,246,0.2); color:#60a5fa; font-size:10px; padding:2px 6px; border-radius:6px;">CONNECTED</span>
             </div>
             <div style="font-size:12px; color:#94a3b8;">Marketing agents (Ada, Iggy, Vid) generate ad hooks, post viral video reels, and track sales attribution.</div>
           </div>
         </div>
         <div style="display:flex; gap:8px;">
-          <a href="https://dashboard.composio.dev/app/facebook" target="_blank" rel="noopener" style="background:#0081fb; color:#fff; text-decoration:none; font-weight:700; font-size:12px; padding:8px 14px; border-radius:8px; display:inline-block;">Connect in Composio ↗</a>
-          <a href="https://adsmanager.facebook.com" target="_blank" rel="noopener" style="background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.15); color:#fff; text-decoration:none; font-weight:700; font-size:12px; padding:8px 14px; border-radius:8px; display:inline-block;">Ads Manager ↗</a>
+          <a href="https://adsmanager.facebook.com" target="_blank" rel="noopener" style="background:#0081fb; color:#fff; text-decoration:none; font-weight:700; font-size:12px; padding:8px 14px; border-radius:8px; display:inline-block;">Ads Manager ↗</a>
+          <a href="https://dashboard.composio.dev/app/facebook" target="_blank" rel="noopener" style="background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.15); color:#fff; text-decoration:none; font-weight:700; font-size:12px; padding:8px 14px; border-radius:8px; display:inline-block;">Composio ↗</a>
         </div>
+      </div>
+
+      <!-- 6. Canva -->
+      <div style="display:flex; align-items:center; justify-content:space-between; background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08); border-radius:12px; padding:14px 16px;">
+        <div style="display:flex; align-items:center; gap:12px;">
+          <div style="width:38px; height:38px; border-radius:10px; background:#00c4cc; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:18px; color:#fff;">C</div>
+          <div>
+            <div style="font-weight:700; font-size:14px; color:#fff; display:flex; align-items:center; gap:8px;">
+              Canva (Graphic Design &amp; Ad Creatives)
+              <span style="background:rgba(0,196,204,0.2); color:#5eead4; font-size:10px; padding:2px 6px; border-radius:6px;">DESIGN READY</span>
+            </div>
+            <div style="font-size:12px; color:#94a3b8;">Creates high-converting product banners, Instagram carousels, and promotional overlays.</div>
+          </div>
+        </div>
+        <a href="https://www.canva.com/" target="_blank" rel="noopener" style="background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2); color:#fff; text-decoration:none; font-weight:700; font-size:12px; padding:8px 14px; border-radius:8px; display:inline-block;">Open Canva ↗</a>
+      </div>
+
+      <!-- 7. Loops -->
+      <div style="display:flex; align-items:center; justify-content:space-between; background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08); border-radius:12px; padding:14px 16px;">
+        <div style="display:flex; align-items:center; gap:12px;">
+          <div style="width:38px; height:38px; border-radius:10px; background:#000; border:1px solid rgba(255,255,255,0.2); display:flex; align-items:center; justify-content:center; font-weight:800; font-size:18px; color:#fff;">L</div>
+          <div>
+            <div style="font-weight:700; font-size:14px; color:#fff; display:flex; align-items:center; gap:8px;">
+              Loops (Email Automation &amp; Retention)
+              <span style="background:rgba(255,255,255,0.1); color:#e2e8f0; font-size:10px; padding:2px 6px; border-radius:6px;">AUTOMATED</span>
+            </div>
+            <div style="font-size:12px; color:#94a3b8;">Abandoned cart flows, shipping confirmations, and VIP loyalty email drip sequences.</div>
+          </div>
+        </div>
+        <a href="https://app.loops.so/" target="_blank" rel="noopener" style="background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2); color:#fff; text-decoration:none; font-weight:700; font-size:12px; padding:8px 14px; border-radius:8px; display:inline-block;">Open Loops ↗</a>
+      </div>
+
+      <!-- 8. Beehiiv -->
+      <div style="display:flex; align-items:center; justify-content:space-between; background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08); border-radius:12px; padding:14px 16px;">
+        <div style="display:flex; align-items:center; gap:12px;">
+          <div style="width:38px; height:38px; border-radius:10px; background:#eab308; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:18px; color:#000;">🐝</div>
+          <div>
+            <div style="font-weight:700; font-size:14px; color:#fff; display:flex; align-items:center; gap:8px;">
+              Beehiiv (VIP Fashion Newsletters)
+              <span style="background:rgba(234,179,8,0.2); color:#fde047; font-size:10px; padding:2px 6px; border-radius:6px;">EDITORIAL</span>
+            </div>
+            <div style="font-size:12px; color:#94a3b8;">Curated weekend style edits and viral product trend alerts dispatched to subscribers.</div>
+          </div>
+        </div>
+        <a href="https://app.beehiiv.com/" target="_blank" rel="noopener" style="background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2); color:#fff; text-decoration:none; font-weight:700; font-size:12px; padding:8px 14px; border-radius:8px; display:inline-block;">Open Beehiiv ↗</a>
+      </div>
+
+      <!-- 9. Hyperframes -->
+      <div style="display:flex; align-items:center; justify-content:space-between; background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08); border-radius:12px; padding:14px 16px;">
+        <div style="display:flex; align-items:center; gap:12px;">
+          <div style="width:38px; height:38px; border-radius:10px; background:#8b5cf6; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:18px; color:#fff;">⚡</div>
+          <div>
+            <div style="font-weight:700; font-size:14px; color:#fff; display:flex; align-items:center; gap:8px;">
+              Hyperframes (Viral AI Video Creatives)
+              <span style="background:rgba(139,92,246,0.2); color:#c4b5fd; font-size:10px; padding:2px 6px; border-radius:6px;">VIDEO AI</span>
+            </div>
+            <div style="font-size:12px; color:#94a3b8;">Generates TikTok, Instagram Reels, and YouTube Shorts dynamic product video ads.</div>
+          </div>
+        </div>
+        <a href="https://hyperframes.com/" target="_blank" rel="noopener" style="background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2); color:#fff; text-decoration:none; font-weight:700; font-size:12px; padding:8px 14px; border-radius:8px; display:inline-block;">Open Hyperframes ↗</a>
+      </div>
+
+      <!-- 10. Microsoft Clarity -->
+      <div style="display:flex; align-items:center; justify-content:space-between; background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08); border-radius:12px; padding:14px 16px;">
+        <div style="display:flex; align-items:center; gap:12px;">
+          <div style="width:38px; height:38px; border-radius:10px; background:#0284c7; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:18px; color:#fff;">📊</div>
+          <div>
+            <div style="font-weight:700; font-size:14px; color:#fff; display:flex; align-items:center; gap:8px;">
+              Microsoft Clarity (Analytics &amp; Heatmaps)
+              <span style="background:rgba(2,132,199,0.2); color:#7dd3fc; font-size:10px; padding:2px 6px; border-radius:6px;">ANALYTICS</span>
+            </div>
+            <div style="font-size:12px; color:#94a3b8;">Inspect session replays, click heatmaps, and checkout bounce rates on sunnyeora.com.</div>
+          </div>
+        </div>
+        <a href="https://clarity.microsoft.com/" target="_blank" rel="noopener" style="background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2); color:#fff; text-decoration:none; font-weight:700; font-size:12px; padding:8px 14px; border-radius:8px; display:inline-block;">Open Clarity ↗</a>
+      </div>
+
+      <!-- 11. Apollo.io -->
+      <div style="display:flex; align-items:center; justify-content:space-between; background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08); border-radius:12px; padding:14px 16px;">
+        <div style="display:flex; align-items:center; gap:12px;">
+          <div style="width:38px; height:38px; border-radius:10px; background:#f59e0b; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:18px; color:#000;">A</div>
+          <div>
+            <div style="font-weight:700; font-size:14px; color:#fff; display:flex; align-items:center; gap:8px;">
+              Apollo.io (Wholesale &amp; B2B Prospecting)
+              <span style="background:rgba(245,158,11,0.2); color:#fcd34d; font-size:10px; padding:2px 6px; border-radius:6px;">B2B INTEL</span>
+            </div>
+            <div style="font-size:12px; color:#94a3b8;">Identifies boutique retail owners and bulk buyers for wholesale fashion purchase orders.</div>
+          </div>
+        </div>
+        <a href="https://app.apollo.io/" target="_blank" rel="noopener" style="background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2); color:#fff; text-decoration:none; font-weight:700; font-size:12px; padding:8px 14px; border-radius:8px; display:inline-block;">Open Apollo ↗</a>
+      </div>
+
+      <!-- 12. Notion -->
+      <div style="display:flex; align-items:center; justify-content:space-between; background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08); border-radius:12px; padding:14px 16px;">
+        <div style="display:flex; align-items:center; gap:12px;">
+          <div style="width:38px; height:38px; border-radius:10px; background:#fff; color:#000; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:18px;">N</div>
+          <div>
+            <div style="font-weight:700; font-size:14px; color:#fff; display:flex; align-items:center; gap:8px;">
+              Notion (Company Wiki &amp; Playbooks)
+              <span style="background:rgba(255,255,255,0.1); color:#fff; font-size:10px; padding:2px 6px; border-radius:6px;">CENTRAL HUB</span>
+            </div>
+            <div style="font-size:12px; color:#94a3b8;">Supplier contracts, returns policy, and agent memory SOPs synced across all 35 agents.</div>
+          </div>
+        </div>
+        <a href="https://www.notion.so/" target="_blank" rel="noopener" style="background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2); color:#fff; text-decoration:none; font-weight:700; font-size:12px; padding:8px 14px; border-radius:8px; display:inline-block;">Open Notion ↗</a>
+      </div>
+
+      <!-- 13. PandaDoc -->
+      <div style="display:flex; align-items:center; justify-content:space-between; background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08); border-radius:12px; padding:14px 16px;">
+        <div style="display:flex; align-items:center; gap:12px;">
+          <div style="width:38px; height:38px; border-radius:10px; background:#10b981; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:18px; color:#fff;">P</div>
+          <div>
+            <div style="font-weight:700; font-size:14px; color:#fff; display:flex; align-items:center; gap:8px;">
+              PandaDoc (Contracts &amp; Supplier Agreements)
+              <span style="background:rgba(16,185,129,0.2); color:#6ee7b7; font-size:10px; padding:2px 6px; border-radius:6px;">LEGAL</span>
+            </div>
+            <div style="font-size:12px; color:#94a3b8;">Automated supply agreements, non-disclosure contracts, and electronic signatures.</div>
+          </div>
+        </div>
+        <a href="https://app.pandadoc.com/" target="_blank" rel="noopener" style="background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2); color:#fff; text-decoration:none; font-weight:700; font-size:12px; padding:8px 14px; border-radius:8px; display:inline-block;">Open PandaDoc ↗</a>
+      </div>
+
+      <!-- 14. Xero -->
+      <div style="display:flex; align-items:center; justify-content:space-between; background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08); border-radius:12px; padding:14px 16px;">
+        <div style="display:flex; align-items:center; gap:12px;">
+          <div style="width:38px; height:38px; border-radius:10px; background:#14b8a6; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:18px; color:#fff;">X</div>
+          <div>
+            <div style="font-weight:700; font-size:14px; color:#fff; display:flex; align-items:center; gap:8px;">
+              Xero (Cloud Accounting &amp; Multi-Currency)
+              <span style="background:rgba(20,184,166,0.2); color:#5eead4; font-size:10px; padding:2px 6px; border-radius:6px;">FINANCE</span>
+            </div>
+            <div style="font-size:12px; color:#94a3b8;">Automated multi-currency bookkeeping, USD/INR ledger, and COGS reconciliation.</div>
+          </div>
+        </div>
+        <a href="https://go.xero.com/" target="_blank" rel="noopener" style="background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2); color:#fff; text-decoration:none; font-weight:700; font-size:12px; padding:8px 14px; border-radius:8px; display:inline-block;">Open Xero ↗</a>
+      </div>
+
+      <!-- 15. FullEnrich -->
+      <div style="display:flex; align-items:center; justify-content:space-between; background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08); border-radius:12px; padding:14px 16px;">
+        <div style="display:flex; align-items:center; gap:12px;">
+          <div style="width:38px; height:38px; border-radius:10px; background:#6366f1; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:18px; color:#fff;">FE</div>
+          <div>
+            <div style="font-weight:700; font-size:14px; color:#fff; display:flex; align-items:center; gap:8px;">
+              FullEnrich (B2B Contact Verification)
+              <span style="background:rgba(99,102,241,0.2); color:#a5b4fc; font-size:10px; padding:2px 6px; border-radius:6px;">ENRICHMENT</span>
+            </div>
+            <div style="font-size:12px; color:#94a3b8;">Verifies high-deliverability supplier emails and direct wholesale procurement numbers.</div>
+          </div>
+        </div>
+        <a href="https://app.fullenrich.com/" target="_blank" rel="noopener" style="background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2); color:#fff; text-decoration:none; font-weight:700; font-size:12px; padding:8px 14px; border-radius:8px; display:inline-block;">Open FullEnrich ↗</a>
+      </div>
+
+      <!-- 16. iMessage -->
+      <div style="display:flex; align-items:center; justify-content:space-between; background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08); border-radius:12px; padding:14px 16px;">
+        <div style="display:flex; align-items:center; gap:12px;">
+          <div style="width:38px; height:38px; border-radius:10px; background:#22c55e; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:18px; color:#fff;">💬</div>
+          <div>
+            <div style="font-weight:700; font-size:14px; color:#fff; display:flex; align-items:center; gap:8px;">
+              iMessage &amp; SMS (VIP Client Concierge)
+              <span style="background:rgba(34,197,94,0.2); color:#86efac; font-size:10px; padding:2px 6px; border-radius:6px;">SMS DIRECT</span>
+            </div>
+            <div style="font-size:12px; color:#94a3b8;">Instant order delivery SMS updates and mobile VIP shopper alerts.</div>
+          </div>
+        </div>
+        <a href="messages://" target="_blank" rel="noopener" style="background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2); color:#fff; text-decoration:none; font-weight:700; font-size:12px; padding:8px 14px; border-radius:8px; display:inline-block;">Open Messages ↗</a>
       </div>
 
     </div>
