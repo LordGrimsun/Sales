@@ -260,27 +260,53 @@ export async function executeComposioTool(taskText, dept, agent) {
       // Format customer-facing HTML layout
       const cleanContent = taskText.replace(/^Subject:\s*[^\n\r]+\n*/i, '').trim();
       const htmlBody = `
-<div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; max-width: 600px; margin: 0 auto; color: #222; line-height: 1.6; border: 1px solid #eee; border-radius: 12px; overflow: hidden;">
-  <div style="background-color: #b85d19; padding: 24px 20px; text-align: center;">
-    <h1 style="color: #ffffff; margin: 0; font-size: 24px; letter-spacing: 2px; text-transform: uppercase;">SUNNYEORA</h1>
-    <p style="color: #fcefe6; margin: 4px 0 0; font-size: 13px; letter-spacing: 1px;">AUTUMN FLASH SALE &bull; LIMITED TIME ONLY</p>
+<div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 14px; overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,0.06); color: #1a1a1a;">
+  <div style="background-color: #1a1a1a; color: #ffffff; padding: 8px 16px; text-align: center; font-size: 11px; letter-spacing: 2px; text-transform: uppercase; font-weight: 600;">
+    🍂 Private VIP Access &bull; 48 Hours Only &bull; Code: <strong>AUTUMN20</strong>
   </div>
-  <div style="padding: 28px 24px; background-color: #ffffff;">
-    <p style="font-size: 16px; margin-top: 0;">Hey there,</p>
-    <p style="font-size: 15px; color: #444;">${cleanContent.replace(/\n\n/g, '</p><p style="font-size: 15px; color: #444;">')}</p>
-    <div style="background-color: #faf6f0; border: 2px dashed #d97736; padding: 18px; text-align: center; margin: 24px 0; border-radius: 8px;">
-      <div style="font-size: 12px; text-transform: uppercase; letter-spacing: 1.5px; color: #888; margin-bottom: 4px;">Exclusive Promo Code</div>
-      <div style="font-size: 26px; font-weight: 800; color: #b85d19; letter-spacing: 4px;">AUTUMN20</div>
-      <div style="font-size: 13px; color: #666; margin-top: 4px;">20% OFF storewide at checkout</div>
-    </div>
-    <div style="text-align: center; margin: 28px 0;">
-      <a href="https://sunnyeora.myshopify.com/collections/all" style="background-color: #111111; color: #ffffff; padding: 14px 32px; text-decoration: none; border-radius: 6px; font-weight: 700; font-size: 15px; display: inline-block;">Shop Autumn Collection &rarr;</a>
-    </div>
-    <p style="font-size: 14px; color: #666;">Claim your favorites while supplies last.</p>
-    <p style="font-size: 15px; margin-bottom: 0;">Warm regards,<br/><strong>The Sunnyeora Team</strong></p>
+  <div style="padding: 28px 24px 16px; text-align: center; border-bottom: 1px solid #f0eee9;">
+    <div style="font-family: 'Playfair Display', Georgia, serif; font-size: 28px; letter-spacing: 5px; font-weight: 700; color: #1a1a1a; text-transform: uppercase;">SUNNYEORA</div>
+    <div style="font-size: 11px; letter-spacing: 2px; color: #8c827a; margin-top: 4px; text-transform: uppercase;">Modern Luxury &bull; Autumn Capsule</div>
   </div>
-  <div style="background-color: #f9f9f9; padding: 16px 20px; text-align: center; font-size: 12px; color: #888; border-top: 1px solid #eee;">
-    <p style="margin: 0 0 4px;">Free shipping available &bull; Secure checkout via Shopify</p>
+  <div style="background: linear-gradient(135deg, #a45318 0%, #cb7632 50%, #d8894a 100%); padding: 40px 28px; text-align: center; color: #ffffff;">
+    <span style="display: inline-block; background-color: rgba(255, 255, 255, 0.2); padding: 4px 12px; border-radius: 20px; font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; font-weight: 600; margin-bottom: 12px;">The Autumn Edit // 2026</span>
+    <h1 style="font-family: 'Playfair Display', Georgia, serif; font-size: 30px; margin: 0 0 10px; font-weight: 700;">Elegance in Every Layer</h1>
+    <p style="font-size: 14px; line-height: 1.6; max-width: 420px; margin: 0 auto 20px; color: #fff1e6;">Discover rich earth tones, cozy knitwear, and timeless essentials designed for the season.</p>
+    <a href="https://sunnyeora.myshopify.com/collections/all" style="display: inline-block; background-color: #ffffff; color: #1a1a1a; padding: 12px 30px; border-radius: 24px; font-weight: 700; font-size: 12px; letter-spacing: 1px; text-transform: uppercase; text-decoration: none;">Explore Collection &rarr;</a>
+  </div>
+  <div style="padding: 24px 20px 8px;">
+    <div style="background-color: #faf7f2; border: 2px dashed #d97736; border-radius: 10px; padding: 18px; text-align: center;">
+      <div style="font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; color: #8a7c70; font-weight: 600;">Exclusive VIP Voucher</div>
+      <div style="font-size: 28px; font-weight: 900; letter-spacing: 4px; color: #b85d19; font-family: monospace; margin: 4px 0;">AUTUMN20</div>
+      <div style="font-size: 13px; color: #524b45;">Take <strong>20% OFF</strong> your entire cart at checkout</div>
+    </div>
+  </div>
+  <div style="padding: 20px 24px 8px; text-align: center;">
+    <div style="font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; color: #b85d19; font-weight: 700; margin-bottom: 4px;">Curated Pieces</div>
+    <h2 style="font-family: 'Playfair Display', Georgia, serif; font-size: 22px; color: #1a1a1a; margin: 0 0 16px;">Trending This Week</h2>
+    <table width="100%" cellpadding="0" cellspacing="0" border="0">
+      <tr>
+        <td width="48%" style="vertical-align: top; background-color: #faf9f7; border-radius: 8px; padding: 14px; text-align: center; border: 1px solid #edebe6;">
+          <div style="font-size: 26px; margin-bottom: 4px;">🧥</div>
+          <div style="font-size: 13px; font-weight: 700; color: #1a1a1a;">Cashmere Knit Cardigan</div>
+          <div style="font-size: 14px; font-weight: 800; color: #b85d19; margin: 4px 0 8px;">$48.00 <span style="font-size: 11px; color: #a89f97; text-decoration: line-through; font-weight: 400;">$60.00</span></div>
+          <a href="https://sunnyeora.myshopify.com/collections/all" style="display: inline-block; background-color: #1a1a1a; color: #ffffff; padding: 6px 14px; border-radius: 4px; font-size: 10px; text-transform: uppercase; letter-spacing: 1px; font-weight: 600; text-decoration: none;">Shop Item</a>
+        </td>
+        <td width="4%"></td>
+        <td width="48%" style="vertical-align: top; background-color: #faf9f7; border-radius: 8px; padding: 14px; text-align: center; border: 1px solid #edebe6;">
+          <div style="font-size: 26px; margin-bottom: 4px;">👜</div>
+          <div style="font-size: 13px; font-weight: 700; color: #1a1a1a;">Terracotta Leather Tote</div>
+          <div style="font-size: 14px; font-weight: 800; color: #b85d19; margin: 4px 0 8px;">$38.40 <span style="font-size: 11px; color: #a89f97; text-decoration: line-through; font-weight: 400;">$48.00</span></div>
+          <a href="https://sunnyeora.myshopify.com/collections/all" style="display: inline-block; background-color: #1a1a1a; color: #ffffff; padding: 6px 14px; border-radius: 4px; font-size: 10px; text-transform: uppercase; letter-spacing: 1px; font-weight: 600; text-decoration: none;">Shop Item</a>
+        </td>
+      </tr>
+    </table>
+  </div>
+  <div style="padding: 20px 24px; background-color: #f7f5f0; text-align: center; font-size: 14px; color: #444; line-height: 1.6; border-top: 1px solid #eee9e0; border-bottom: 1px solid #eee9e0;">
+    &ldquo;Quiet luxury, seasonal textures, and effortless cuts &mdash; without the retail markup.&rdquo;
+  </div>
+  <div style="background-color: #111111; padding: 20px; text-align: center; font-size: 11px; color: #777777;">
+    <p style="margin: 0 0 6px;">&copy; 2026 Sunnyeora Studio &bull; Free worldwide shipping available</p>
     <p style="margin: 0;"><a href="https://sunnyeora.myshopify.com" style="color: #b85d19; text-decoration: none;">sunnyeora.myshopify.com</a></p>
   </div>
 </div>`;
