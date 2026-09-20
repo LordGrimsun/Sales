@@ -766,9 +766,10 @@ export function initTasks(ctx) {
   }
   function rowHTMLr(r) { // a SCHEDULED row: the routine itself, with its countdown and its buttons
     const a = agentOf(r.agent);
+    const whenDesc = r.desc ? esc(r.desc) : (r.when ? esc(describe(r.when)) : 'Scheduled');
     return `<div class="tp-row sched${r.paused ? ' paused' : ''}" data-id="r:${r.id}" data-rid="${r.id}" data-dept="${r.dept}" data-agent="${r.agent}">
       <span class="tp-st sched">⏱</span>
-      <div class="tp-body"><div class="tp-t">${esc(r.title)}</div><div class="tp-m">${esc(r.desc)} · ${a.name} · ${modelName(r.model || officeModel)}${r.needsOk ? ' · waits for your OK' : ' · read-only'}${r.lastAt ? ' · last ' + timeStr(r.lastAt) + (r.lastLate ? ' <span class="tp-late">late</span>' : '') : ''}</div>
+      <div class="tp-body"><div class="tp-t">${esc(r.title)}</div><div class="tp-m">${whenDesc} · ${a ? a.name : 'Agent'} · ${modelName(r.model || officeModel)}${r.needsOk ? ' · waits for your OK' : ' · read-only'}${r.lastAt ? ' · last ' + timeStr(r.lastAt) + (r.lastLate ? ' <span class="tp-late">late</span>' : '') : ''}</div>
       <div class="tp-act"><button class="run" data-act="run">RUN NOW</button><button data-act="${r.paused ? 'resume' : 'pause'}">${r.paused ? 'RESUME' : 'PAUSE'}</button><button data-act="delete">DELETE</button></div></div>
       <span class="tp-ago" data-rago="${r.id}">${r.paused ? 'PAUSED' : esc(untilText(r.nextAt))}</span></div>`;
   }

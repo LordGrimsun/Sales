@@ -37,7 +37,7 @@ function stripScratchpad(text) {
 export function detectProvider() {
   if (process.env.ANTHROPIC_API_KEY) return 'anthropic';
   if (process.env.OPENAI_API_KEY) return 'openai';
-  if (process.env.GEMINI_API_KEY) return 'gemini';
+  if (process.env.GEMINI_API_KEY || process.env.GEMINI_API_KEY2) return 'gemini';
   if (process.env.OPENROUTER_API_KEY) return 'openrouter';
   return 'claude-cli';
 }
@@ -149,10 +149,13 @@ export async function askLLM(system, user, opts = {}) {
   }
 
   // 3. Gemini API (Native REST generateContent with dynamic model discovery)
-  if (process.env.GEMINI_API_KEY) {
-    const key = process.env.GEMINI_API_KEY.trim();
+  const geminiKey = (process.env.GEMINI_API_KEY || process.env.GEMINI_API_KEY2 || '').trim();
+  if (geminiKey) {
+    const key = geminiKey;
     const candidateModels = [
       process.env.GEMINI_MODEL,
+      'gemini-2.5-flash',
+      'gemini-2.0-flash',
       'gemini-1.5-flash',
       'gemini-1.5-flash-latest',
       'gemini-1.5-pro',
