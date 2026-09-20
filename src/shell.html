@@ -267,6 +267,15 @@
   @keyframes tpulse {
     45% { transform: scale(1.38); filter: drop-shadow(0 0 9px rgba(46,139,87,.7)); }
   }
+  @keyframes highlightGlow {
+    0% { box-shadow: 0 0 0 2px #38bdf8, 0 0 24px rgba(56, 189, 248, 0.7); }
+    50% { box-shadow: 0 0 0 4px #a855f7, 0 0 36px rgba(168, 85, 247, 0.9); }
+    100% { box-shadow: none; }
+  }
+  .highlight-pulse {
+    animation: highlightGlow 2.4s ease-out;
+    border-color: #38bdf8 !important;
+  }
 
   /* permanent connector wiring: one conduit per dept from the top bar to a pod port */
   #wires { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
@@ -1620,41 +1629,49 @@
 
 <!-- Sunnyeora Integrations & Platform Connections Modal -->
 <div id="connModal" style="display:none; position:fixed; inset:0; z-index:99999; background:rgba(8,10,14,0.85); backdrop-filter:blur(8px); align-items:center; justify-content:center; padding:16px;">
-  <div style="background:#11141a; border:1px solid rgba(255,255,255,0.12); border-radius:16px; max-width:760px; width:100%; max-height:90vh; overflow-y:auto; box-shadow:0 30px 80px rgba(0,0,0,0.7); color:#e2e8f0; padding:28px; position:relative; font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
+  <div style="background:#11141a; border:1px solid rgba(255,255,255,0.12); border-radius:16px; max-width:800px; width:100%; max-height:92vh; overflow-y:auto; box-shadow:0 30px 80px rgba(0,0,0,0.7); color:#e2e8f0; padding:28px; position:relative; font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
     <button id="connClose" style="position:absolute; top:20px; right:20px; background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.1); color:#94a3b8; border-radius:8px; width:32px; height:32px; cursor:pointer; font-size:16px; display:flex; align-items:center; justify-content:center;">✕</button>
     
     <div style="display:flex; align-items:center; gap:10px; margin-bottom:6px;">
       <span style="font-size:20px;">⚡</span>
-      <h2 style="margin:0; font-size:18px; font-weight:700; letter-spacing:0.04em; color:#fff; text-transform:uppercase;">Sunnyeora Integrations Hub</h2>
-      <span style="background:rgba(34,197,94,0.15); color:#4ade80; border:1px solid rgba(34,197,94,0.3); font-size:10px; font-weight:700; padding:2px 8px; border-radius:12px; letter-spacing:0.05em;">LIVE SYSTEM</span>
+      <h2 style="margin:0; font-size:18px; font-weight:700; letter-spacing:0.04em; color:#fff; text-transform:uppercase;">Composio &amp; Platform Integrations Hub</h2>
+      <span style="background:rgba(34,197,94,0.15); color:#4ade80; border:1px solid rgba(34,197,94,0.3); font-size:10px; font-weight:700; padding:2px 8px; border-radius:12px; letter-spacing:0.05em;">ROLE-BASED ACCESS</span>
     </div>
-    <p style="margin:0 0 20px 0; color:#94a3b8; font-size:13px; line-height:1.5;">The single point of connection: Link your store, suppliers, email, and payment gateways so your 35 AI agents run your global business end-to-end.</p>
+    <p style="margin:0 0 16px 0; color:#94a3b8; font-size:13px; line-height:1.5;">Connect your tools via <b>Composio</b> to authorize your 35 autonomous agents. Each tool grants specific role-based permissions to its department pods.</p>
 
-    <!-- 4 Step Quick Roadmap -->
-    <div style="background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.08); border-radius:12px; padding:14px 18px; margin-bottom:24px;">
-      <div style="font-size:11px; font-weight:700; color:#38bdf8; text-transform:uppercase; letter-spacing:0.08em; margin-bottom:8px;">The 4-Step Connection Chain:</div>
-      <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(150px, 1fr)); gap:10px; font-size:12px; color:#cbd5e1;">
-        <div style="background:rgba(0,0,0,0.25); padding:8px 10px; border-radius:8px;"><b>1. Store</b><br><span style="color:#94a3b8; font-size:11px;">Create Shopify store in USD</span></div>
-        <div style="background:rgba(0,0,0,0.25); padding:8px 10px; border-radius:8px;"><b>2. Supplier</b><br><span style="color:#94a3b8; font-size:11px;">Install CJ Dropshipping app</span></div>
-        <div style="background:rgba(0,0,0,0.25); padding:8px 10px; border-radius:8px;"><b>3. Payments</b><br><span style="color:#94a3b8; font-size:11px;">Turn on Stripe (USD to INR)</span></div>
-        <div style="background:rgba(0,0,0,0.25); padding:8px 10px; border-radius:8px;"><b>4. AI Office</b><br><span style="color:#94a3b8; font-size:11px;">Agents write copy & ads</span></div>
+    <!-- Composio Master API Key Setup Banner -->
+    <div style="background:linear-gradient(135deg, rgba(234,179,8,0.14), rgba(16,185,129,0.08)); border:1px solid rgba(234,179,8,0.35); border-radius:14px; padding:16px 18px; margin-bottom:20px;">
+      <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; margin-bottom:10px;">
+        <div style="display:flex; align-items:center; gap:8px;">
+          <span style="font-size:20px;">🔑</span>
+          <div>
+            <div style="font-weight:700; font-size:13px; color:#fff;">COMPOSIO AGENT INTEGRATION KEY</div>
+            <div style="font-size:11px; color:#cbd5e1;">One master key connects all 35 agents to Gmail, Meta Ads, Slack, Notion, Stripe &amp; tools as per their roles.</div>
+          </div>
+        </div>
+        <a href="https://dashboard.composio.dev/settings/api-keys" target="_blank" rel="noopener" style="color:#fde047; font-size:11px; text-decoration:none; font-weight:700;">Get Key from Composio ↗</a>
       </div>
+      <div style="display:flex; gap:8px; align-items:center;">
+        <input id="composioApiKeyInput" type="password" placeholder="Paste your COMPOSIO_API_KEY (comp_... or ck_...)" style="flex:1; background:rgba(0,0,0,0.4); border:1px solid rgba(255,255,255,0.15); border-radius:8px; padding:8px 12px; color:#fff; font-size:12px; font-family:monospace; outline:none;" />
+        <button id="saveComposioBtn" style="background:#eab308; color:#000; font-weight:800; border:none; padding:8px 16px; border-radius:8px; font-size:12px; cursor:pointer;">SAVE KEY</button>
+      </div>
+      <div id="composioKeySavedMsg" style="display:none; color:#4ade80; font-size:11.5px; margin-top:8px; font-weight:700;">✓ Composio API Key active! Agents authorized for autonomous role-based execution.</div>
     </div>
 
     <!-- Integrations Grid -->
     <div style="display:flex; flex-direction:column; gap:14px;">
       
       <!-- 0. Google Gemini (Primary AI Brain) -->
-      <div style="background:linear-gradient(135deg, rgba(78,117,248,0.12), rgba(244,63,94,0.08)); border:1px solid rgba(78,117,248,0.35); border-radius:14px; padding:16px;">
+      <div id="conn-card-gemini" style="background:linear-gradient(135deg, rgba(78,117,248,0.12), rgba(244,63,94,0.08)); border:1px solid rgba(78,117,248,0.35); border-radius:14px; padding:16px; transition:all 0.3s ease;">
         <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px;">
           <div style="display:flex; align-items:center; gap:12px;">
             <div style="width:40px; height:40px; border-radius:10px; background:linear-gradient(135deg,#4E75F8,#7B61FF,#F43F5E); display:flex; align-items:center; justify-content:center; font-weight:800; font-size:20px; color:#fff; box-shadow:0 0 12px rgba(78,117,248,0.5);">✦</div>
             <div>
               <div style="font-weight:700; font-size:14px; color:#fff; display:flex; align-items:center; gap:8px;">
                 Google Gemini (Autonomous Office Brain)
-                <span style="background:rgba(78,117,248,0.25); color:#93c5fd; border:1px solid rgba(78,117,248,0.5); font-size:10px; font-weight:700; padding:2px 8px; border-radius:6px;">AI BRAIN · GEMINI 2.5 FLASH ✔</span>
+                <span style="background:rgba(78,117,248,0.25); color:#93c5fd; border:1px solid rgba(78,117,248,0.5); font-size:10px; font-weight:700; padding:2px 8px; border-radius:6px;">PRIMARY BRAIN ✔</span>
               </div>
-              <div style="font-size:12px; color:#cbd5e1;">The central AI intelligence powering all 35 agents, dropshipping unit economics, viral ad generation, and autonomous squad relays.</div>
+              <div style="font-size:12px; color:#cbd5e1; margin-top:2px;"><b>Role:</b> Core autonomous intelligence coordinating all 35 agents, dropshipping unit economics, viral ad hooks, and squad relays.</div>
             </div>
           </div>
           <div style="display:flex; gap:8px;">
@@ -1664,17 +1681,117 @@
         </div>
       </div>
 
-      <!-- 1. Shopify Storefront -->
-      <div style="background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08); border-radius:12px; padding:16px;">
-        <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:12px;">
+      <!-- 1. Gmail via Composio -->
+      <div id="conn-card-gmail" style="background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08); border-radius:14px; padding:16px; transition:all 0.3s ease;">
+        <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px;">
           <div style="display:flex; align-items:center; gap:12px;">
-            <div style="width:38px; height:38px; border-radius:10px; background:#95BF47; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:18px; color:#fff;">S</div>
+            <div style="width:40px; height:40px; border-radius:10px; background:#ea4335; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:20px; color:#fff;">M</div>
+            <div>
+              <div style="font-weight:700; font-size:14px; color:#fff; display:flex; align-items:center; gap:8px;">
+                Gmail &amp; Google Workspace
+                <span class="app-status-badge" data-key="gmail" style="background:rgba(34,197,94,0.2); color:#4ade80; font-size:10px; font-weight:700; padding:2px 8px; border-radius:6px;">CONNECTED COMPOSIO ✔</span>
+              </div>
+              <div style="font-size:12px; color:#cbd5e1; margin-top:2px;"><b>Role (Emails Pod):</b> Elead, Cmail, Imail, Vmail, Kmail handle autonomous customer care, order tracking triage, foreign buyer inquiries, and supplier emails.</div>
+            </div>
+          </div>
+          <div style="display:flex; gap:8px;">
+            <a href="https://dashboard.composio.dev/app/gmail" target="_blank" rel="noopener" style="background:#ea4335; color:#fff; text-decoration:none; font-weight:700; font-size:12px; padding:8px 14px; border-radius:8px; display:inline-block;">⚡ Connect in Composio ↗</a>
+            <a href="https://mail.google.com" target="_blank" rel="noopener" style="background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.15); color:#fff; text-decoration:none; font-weight:700; font-size:12px; padding:8px 14px; border-radius:8px; display:inline-block;">Open Gmail ↗</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2. Meta & Facebook Ads via Composio -->
+      <div id="conn-card-meta" style="background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08); border-radius:14px; padding:16px; transition:all 0.3s ease;">
+        <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px;">
+          <div style="display:flex; align-items:center; gap:12px;">
+            <div style="width:40px; height:40px; border-radius:10px; background:#0081fb; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:20px; color:#fff;">∞</div>
+            <div>
+              <div style="font-weight:700; font-size:14px; color:#fff; display:flex; align-items:center; gap:8px;">
+                Meta Ads &amp; Facebook Pages
+                <span class="app-status-badge" data-key="meta" style="background:rgba(59,130,246,0.2); color:#60a5fa; font-size:10px; font-weight:700; padding:2px 8px; border-radius:6px;">CONNECTED COMPOSIO ✔</span>
+              </div>
+              <div style="font-size:12px; color:#cbd5e1; margin-top:2px;"><b>Role (Marketing Pod):</b> Ada, Iggy, Vid generate ad copy variations, post viral video reels, launch ad sets, and monitor real-time ROAS.</div>
+            </div>
+          </div>
+          <div style="display:flex; gap:8px;">
+            <a href="https://dashboard.composio.dev/app/facebook" target="_blank" rel="noopener" style="background:#0081fb; color:#fff; text-decoration:none; font-weight:700; font-size:12px; padding:8px 14px; border-radius:8px; display:inline-block;">⚡ Connect in Composio ↗</a>
+            <a href="https://adsmanager.facebook.com" target="_blank" rel="noopener" style="background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.15); color:#fff; text-decoration:none; font-weight:700; font-size:12px; padding:8px 14px; border-radius:8px; display:inline-block;">Ads Manager ↗</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3. Slack via Composio -->
+      <div id="conn-card-slack" style="background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08); border-radius:14px; padding:16px; transition:all 0.3s ease;">
+        <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px;">
+          <div style="display:flex; align-items:center; gap:12px;">
+            <div style="width:40px; height:40px; border-radius:10px; background:#4a154b; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:20px; color:#fff;">#</div>
+            <div>
+              <div style="font-weight:700; font-size:14px; color:#fff; display:flex; align-items:center; gap:8px;">
+                Slack Workspace
+                <span class="app-status-badge" data-key="slack" style="background:rgba(34,197,94,0.2); color:#4ade80; font-size:10px; font-weight:700; padding:2px 8px; border-radius:6px;">CONNECTED COMPOSIO ✔</span>
+              </div>
+              <div style="font-size:12px; color:#cbd5e1; margin-top:2px;"><b>Role (All 35 Agents):</b> Cross-department squad handoffs, urgent stock/review alerts, and human-in-the-loop task approval notifications.</div>
+            </div>
+          </div>
+          <div style="display:flex; gap:8px;">
+            <a href="https://dashboard.composio.dev/app/slack" target="_blank" rel="noopener" style="background:#4a154b; color:#fff; text-decoration:none; font-weight:700; font-size:12px; padding:8px 14px; border-radius:8px; display:inline-block;">⚡ Connect in Composio ↗</a>
+            <a href="https://slack.com/" target="_blank" rel="noopener" style="background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.15); color:#fff; text-decoration:none; font-weight:700; font-size:12px; padding:8px 14px; border-radius:8px; display:inline-block;">Open Slack ↗</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4. Notion via Composio -->
+      <div id="conn-card-notion" style="background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08); border-radius:14px; padding:16px; transition:all 0.3s ease;">
+        <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px;">
+          <div style="display:flex; align-items:center; gap:12px;">
+            <div style="width:40px; height:40px; border-radius:10px; background:#fff; color:#000; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:20px;">N</div>
+            <div>
+              <div style="font-weight:700; font-size:14px; color:#fff; display:flex; align-items:center; gap:8px;">
+                Notion (Memory of Record)
+                <span class="app-status-badge" data-key="notion" style="background:rgba(34,197,94,0.2); color:#4ade80; font-size:10px; font-weight:700; padding:2px 8px; border-radius:6px;">CONNECTED COMPOSIO ✔</span>
+              </div>
+              <div style="font-size:12px; color:#cbd5e1; margin-top:2px;"><b>Role (Company-wide):</b> Central knowledge repository, supplier directories, SOP guidelines, and persistent agent episodic memory.</div>
+            </div>
+          </div>
+          <div style="display:flex; gap:8px;">
+            <a href="https://dashboard.composio.dev/app/notion" target="_blank" rel="noopener" style="background:#22c55e; color:#000; text-decoration:none; font-weight:700; font-size:12px; padding:8px 14px; border-radius:8px; display:inline-block;">⚡ Connect in Composio ↗</a>
+            <a href="https://www.notion.so/" target="_blank" rel="noopener" style="background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.15); color:#fff; text-decoration:none; font-weight:700; font-size:12px; padding:8px 14px; border-radius:8px; display:inline-block;">Open Notion ↗</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- 5. Stripe Global & India via Composio -->
+      <div id="conn-card-stripe" style="background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08); border-radius:14px; padding:16px; transition:all 0.3s ease;">
+        <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px;">
+          <div style="display:flex; align-items:center; gap:12px;">
+            <div style="width:40px; height:40px; border-radius:10px; background:#6366f1; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:20px; color:#fff;">$</div>
+            <div>
+              <div style="font-weight:700; font-size:14px; color:#fff; display:flex; align-items:center; gap:8px;">
+                Stripe (Payments &amp; Settlement)
+                <span class="app-status-badge" data-key="stripe" style="background:rgba(34,197,94,0.2); color:#4ade80; font-size:10px; font-weight:700; padding:2px 8px; border-radius:6px;">CONNECTED COMPOSIO ✔</span>
+              </div>
+              <div style="font-size:12px; color:#cbd5e1; margin-top:2px;"><b>Role (Finance Pod):</b> Alead, Invo, Recon monitor USD foreign currency charges, refund disputes, and automated INR bank account settlements.</div>
+            </div>
+          </div>
+          <div style="display:flex; gap:8px;">
+            <a href="https://dashboard.composio.dev/app/stripe" target="_blank" rel="noopener" style="background:#6366f1; color:#fff; text-decoration:none; font-weight:700; font-size:12px; padding:8px 14px; border-radius:8px; display:inline-block;">⚡ Connect in Composio ↗</a>
+            <a href="https://dashboard.stripe.com/" target="_blank" rel="noopener" style="background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.15); color:#fff; text-decoration:none; font-weight:700; font-size:12px; padding:8px 14px; border-radius:8px; display:inline-block;">Open Stripe ↗</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- 6. Shopify Storefront & Admin -->
+      <div id="conn-card-shopify" style="background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08); border-radius:14px; padding:16px; transition:all 0.3s ease;">
+        <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:12px; flex-wrap:wrap; gap:12px;">
+          <div style="display:flex; align-items:center; gap:12px;">
+            <div style="width:40px; height:40px; border-radius:10px; background:#95BF47; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:20px; color:#fff;">S</div>
             <div>
               <div style="font-weight:700; font-size:14px; color:#fff; display:flex; align-items:center; gap:8px;">
                 Shopify Storefront (Sunnyeora)
                 <span id="shopifyStatusBadge" style="background:rgba(34,197,94,0.2); color:#4ade80; font-size:10px; font-weight:700; padding:2px 6px; border-radius:6px;">CONNECTED ✔</span>
               </div>
-              <div style="font-size:12px; color:#94a3b8;">Where US/UK customers browse and checkout in USD ($).</div>
+              <div style="font-size:12px; color:#cbd5e1; margin-top:2px;"><b>Role (All Pods):</b> Live product catalog syncing, inventory updates, and order routing for international shoppers.</div>
             </div>
           </div>
           <div style="display:flex; gap:8px;">
@@ -1682,7 +1799,6 @@
             <a href="https://sunnyeora.myshopify.com/" target="_blank" rel="noopener" style="background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.15); color:#fff; text-decoration:none; font-weight:700; font-size:12px; padding:8px 14px; border-radius:8px; display:inline-block;">Storefront ↗</a>
           </div>
         </div>
-        <!-- Interactive Store URL & API Token inputs -->
         <div style="display:flex; flex-direction:column; gap:8px;">
           <div style="display:flex; gap:8px; align-items:center; background:rgba(0,0,0,0.3); border:1px solid rgba(255,255,255,0.08); border-radius:8px; padding:6px 10px;">
             <span style="font-size:12px; color:#94a3b8; white-space:nowrap; width:100px;">Store URL:</span>
@@ -1694,243 +1810,233 @@
             <button id="saveShopifyBtn" style="background:#22c55e; border:none; color:#000; font-weight:700; font-size:11px; padding:6px 14px; border-radius:6px; cursor:pointer;">UPDATE</button>
           </div>
         </div>
-        <div id="shopifyConnectedInfo" style="display:block; margin-top:8px; font-size:11px; color:#4ade80;">
-          ✓ Connected store: <b id="shopifySavedDomain">https://sunnyeora.myshopify.com/</b> — Storefront & Backend Linked!
+      </div>
+
+      <!-- 7. CJ Dropshipping -->
+      <div id="conn-card-cj" style="background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08); border-radius:14px; padding:16px; transition:all 0.3s ease;">
+        <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px;">
+          <div style="display:flex; align-items:center; gap:12px;">
+            <div style="width:40px; height:40px; border-radius:10px; background:#f97316; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:20px; color:#fff;">CJ</div>
+            <div>
+              <div style="font-weight:700; font-size:14px; color:#fff; display:flex; align-items:center; gap:8px;">
+                CJ Dropshipping (Supplier &amp; Logistics)
+                <span style="background:rgba(34,197,94,0.2); color:#4ade80; font-size:10px; font-weight:700; padding:2px 6px; border-radius:6px;">CONNECTED ✔</span>
+              </div>
+              <div style="font-size:12px; color:#cbd5e1; margin-top:2px;"><b>Role (Ops Pod):</b> Olead, Scout automatically fulfill orders, package apparel, and dispatch via USPS with 7-10 day tracking.</div>
+            </div>
+          </div>
+          <a href="https://www.cjdropshipping.com" target="_blank" rel="noopener" style="background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2); color:#fff; text-decoration:none; font-weight:700; font-size:12px; padding:8px 14px; border-radius:8px; display:inline-block;">Open CJ Portal ↗</a>
         </div>
       </div>
 
-      <!-- 2. CJ Dropshipping -->
-      <div style="display:flex; align-items:center; justify-content:space-between; background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08); border-radius:12px; padding:14px 16px;">
-        <div style="display:flex; align-items:center; gap:12px;">
-          <div style="width:38px; height:38px; border-radius:10px; background:#f97316; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:18px; color:#fff;">CJ</div>
-          <div>
-            <div style="font-weight:700; font-size:14px; color:#fff; display:flex; align-items:center; gap:8px;">
-              CJ Dropshipping (Supplier & Logistics)
-              <span style="background:rgba(34,197,94,0.2); color:#4ade80; font-size:10px; font-weight:700; padding:2px 6px; border-radius:6px;">CONNECTED TO SHOPIFY ✔</span>
+      <!-- 8. Canva via Composio -->
+      <div id="conn-card-canva" style="background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08); border-radius:14px; padding:16px; transition:all 0.3s ease;">
+        <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px;">
+          <div style="display:flex; align-items:center; gap:12px;">
+            <div style="width:40px; height:40px; border-radius:10px; background:#00c4cc; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:20px; color:#fff;">C</div>
+            <div>
+              <div style="font-weight:700; font-size:14px; color:#fff; display:flex; align-items:center; gap:8px;">
+                Canva (Design &amp; Creative Assets)
+                <span class="app-status-badge" data-key="canva" style="background:rgba(0,196,204,0.2); color:#5eead4; font-size:10px; padding:2px 6px; border-radius:6px;">DESIGN READY</span>
+              </div>
+              <div style="font-size:12px; color:#cbd5e1; margin-top:2px;"><b>Role (Marketing &amp; Delivery):</b> Gfx and Cass design brand carousels, seasonal collection banners, and promotional graphics.</div>
             </div>
-            <div style="font-size:12px; color:#94a3b8;">Auto-syncs Shopify orders, packs, and ships to US in 7-10 days via USPS.</div>
           </div>
-        </div>
-        <a href="https://www.cjdropshipping.com" target="_blank" rel="noopener" style="background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2); color:#fff; text-decoration:none; font-weight:700; font-size:12px; padding:8px 14px; border-radius:8px; display:inline-block;">Open CJ Portal ↗</a>
-      </div>
-
-      <!-- 3. Gmail via Composio -->
-      <div style="display:flex; align-items:center; justify-content:space-between; background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08); border-radius:12px; padding:14px 16px;">
-        <div style="display:flex; align-items:center; gap:12px;">
-          <div style="width:38px; height:38px; border-radius:10px; background:#ea4335; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:18px; color:#fff;">M</div>
-          <div>
-            <div style="font-weight:700; font-size:14px; color:#fff; display:flex; align-items:center; gap:8px;">
-              Gmail (Customer Care & Triage)
-              <span id="modalComposioBadge" style="background:rgba(34,197,94,0.2); color:#4ade80; font-size:10px; padding:2px 6px; border-radius:6px;">CONNECTED KEY</span>
-            </div>
-            <div style="font-size:12px; color:#94a3b8;">Emails Pod drafts tracking updates, replies to foreign buyers, and contacts suppliers.</div>
+          <div style="display:flex; gap:8px;">
+            <a href="https://dashboard.composio.dev/app/canva" target="_blank" rel="noopener" style="background:#00c4cc; color:#000; text-decoration:none; font-weight:700; font-size:12px; padding:8px 14px; border-radius:8px; display:inline-block;">⚡ Connect in Composio ↗</a>
+            <a href="https://www.canva.com/" target="_blank" rel="noopener" style="background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.15); color:#fff; text-decoration:none; font-weight:700; font-size:12px; padding:8px 14px; border-radius:8px; display:inline-block;">Open Canva ↗</a>
           </div>
-        </div>
-        <div style="display:flex; gap:8px;">
-          <a href="https://mail.google.com" target="_blank" rel="noopener" style="background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2); color:#fff; text-decoration:none; font-weight:700; font-size:12px; padding:8px 14px; border-radius:8px; display:inline-block;">Open Gmail ↗</a>
-          <a href="https://dashboard.composio.dev/app/gmail" target="_blank" rel="noopener" style="background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2); color:#fff; text-decoration:none; font-weight:700; font-size:12px; padding:8px 14px; border-radius:8px; display:inline-block;">Composio ↗</a>
         </div>
       </div>
 
-      <!-- 4. Stripe Global & India -->
-      <div style="display:flex; align-items:center; justify-content:space-between; background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08); border-radius:12px; padding:14px 16px;">
-        <div style="display:flex; align-items:center; gap:12px;">
-          <div style="width:38px; height:38px; border-radius:10px; background:#6366f1; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:18px; color:#fff;">$</div>
-          <div>
-            <div style="font-weight:700; font-size:14px; color:#fff; display:flex; align-items:center; gap:8px;">
-              Stripe India (Global Checkout & Payouts)
-              <span style="background:rgba(34,197,94,0.2); color:#4ade80; font-size:10px; font-weight:700; padding:2px 6px; border-radius:6px;">ACTIVE</span>
+      <!-- 9. Loops via Composio -->
+      <div id="conn-card-loops" style="background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08); border-radius:14px; padding:16px; transition:all 0.3s ease;">
+        <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px;">
+          <div style="display:flex; align-items:center; gap:12px;">
+            <div style="width:40px; height:40px; border-radius:10px; background:#000; border:1px solid rgba(255,255,255,0.2); display:flex; align-items:center; justify-content:center; font-weight:800; font-size:20px; color:#fff;">L</div>
+            <div>
+              <div style="font-weight:700; font-size:14px; color:#fff; display:flex; align-items:center; gap:8px;">
+                Loops (Email Retention &amp; Drip Flows)
+                <span class="app-status-badge" data-key="loops" style="background:rgba(255,255,255,0.1); color:#e2e8f0; font-size:10px; padding:2px 6px; border-radius:6px;">AUTOMATED</span>
+              </div>
+              <div style="font-size:12px; color:#cbd5e1; margin-top:2px;"><b>Role (Marketing Pod):</b> Newt sends automated abandoned checkout recovery emails, welcome discounts, and VIP retention journeys.</div>
             </div>
-            <div style="font-size:12px; color:#94a3b8;">Accepts USD from foreign credit cards; auto-settles INR to Indian bank accounts.</div>
           </div>
-        </div>
-        <a href="https://dashboard.stripe.com/" target="_blank" rel="noopener" style="background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2); color:#fff; text-decoration:none; font-weight:700; font-size:12px; padding:8px 14px; border-radius:8px; display:inline-block;">Open Stripe ↗</a>
-      </div>
-
-      <!-- 5. Meta & Facebook Ads -->
-      <div style="display:flex; align-items:center; justify-content:space-between; background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08); border-radius:12px; padding:14px 16px;">
-        <div style="display:flex; align-items:center; gap:12px;">
-          <div style="width:38px; height:38px; border-radius:10px; background:#0081fb; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:18px; color:#fff;">∞</div>
-          <div>
-            <div style="font-weight:700; font-size:14px; color:#fff; display:flex; align-items:center; gap:8px;">
-              Facebook &amp; Meta Ads (Marketing Pod)
-              <span id="modalMetaBadge" style="background:rgba(59,130,246,0.2); color:#60a5fa; font-size:10px; padding:2px 6px; border-radius:6px;">CONNECTED</span>
-            </div>
-            <div style="font-size:12px; color:#94a3b8;">Marketing agents (Ada, Iggy, Vid) generate ad hooks, post viral video reels, and track sales attribution.</div>
+          <div style="display:flex; gap:8px;">
+            <a href="https://dashboard.composio.dev/app/loops" target="_blank" rel="noopener" style="background:rgba(255,255,255,0.2); color:#fff; text-decoration:none; font-weight:700; font-size:12px; padding:8px 14px; border-radius:8px; display:inline-block;">⚡ Connect in Composio ↗</a>
+            <a href="https://app.loops.so/" target="_blank" rel="noopener" style="background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.15); color:#fff; text-decoration:none; font-weight:700; font-size:12px; padding:8px 14px; border-radius:8px; display:inline-block;">Open Loops ↗</a>
           </div>
-        </div>
-        <div style="display:flex; gap:8px;">
-          <a href="https://adsmanager.facebook.com" target="_blank" rel="noopener" style="background:#0081fb; color:#fff; text-decoration:none; font-weight:700; font-size:12px; padding:8px 14px; border-radius:8px; display:inline-block;">Ads Manager ↗</a>
-          <a href="https://dashboard.composio.dev/app/facebook" target="_blank" rel="noopener" style="background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.15); color:#fff; text-decoration:none; font-weight:700; font-size:12px; padding:8px 14px; border-radius:8px; display:inline-block;">Composio ↗</a>
         </div>
       </div>
 
-      <!-- 6. Canva -->
-      <div style="display:flex; align-items:center; justify-content:space-between; background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08); border-radius:12px; padding:14px 16px;">
-        <div style="display:flex; align-items:center; gap:12px;">
-          <div style="width:38px; height:38px; border-radius:10px; background:#00c4cc; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:18px; color:#fff;">C</div>
-          <div>
-            <div style="font-weight:700; font-size:14px; color:#fff; display:flex; align-items:center; gap:8px;">
-              Canva (Graphic Design &amp; Ad Creatives)
-              <span style="background:rgba(0,196,204,0.2); color:#5eead4; font-size:10px; padding:2px 6px; border-radius:6px;">DESIGN READY</span>
+      <!-- 10. Beehiiv via Composio -->
+      <div id="conn-card-beehiiv" style="background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08); border-radius:14px; padding:16px; transition:all 0.3s ease;">
+        <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px;">
+          <div style="display:flex; align-items:center; gap:12px;">
+            <div style="width:40px; height:40px; border-radius:10px; background:#eab308; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:20px; color:#000;">🐝</div>
+            <div>
+              <div style="font-weight:700; font-size:14px; color:#fff; display:flex; align-items:center; gap:8px;">
+                Beehiiv (VIP Fashion Newsletter)
+                <span class="app-status-badge" data-key="beehiiv" style="background:rgba(234,179,8,0.2); color:#fde047; font-size:10px; padding:2px 6px; border-radius:6px;">EDITORIAL</span>
+              </div>
+              <div style="font-size:12px; color:#cbd5e1; margin-top:2px;"><b>Role (Marketing Pod):</b> Riley crafts and sends weekly curated fashion trend breakdowns and seasonal product launches.</div>
             </div>
-            <div style="font-size:12px; color:#94a3b8;">Creates high-converting product banners, Instagram carousels, and promotional overlays.</div>
+          </div>
+          <div style="display:flex; gap:8px;">
+            <a href="https://dashboard.composio.dev/app/beehiiv" target="_blank" rel="noopener" style="background:#eab308; color:#000; text-decoration:none; font-weight:700; font-size:12px; padding:8px 14px; border-radius:8px; display:inline-block;">⚡ Connect in Composio ↗</a>
+            <a href="https://app.beehiiv.com/" target="_blank" rel="noopener" style="background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.15); color:#fff; text-decoration:none; font-weight:700; font-size:12px; padding:8px 14px; border-radius:8px; display:inline-block;">Open Beehiiv ↗</a>
           </div>
         </div>
-        <a href="https://www.canva.com/" target="_blank" rel="noopener" style="background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2); color:#fff; text-decoration:none; font-weight:700; font-size:12px; padding:8px 14px; border-radius:8px; display:inline-block;">Open Canva ↗</a>
       </div>
 
-      <!-- 7. Loops -->
-      <div style="display:flex; align-items:center; justify-content:space-between; background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08); border-radius:12px; padding:14px 16px;">
-        <div style="display:flex; align-items:center; gap:12px;">
-          <div style="width:38px; height:38px; border-radius:10px; background:#000; border:1px solid rgba(255,255,255,0.2); display:flex; align-items:center; justify-content:center; font-weight:800; font-size:18px; color:#fff;">L</div>
-          <div>
-            <div style="font-weight:700; font-size:14px; color:#fff; display:flex; align-items:center; gap:8px;">
-              Loops (Email Automation &amp; Retention)
-              <span style="background:rgba(255,255,255,0.1); color:#e2e8f0; font-size:10px; padding:2px 6px; border-radius:6px;">AUTOMATED</span>
+      <!-- 11. Hyperframes -->
+      <div id="conn-card-hyperframes" style="background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08); border-radius:14px; padding:16px; transition:all 0.3s ease;">
+        <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px;">
+          <div style="display:flex; align-items:center; gap:12px;">
+            <div style="width:40px; height:40px; border-radius:10px; background:#8b5cf6; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:20px; color:#fff;">⚡</div>
+            <div>
+              <div style="font-weight:700; font-size:14px; color:#fff; display:flex; align-items:center; gap:8px;">
+                Hyperframes (Viral AI Video Engine)
+                <span class="app-status-badge" data-key="hyperframes" style="background:rgba(139,92,246,0.2); color:#c4b5fd; font-size:10px; padding:2px 6px; border-radius:6px;">VIDEO AI</span>
+              </div>
+              <div style="font-size:12px; color:#cbd5e1; margin-top:2px;"><b>Role (Marketing Pod):</b> Vid creates dynamic TikTok, Reels, and Shorts video ads from Sunnyeora catalog images.</div>
             </div>
-            <div style="font-size:12px; color:#94a3b8;">Abandoned cart flows, shipping confirmations, and VIP loyalty email drip sequences.</div>
           </div>
+          <a href="https://hyperframes.com/" target="_blank" rel="noopener" style="background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2); color:#fff; text-decoration:none; font-weight:700; font-size:12px; padding:8px 14px; border-radius:8px; display:inline-block;">Open Hyperframes ↗</a>
         </div>
-        <a href="https://app.loops.so/" target="_blank" rel="noopener" style="background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2); color:#fff; text-decoration:none; font-weight:700; font-size:12px; padding:8px 14px; border-radius:8px; display:inline-block;">Open Loops ↗</a>
       </div>
 
-      <!-- 8. Beehiiv -->
-      <div style="display:flex; align-items:center; justify-content:space-between; background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08); border-radius:12px; padding:14px 16px;">
-        <div style="display:flex; align-items:center; gap:12px;">
-          <div style="width:38px; height:38px; border-radius:10px; background:#eab308; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:18px; color:#000;">🐝</div>
-          <div>
-            <div style="font-weight:700; font-size:14px; color:#fff; display:flex; align-items:center; gap:8px;">
-              Beehiiv (VIP Fashion Newsletters)
-              <span style="background:rgba(234,179,8,0.2); color:#fde047; font-size:10px; padding:2px 6px; border-radius:6px;">EDITORIAL</span>
+      <!-- 12. Microsoft Clarity -->
+      <div id="conn-card-clarity" style="background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08); border-radius:14px; padding:16px; transition:all 0.3s ease;">
+        <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px;">
+          <div style="display:flex; align-items:center; gap:12px;">
+            <div style="width:40px; height:40px; border-radius:10px; background:#0284c7; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:20px; color:#fff;">📊</div>
+            <div>
+              <div style="font-weight:700; font-size:14px; color:#fff; display:flex; align-items:center; gap:8px;">
+                Microsoft Clarity (Session Heatmaps)
+                <span class="app-status-badge" data-key="clarity" style="background:rgba(2,132,199,0.2); color:#7dd3fc; font-size:10px; padding:2px 6px; border-radius:6px;">ANALYTICS</span>
+              </div>
+              <div style="font-size:12px; color:#cbd5e1; margin-top:2px;"><b>Role (Marketing Pod):</b> Mlead &amp; Ada monitor visitor drop-off points, click heatmaps, and checkout friction on sunnyeora.com.</div>
             </div>
-            <div style="font-size:12px; color:#94a3b8;">Curated weekend style edits and viral product trend alerts dispatched to subscribers.</div>
           </div>
+          <a href="https://clarity.microsoft.com/" target="_blank" rel="noopener" style="background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2); color:#fff; text-decoration:none; font-weight:700; font-size:12px; padding:8px 14px; border-radius:8px; display:inline-block;">Open Clarity ↗</a>
         </div>
-        <a href="https://app.beehiiv.com/" target="_blank" rel="noopener" style="background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2); color:#fff; text-decoration:none; font-weight:700; font-size:12px; padding:8px 14px; border-radius:8px; display:inline-block;">Open Beehiiv ↗</a>
       </div>
 
-      <!-- 9. Hyperframes -->
-      <div style="display:flex; align-items:center; justify-content:space-between; background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08); border-radius:12px; padding:14px 16px;">
-        <div style="display:flex; align-items:center; gap:12px;">
-          <div style="width:38px; height:38px; border-radius:10px; background:#8b5cf6; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:18px; color:#fff;">⚡</div>
-          <div>
-            <div style="font-weight:700; font-size:14px; color:#fff; display:flex; align-items:center; gap:8px;">
-              Hyperframes (Viral AI Video Creatives)
-              <span style="background:rgba(139,92,246,0.2); color:#c4b5fd; font-size:10px; padding:2px 6px; border-radius:6px;">VIDEO AI</span>
+      <!-- 13. Apollo.io via Composio -->
+      <div id="conn-card-apollo" style="background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08); border-radius:14px; padding:16px; transition:all 0.3s ease;">
+        <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px;">
+          <div style="display:flex; align-items:center; gap:12px;">
+            <div style="width:40px; height:40px; border-radius:10px; background:#f59e0b; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:20px; color:#000;">A</div>
+            <div>
+              <div style="font-weight:700; font-size:14px; color:#fff; display:flex; align-items:center; gap:8px;">
+                Apollo.io (Wholesale Prospecting)
+                <span class="app-status-badge" data-key="apollo" style="background:rgba(245,158,11,0.2); color:#fcd34d; font-size:10px; padding:2px 6px; border-radius:6px;">B2B INTEL</span>
+              </div>
+              <div style="font-size:12px; color:#cbd5e1; margin-top:2px;"><b>Role (Sales Pod):</b> Pros discovers boutique retailers, fashion buyers, and distributors for bulk wholesale orders.</div>
             </div>
-            <div style="font-size:12px; color:#94a3b8;">Generates TikTok, Instagram Reels, and YouTube Shorts dynamic product video ads.</div>
+          </div>
+          <div style="display:flex; gap:8px;">
+            <a href="https://dashboard.composio.dev/app/apollo" target="_blank" rel="noopener" style="background:#f59e0b; color:#000; text-decoration:none; font-weight:700; font-size:12px; padding:8px 14px; border-radius:8px; display:inline-block;">⚡ Connect in Composio ↗</a>
+            <a href="https://app.apollo.io/" target="_blank" rel="noopener" style="background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.15); color:#fff; text-decoration:none; font-weight:700; font-size:12px; padding:8px 14px; border-radius:8px; display:inline-block;">Open Apollo ↗</a>
           </div>
         </div>
-        <a href="https://hyperframes.com/" target="_blank" rel="noopener" style="background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2); color:#fff; text-decoration:none; font-weight:700; font-size:12px; padding:8px 14px; border-radius:8px; display:inline-block;">Open Hyperframes ↗</a>
       </div>
 
-      <!-- 10. Microsoft Clarity -->
-      <div style="display:flex; align-items:center; justify-content:space-between; background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08); border-radius:12px; padding:14px 16px;">
-        <div style="display:flex; align-items:center; gap:12px;">
-          <div style="width:38px; height:38px; border-radius:10px; background:#0284c7; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:18px; color:#fff;">📊</div>
-          <div>
-            <div style="font-weight:700; font-size:14px; color:#fff; display:flex; align-items:center; gap:8px;">
-              Microsoft Clarity (Analytics &amp; Heatmaps)
-              <span style="background:rgba(2,132,199,0.2); color:#7dd3fc; font-size:10px; padding:2px 6px; border-radius:6px;">ANALYTICS</span>
+      <!-- 14. PandaDoc via Composio -->
+      <div id="conn-card-pandadoc" style="background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08); border-radius:14px; padding:16px; transition:all 0.3s ease;">
+        <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px;">
+          <div style="display:flex; align-items:center; gap:12px;">
+            <div style="width:40px; height:40px; border-radius:10px; background:#10b981; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:20px; color:#fff;">P</div>
+            <div>
+              <div style="font-weight:700; font-size:14px; color:#fff; display:flex; align-items:center; gap:8px;">
+                PandaDoc (Contracts &amp; Invoices)
+                <span class="app-status-badge" data-key="pandadoc" style="background:rgba(16,185,129,0.2); color:#6ee7b7; font-size:10px; padding:2px 6px; border-radius:6px;">LEGAL</span>
+              </div>
+              <div style="font-size:12px; color:#cbd5e1; margin-top:2px;"><b>Role (Ops &amp; Delivery):</b> Crep and Legal generate supplier contracts, wholesale pricing agreements, and legal documentation.</div>
             </div>
-            <div style="font-size:12px; color:#94a3b8;">Inspect session replays, click heatmaps, and checkout bounce rates on sunnyeora.com.</div>
+          </div>
+          <div style="display:flex; gap:8px;">
+            <a href="https://dashboard.composio.dev/app/pandadoc" target="_blank" rel="noopener" style="background:#10b981; color:#fff; text-decoration:none; font-weight:700; font-size:12px; padding:8px 14px; border-radius:8px; display:inline-block;">⚡ Connect in Composio ↗</a>
+            <a href="https://app.pandadoc.com/" target="_blank" rel="noopener" style="background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.15); color:#fff; text-decoration:none; font-weight:700; font-size:12px; padding:8px 14px; border-radius:8px; display:inline-block;">Open PandaDoc ↗</a>
           </div>
         </div>
-        <a href="https://clarity.microsoft.com/" target="_blank" rel="noopener" style="background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2); color:#fff; text-decoration:none; font-weight:700; font-size:12px; padding:8px 14px; border-radius:8px; display:inline-block;">Open Clarity ↗</a>
       </div>
 
-      <!-- 11. Apollo.io -->
-      <div style="display:flex; align-items:center; justify-content:space-between; background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08); border-radius:12px; padding:14px 16px;">
-        <div style="display:flex; align-items:center; gap:12px;">
-          <div style="width:38px; height:38px; border-radius:10px; background:#f59e0b; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:18px; color:#000;">A</div>
-          <div>
-            <div style="font-weight:700; font-size:14px; color:#fff; display:flex; align-items:center; gap:8px;">
-              Apollo.io (Wholesale &amp; B2B Prospecting)
-              <span style="background:rgba(245,158,11,0.2); color:#fcd34d; font-size:10px; padding:2px 6px; border-radius:6px;">B2B INTEL</span>
+      <!-- 15. Xero via Composio -->
+      <div id="conn-card-xero" style="background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08); border-radius:14px; padding:16px; transition:all 0.3s ease;">
+        <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px;">
+          <div style="display:flex; align-items:center; gap:12px;">
+            <div style="width:40px; height:40px; border-radius:10px; background:#14b8a6; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:20px; color:#fff;">X</div>
+            <div>
+              <div style="font-weight:700; font-size:14px; color:#fff; display:flex; align-items:center; gap:8px;">
+                Xero (Accounting &amp; Currency Ledger)
+                <span class="app-status-badge" data-key="xero" style="background:rgba(20,184,166,0.2); color:#5eead4; font-size:10px; padding:2px 6px; border-radius:6px;">FINANCE</span>
+              </div>
+              <div style="font-size:12px; color:#cbd5e1; margin-top:2px;"><b>Role (Finance Pod):</b> Alead &amp; Apay log USD/INR currency conversions, CJ supplier expenses, and monthly balance sheets.</div>
             </div>
-            <div style="font-size:12px; color:#94a3b8;">Identifies boutique retail owners and bulk buyers for wholesale fashion purchase orders.</div>
+          </div>
+          <div style="display:flex; gap:8px;">
+            <a href="https://dashboard.composio.dev/app/xero" target="_blank" rel="noopener" style="background:#14b8a6; color:#fff; text-decoration:none; font-weight:700; font-size:12px; padding:8px 14px; border-radius:8px; display:inline-block;">⚡ Connect in Composio ↗</a>
+            <a href="https://go.xero.com/" target="_blank" rel="noopener" style="background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.15); color:#fff; text-decoration:none; font-weight:700; font-size:12px; padding:8px 14px; border-radius:8px; display:inline-block;">Open Xero ↗</a>
           </div>
         </div>
-        <a href="https://app.apollo.io/" target="_blank" rel="noopener" style="background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2); color:#fff; text-decoration:none; font-weight:700; font-size:12px; padding:8px 14px; border-radius:8px; display:inline-block;">Open Apollo ↗</a>
       </div>
 
-      <!-- 12. Notion -->
-      <div style="display:flex; align-items:center; justify-content:space-between; background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08); border-radius:12px; padding:14px 16px;">
-        <div style="display:flex; align-items:center; gap:12px;">
-          <div style="width:38px; height:38px; border-radius:10px; background:#fff; color:#000; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:18px;">N</div>
-          <div>
-            <div style="font-weight:700; font-size:14px; color:#fff; display:flex; align-items:center; gap:8px;">
-              Notion (Company Wiki &amp; Playbooks)
-              <span style="background:rgba(255,255,255,0.1); color:#fff; font-size:10px; padding:2px 6px; border-radius:6px;">CENTRAL HUB</span>
+      <!-- 16. FullEnrich -->
+      <div id="conn-card-fullenrich" style="background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08); border-radius:14px; padding:16px; transition:all 0.3s ease;">
+        <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px;">
+          <div style="display:flex; align-items:center; gap:12px;">
+            <div style="width:40px; height:40px; border-radius:10px; background:#6366f1; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:18px; color:#fff;">FE</div>
+            <div>
+              <div style="font-weight:700; font-size:14px; color:#fff; display:flex; align-items:center; gap:8px;">
+                FullEnrich (Contact Intelligence)
+                <span class="app-status-badge" data-key="fullenrich" style="background:rgba(99,102,241,0.2); color:#a5b4fc; font-size:10px; padding:2px 6px; border-radius:6px;">ENRICHMENT</span>
+              </div>
+              <div style="font-size:12px; color:#cbd5e1; margin-top:2px;"><b>Role (Sales Pod):</b> Enzo and ILM verify direct wholesale buyer phone numbers and supplier deliverability.</div>
             </div>
-            <div style="font-size:12px; color:#94a3b8;">Supplier contracts, returns policy, and agent memory SOPs synced across all 35 agents.</div>
           </div>
+          <a href="https://app.fullenrich.com/" target="_blank" rel="noopener" style="background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2); color:#fff; text-decoration:none; font-weight:700; font-size:12px; padding:8px 14px; border-radius:8px; display:inline-block;">Open FullEnrich ↗</a>
         </div>
-        <a href="https://www.notion.so/" target="_blank" rel="noopener" style="background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2); color:#fff; text-decoration:none; font-weight:700; font-size:12px; padding:8px 14px; border-radius:8px; display:inline-block;">Open Notion ↗</a>
       </div>
 
-      <!-- 13. PandaDoc -->
-      <div style="display:flex; align-items:center; justify-content:space-between; background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08); border-radius:12px; padding:14px 16px;">
-        <div style="display:flex; align-items:center; gap:12px;">
-          <div style="width:38px; height:38px; border-radius:10px; background:#10b981; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:18px; color:#fff;">P</div>
-          <div>
-            <div style="font-weight:700; font-size:14px; color:#fff; display:flex; align-items:center; gap:8px;">
-              PandaDoc (Contracts &amp; Supplier Agreements)
-              <span style="background:rgba(16,185,129,0.2); color:#6ee7b7; font-size:10px; padding:2px 6px; border-radius:6px;">LEGAL</span>
+      <!-- 17. iMessage & SMS -->
+      <div id="conn-card-imessage" style="background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08); border-radius:14px; padding:16px; transition:all 0.3s ease;">
+        <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px;">
+          <div style="display:flex; align-items:center; gap:12px;">
+            <div style="width:40px; height:40px; border-radius:10px; background:#22c55e; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:20px; color:#fff;">💬</div>
+            <div>
+              <div style="font-weight:700; font-size:14px; color:#fff; display:flex; align-items:center; gap:8px;">
+                iMessage &amp; SMS Dispatch
+                <span class="app-status-badge" data-key="imessage" style="background:rgba(34,197,94,0.2); color:#86efac; font-size:10px; padding:2px 6px; border-radius:6px;">SMS DIRECT</span>
+              </div>
+              <div style="font-size:12px; color:#cbd5e1; margin-top:2px;"><b>Role (Sales &amp; Care):</b> Ilm and Cmail dispatch instant delivery tracking updates and VIP customer concierge SMS.</div>
             </div>
-            <div style="font-size:12px; color:#94a3b8;">Automated supply agreements, non-disclosure contracts, and electronic signatures.</div>
           </div>
+          <a href="messages://" target="_blank" rel="noopener" style="background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2); color:#fff; text-decoration:none; font-weight:700; font-size:12px; padding:8px 14px; border-radius:8px; display:inline-block;">Open Messages ↗</a>
         </div>
-        <a href="https://app.pandadoc.com/" target="_blank" rel="noopener" style="background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2); color:#fff; text-decoration:none; font-weight:700; font-size:12px; padding:8px 14px; border-radius:8px; display:inline-block;">Open PandaDoc ↗</a>
       </div>
 
-      <!-- 14. Xero -->
-      <div style="display:flex; align-items:center; justify-content:space-between; background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08); border-radius:12px; padding:14px 16px;">
-        <div style="display:flex; align-items:center; gap:12px;">
-          <div style="width:38px; height:38px; border-radius:10px; background:#14b8a6; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:18px; color:#fff;">X</div>
-          <div>
-            <div style="font-weight:700; font-size:14px; color:#fff; display:flex; align-items:center; gap:8px;">
-              Xero (Cloud Accounting &amp; Multi-Currency)
-              <span style="background:rgba(20,184,166,0.2); color:#5eead4; font-size:10px; padding:2px 6px; border-radius:6px;">FINANCE</span>
+      <!-- 18. Headless Chrome Browser -->
+      <div id="conn-card-chrome" style="background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08); border-radius:14px; padding:16px; transition:all 0.3s ease;">
+        <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px;">
+          <div style="display:flex; align-items:center; gap:12px;">
+            <div style="width:40px; height:40px; border-radius:10px; background:#4285f4; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:20px; color:#fff;">🌐</div>
+            <div>
+              <div style="font-weight:700; font-size:14px; color:#fff; display:flex; align-items:center; gap:8px;">
+                Autonomous Chrome Browser
+                <span class="app-status-badge" data-key="chrome" style="background:rgba(66,133,244,0.2); color:#93c5fd; font-size:10px; padding:2px 6px; border-radius:6px;">ACTIVE BROWSER</span>
+              </div>
+              <div style="font-size:12px; color:#cbd5e1; margin-top:2px;"><b>Role (All Pods):</b> Real-time market price scraping, competitor inventory scanning, and automated web research.</div>
             </div>
-            <div style="font-size:12px; color:#94a3b8;">Automated multi-currency bookkeeping, USD/INR ledger, and COGS reconciliation.</div>
           </div>
+          <a href="https://docs.composio.dev/docs/composio-connect.md" target="_blank" rel="noopener" style="background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2); color:#fff; text-decoration:none; font-weight:700; font-size:12px; padding:8px 14px; border-radius:8px; display:inline-block;">Browser Setup ↗</a>
         </div>
-        <a href="https://go.xero.com/" target="_blank" rel="noopener" style="background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2); color:#fff; text-decoration:none; font-weight:700; font-size:12px; padding:8px 14px; border-radius:8px; display:inline-block;">Open Xero ↗</a>
-      </div>
-
-      <!-- 15. FullEnrich -->
-      <div style="display:flex; align-items:center; justify-content:space-between; background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08); border-radius:12px; padding:14px 16px;">
-        <div style="display:flex; align-items:center; gap:12px;">
-          <div style="width:38px; height:38px; border-radius:10px; background:#6366f1; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:18px; color:#fff;">FE</div>
-          <div>
-            <div style="font-weight:700; font-size:14px; color:#fff; display:flex; align-items:center; gap:8px;">
-              FullEnrich (B2B Contact Verification)
-              <span style="background:rgba(99,102,241,0.2); color:#a5b4fc; font-size:10px; padding:2px 6px; border-radius:6px;">ENRICHMENT</span>
-            </div>
-            <div style="font-size:12px; color:#94a3b8;">Verifies high-deliverability supplier emails and direct wholesale procurement numbers.</div>
-          </div>
-        </div>
-        <a href="https://app.fullenrich.com/" target="_blank" rel="noopener" style="background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2); color:#fff; text-decoration:none; font-weight:700; font-size:12px; padding:8px 14px; border-radius:8px; display:inline-block;">Open FullEnrich ↗</a>
-      </div>
-
-      <!-- 16. iMessage -->
-      <div style="display:flex; align-items:center; justify-content:space-between; background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08); border-radius:12px; padding:14px 16px;">
-        <div style="display:flex; align-items:center; gap:12px;">
-          <div style="width:38px; height:38px; border-radius:10px; background:#22c55e; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:18px; color:#fff;">💬</div>
-          <div>
-            <div style="font-weight:700; font-size:14px; color:#fff; display:flex; align-items:center; gap:8px;">
-              iMessage &amp; SMS (VIP Client Concierge)
-              <span style="background:rgba(34,197,94,0.2); color:#86efac; font-size:10px; padding:2px 6px; border-radius:6px;">SMS DIRECT</span>
-            </div>
-            <div style="font-size:12px; color:#94a3b8;">Instant order delivery SMS updates and mobile VIP shopper alerts.</div>
-          </div>
-        </div>
-        <a href="messages://" target="_blank" rel="noopener" style="background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2); color:#fff; text-decoration:none; font-weight:700; font-size:12px; padding:8px 14px; border-radius:8px; display:inline-block;">Open Messages ↗</a>
       </div>
 
     </div>
+  </div>
+</div>
   </div>
 </div>
 
@@ -2111,6 +2217,73 @@
         if (topconn) topconn.addEventListener('click', open);
         if (close) close.addEventListener('click', hide);
         modal.addEventListener('click', function(e) { if (e.target === modal) hide(); });
+
+        window.openAppConnect = function(key) {
+          modal.style.display = 'flex';
+          const idMap = {
+            gemini: 'conn-card-gemini',
+            gmail: 'conn-card-gmail',
+            meta: 'conn-card-meta',
+            slack: 'conn-card-slack',
+            notion: 'conn-card-notion',
+            stripe: 'conn-card-stripe',
+            shopify: 'conn-card-shopify',
+            cj: 'conn-card-cj',
+            canva: 'conn-card-canva',
+            loops: 'conn-card-loops',
+            beehiiv: 'conn-card-beehiiv',
+            hyperframes: 'conn-card-hyperframes',
+            clarity: 'conn-card-clarity',
+            apollo: 'conn-card-apollo',
+            pandadoc: 'conn-card-pandadoc',
+            xero: 'conn-card-xero',
+            fullenrich: 'conn-card-fullenrich',
+            imessage: 'conn-card-imessage',
+            chrome: 'conn-card-chrome'
+          };
+          const targetId = idMap[key] || ('conn-card-' + key);
+          const card = document.getElementById(targetId);
+          if (card) {
+            setTimeout(function() {
+              card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+              card.classList.remove('highlight-pulse');
+              void card.offsetWidth;
+              card.classList.add('highlight-pulse');
+            }, 80);
+          }
+        };
+
+        // Composio Master API Key management
+        const compInput = document.getElementById('composioApiKeyInput');
+        const compSaveBtn = document.getElementById('saveComposioBtn');
+        const compSavedMsg = document.getElementById('composioKeySavedMsg');
+        try {
+          const savedCompKey = localStorage.getItem('composio_api_key');
+          if (savedCompKey && compInput) {
+            compInput.value = savedCompKey;
+            if (compSavedMsg) compSavedMsg.style.display = 'block';
+          }
+        } catch(e) {}
+
+        if (compSaveBtn && compInput) {
+          compSaveBtn.addEventListener('click', function() {
+            const val = compInput.value.trim();
+            if (!val) return;
+            try {
+              localStorage.setItem('composio_api_key', val);
+            } catch(e) {}
+            if (compSavedMsg) compSavedMsg.style.display = 'block';
+            compSaveBtn.textContent = 'SAVED ✔';
+            setTimeout(function() { compSaveBtn.textContent = 'SAVE KEY'; }, 2000);
+            try {
+              fetch('/api/composio', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ apiKey: val })
+              }).catch(function() {});
+            } catch(e) {}
+          });
+        }
       }
 
       // Catalog Modal

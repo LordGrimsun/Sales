@@ -202,8 +202,12 @@ export function initMcp({ scene, hud, LAYOUT, DEPTS, FR, R, connectors = null })
       img.addEventListener('click', (e) => {
         e.stopPropagation();
         fireConnector(k);
-        const targetUrl = CONNECTOR_URLS[k] || ('https://dashboard.composio.dev/app/' + k);
-        window.open(targetUrl, '_blank', 'noopener,noreferrer');
+        if (typeof window.openAppConnect === 'function') {
+          window.openAppConnect(k);
+        } else {
+          const targetUrl = CONNECTOR_URLS[k] || ('https://dashboard.composio.dev/app/' + k);
+          window.open(targetUrl, '_blank', 'noopener,noreferrer');
+        }
       });
       topconn.appendChild(img);
       topImgs[k] = img;

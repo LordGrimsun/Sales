@@ -226,6 +226,22 @@ export default async function handler(req, res) {
       return json(res, 200, { servers: platformServers, tools: true, browser: { enabled: true } });
     }
 
+    // 6b. Composio API / Connection Status
+    if (pathname === '/api/composio') {
+      if (req.method === 'POST') {
+        const b = await getBody(req);
+        if (b && b.apiKey) {
+          process.env.COMPOSIO_API_KEY = String(b.apiKey).trim();
+        }
+        return json(res, 200, { ok: true, configured: true });
+      }
+      return json(res, 200, {
+        ok: true,
+        configured: !!(process.env.COMPOSIO_API_KEY && process.env.COMPOSIO_API_KEY.length > 5),
+        dashboardUrl: 'https://dashboard.composio.dev/'
+      });
+    }
+
     // 7. Tasks GET / POST
     if (pathname === '/api/tasks') {
       if (req.method === 'GET') {
