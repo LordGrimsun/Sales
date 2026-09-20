@@ -8,8 +8,8 @@
         "color_scheme": "scheme-1",
         "show_line_separator": true,
         "show_social": false,
-        "auto_rotate": false,
-        "change_slides_speed": 5,
+        "auto_rotate": true,
+        "change_slides_speed": 4,
         "enable_country_selector": false,
         "enable_language_selector": false
       },
@@ -17,15 +17,25 @@
         "announcement-bar-0": {
           "type": "announcement",
           "settings": {
-            "text": "Free USPS Priority Air Shipping to US, UK, CA & AU | 14-Day Easy Returns",
+            "text": "🍂 AUTUMN VIP SALE: Use Code AUTUMN20 for 20% OFF All Suits & Knits",
             "text_alignment": "center",
             "color_scheme": "scheme-1",
-            "link": ""
+            "link": "/collections/all"
+          }
+        },
+        "announcement-bar-1": {
+          "type": "announcement",
+          "settings": {
+            "text": "Free USPS Air Express Shipping to US, UK, CA & AU on Orders Over $75",
+            "text_alignment": "center",
+            "color_scheme": "scheme-1",
+            "link": "/collections/all"
           }
         }
       },
       "block_order": [
-        "announcement-bar-0"
+        "announcement-bar-0",
+        "announcement-bar-1"
       ]
     },
     "header": {
