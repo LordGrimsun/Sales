@@ -197,20 +197,26 @@ export async function executeComposioTool(taskText, dept, agent) {
   try {
     let toolToRun = null;
 
-    // Direct platform mappings for verified high-priority tools
-    if (textLower.includes('canva') || textLower.includes('design') || textLower.includes('creative') || textLower.includes('banner') || textLower.includes('poster')) {
-      toolToRun = 'CANVA_POST_DESIGNS';
-    } else if (textLower.includes('slack') || textLower.includes('broadcast') || textLower.includes('alert')) {
-      toolToRun = 'SLACK_SEND_MESSAGE';
-    } else if (textLower.includes('email') || textLower.includes('mail') || textLower.includes('inbox') || textLower.includes('draft')) {
-      if (textLower.includes('check') || textLower.includes('read') || textLower.includes('fetch') || textLower.includes('inbox')) {
+    // Direct platform mappings with department-aware intent priority
+    if (dept === 'emails') {
+      if (textLower.includes('check') || textLower.includes('read') || textLower.includes('fetch') || textLower.includes('inbox') || textLower.includes('unread')) {
         toolToRun = 'GMAIL_FETCH_EMAILS';
       } else {
         toolToRun = 'GMAIL_CREATE_EMAIL_DRAFT';
       }
+    } else if (textLower.includes('slack') || textLower.includes('broadcast') || textLower.includes('squad alert') || textLower.includes('notify squad')) {
+      toolToRun = 'SLACK_SEND_MESSAGE';
+    } else if (textLower.includes('email') || textLower.includes('mail') || textLower.includes('draft') || textLower.includes('inbox')) {
+      if (textLower.includes('check') || textLower.includes('read') || textLower.includes('fetch')) {
+        toolToRun = 'GMAIL_FETCH_EMAILS';
+      } else {
+        toolToRun = 'GMAIL_CREATE_EMAIL_DRAFT';
+      }
+    } else if (textLower.includes('canva') || textLower.includes('design') || textLower.includes('creative') || textLower.includes('banner') || textLower.includes('poster') || textLower.includes('tiktok') || textLower.includes('reels')) {
+      toolToRun = 'CANVA_POST_DESIGNS';
     } else if (textLower.includes('facebook') || textLower.includes('meta') || textLower.includes('ad set') || textLower.includes('roas')) {
       toolToRun = 'FACEBOOK_LIST_MANAGED_PAGES';
-    } else if (textLower.includes('shopify') || textLower.includes('store') || textLower.includes('shop')) {
+    } else if (textLower.includes('shopify') || textLower.includes('order') || textLower.includes('inventory') || textLower.includes('sku')) {
       toolToRun = 'SHOPIFY_QUERY_SHOP';
     }
 
