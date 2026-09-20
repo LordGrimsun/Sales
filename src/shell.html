@@ -166,20 +166,61 @@
   .connl .dot { width: 7px; height: 7px; border-radius: 50%; display: inline-block; }
   /* top-bar connector strip — the demo hook: familiar brand logos ARE the header, with
      data beaming from them down into the departments */
-  #topconn { display: none; align-items: center; gap: 7px; margin-left: 4px; }
-  /* V3.5: inside a department the strip centres in the bar and names the dept it feeds */
-  #topconn.focus { display: flex; position: absolute; left: 50%; transform: translateX(-50%); margin: 0; z-index: 10; }
-  /* When in department focus: hide store/catalog/integrations/models so centered connector strip has zero overlap */
-  body.railLeft #topStoreBtn,
-  body.railLeft #topCatalogBtn,
-  body.railLeft #topConnBtn,
-  body.railLeft #topmodels,
-  #topbar:has(#topconn.focus) #topStoreBtn,
-  #topbar:has(#topconn.focus) #topCatalogBtn,
-  #topbar:has(#topconn.focus) #topConnBtn,
-  #topbar:has(#topconn.focus) #topmodels {
-    display: none !important;
+  /* top-bar connector strip — live icons across the bar */
+  #topconn { display: flex !important; align-items: center; gap: 7px; margin-left: 14px; overflow-x: auto; }
+  #topconn::-webkit-scrollbar { display: none; }
+  #topconn.focus { display: flex !important; }
+
+  /* Top Dropdown for 35 Agents Online, Storefront, Catalog, Integrations */
+  .top-dropdown-wrap { position: relative; display: inline-flex; align-items: center; flex: none; }
+  .top-drop-trigger {
+    height: 32px; padding: 0 12px; border-radius: 9px;
+    background: rgba(15, 23, 42, 0.05); border: 1px solid var(--hairline);
+    color: var(--ink); font-family: var(--ui); font-size: 11px; font-weight: 700;
+    letter-spacing: .06em; display: inline-flex; align-items: center; gap: 6px;
+    cursor: pointer; transition: all .2s var(--ease); white-space: nowrap; flex: none;
   }
+  .top-drop-trigger:hover, .top-dropdown-wrap.open .top-drop-trigger {
+    background: var(--ink); color: #fff; border-color: var(--ink);
+  }
+  .top-drop-trigger .pulse-dot {
+    width: 6px; height: 6px; border-radius: 50%; background: #10b981; box-shadow: 0 0 6px #10b981;
+  }
+  body.dark .top-drop-trigger {
+    background: rgba(255, 255, 255, 0.08); border-color: rgba(255, 255, 255, 0.12); color: #fff;
+  }
+  body.dark .top-drop-trigger:hover, body.dark .top-dropdown-wrap.open .top-drop-trigger {
+    background: #fff; color: #000; border-color: #fff;
+  }
+  .top-drop-menu {
+    position: absolute; left: 0; top: calc(100% + 6px); z-index: 50;
+    min-width: 280px; background: #fff; border: 1px solid var(--hairline); border-radius: 14px;
+    box-shadow: 0 18px 45px rgba(0, 0, 0, 0.16); padding: 6px; display: none; flex-direction: column; gap: 3px;
+  }
+  .top-dropdown-wrap.open .top-drop-menu { display: flex; animation: tbin .2s var(--ease); }
+  body.dark .top-drop-menu {
+    background: #111827; border-color: rgba(255, 255, 255, 0.14); box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+  }
+  .top-drop-menu .drop-item-header {
+    font-size: 9px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase;
+    color: var(--grey); padding: 6px 10px 4px;
+  }
+  .top-drop-menu .drop-item {
+    display: flex; align-items: center; gap: 9px;
+    padding: 8px 10px; border-radius: 9px; border: 0; background: none;
+    font-family: var(--ui); font-size: 11.5px; font-weight: 700; color: var(--ink);
+    text-decoration: none !important; cursor: pointer; text-align: left;
+    transition: all .15s var(--ease);
+  }
+  .top-drop-menu .drop-item:hover {
+    background: rgba(15, 23, 42, 0.06); transform: translateX(2px);
+  }
+  body.dark .top-drop-menu .drop-item { color: #F8FAFC; }
+  body.dark .top-drop-menu .drop-item:hover { background: rgba(255, 255, 255, 0.08); }
+  .top-drop-menu .status-item {
+    background: rgba(16, 185, 129, 0.08); color: #059669; font-weight: 800; cursor: default;
+  }
+  body.dark .top-drop-menu .status-item { background: rgba(16, 185, 129, 0.15); color: #34d399; }
   /* V3.1: the model layer — Claude + ChatGPT run the office headless; wired to the Brain */
   #topmodels { display: flex; align-items: center; gap: 7px; margin-right: 14px; }
   #topmodels .tc-lab .dot { background: var(--ink); }
@@ -1336,18 +1377,31 @@
 <div id="hud"></div>
 <div id="topbar">
   <div class="top-brand-wrap">
-    <span class="brand">SUNNYEORA <span class="ver">AI SALES OS</span></span>
-    <span class="agent-live-badge"><span class="pulse-dot"></span>35 AGENTS ONLINE</span>
+    <span class="brand">SUNNYEORA</span>
   </div>
-  <a href="https://sunnyeora.myshopify.com/" target="_blank" rel="noopener" id="topStoreBtn" title="View Live Shopify Storefront (sunnyeora.myshopify.com)">
-    🛍️ STOREFRONT <span class="top-live-dot"></span>
-  </a>
-  <button id="topCatalogBtn" title="Catalog & Winning Products">
-    🔥 CATALOG <span class="badge-pill">31 LIVE</span>
-  </button>
-  <button id="topConnBtn" title="Integrations & Platform Connections Hub">
-    ⚡ INTEGRATIONS
-  </button>
+  <div class="top-dropdown-wrap" id="topOpsDropdown">
+    <button class="top-drop-trigger" id="topDropBtn" title="35 Online · Storefront · Catalog · Integrations">
+      <span class="pulse-dot"></span>
+      <span>35 ONLINE · STORE</span>
+      <span class="drop-arrow">▾</span>
+    </button>
+    <div class="top-drop-menu" id="topDropMenu">
+      <div class="drop-item-header">OPERATIONS &amp; STORE</div>
+      <div class="drop-item status-item">
+        <span class="pulse-dot"></span>
+        <span>35 AGENTS ONLINE</span>
+      </div>
+      <a href="https://sunnyeora.myshopify.com/" target="_blank" rel="noopener" class="drop-item" id="topStoreBtn">
+        🛍️ <span>STOREFRONT (sunnyeora.myshopify.com) ↗</span>
+      </a>
+      <button class="drop-item" id="topCatalogBtn">
+        🔥 <span>PRODUCT CATALOG (31 Live SKUs)</span>
+      </button>
+      <button class="drop-item" id="topConnBtn">
+        ⚡ <span>INTEGRATIONS HUB (Composio, Stripe, CJ, Meta)</span>
+      </button>
+    </div>
+  </div>
   <div id="topconn"></div>
   <span class="sp"></span>
   <div id="topmodels"></div>
