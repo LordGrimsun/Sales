@@ -809,41 +809,155 @@ export function initTasks(ctx) {
       `;
     }
     
-    // 2. 1-Click Sales & Growth Playbooks
+    // 2. Multi-Agent Squad Playbooks (Inspired by bradygaster/squad & Squad-IRL)
     html += `
       <div class="tp-section-head" style="margin-top:14px;">
-        <span>1-CLICK SALES PLAYBOOKS</span>
-        <span class="tp-sh-tag">GROWTH ENGINE</span>
+        <span>MULTI-AGENT SQUAD PLAYBOOKS</span>
+        <span class="tp-sh-tag">SQUAD RELAY</span>
       </div>
       <div class="tp-playbooks">
         <div class="tp-pb-card" data-cmd="as a team, recover stalled checkouts and generate recovery outreach for sunnyeora">
           <div class="tp-pb-icon">⚡</div>
           <div class="tp-pb-body">
-            <div class="tp-pb-title">Recover Abandoned Checkouts</div>
-            <div class="tp-pb-desc">Drafts targeted email & SMS recovery with 10% off code</div>
+            <div class="tp-pb-title">Abandoned Checkout Recovery Squad</div>
+            <div class="tp-pb-desc">3-desk relay: Lexi segments carts, Inb enriches data, Folo drafts SMS & Email with 10% off</div>
+            <div class="tp-squad-meta">
+              <span class="tp-squad-relay">RELAY: Lexi ➔ Inb ➔ Folo</span>
+              <span class="tp-gates">
+                <span class="tp-gate-step">PLAN</span> ➔
+                <span class="tp-gate-step">WORK</span> ➔
+                <span class="tp-gate-step active">REVIEW</span> ➔
+                <span class="tp-gate-step">DISPATCH</span>
+              </span>
+            </div>
           </div>
-          <button class="tp-pb-btn" type="button">TRIGGER</button>
+          <button class="tp-pb-btn" type="button">RUN SQUAD</button>
         </div>
-        <div class="tp-pb-card" data-cmd="generate 3 viral TikTok ad hooks for Sunnyeora 2-piece suits and sweaters">
+
+        <div class="tp-pb-card" data-cmd="as a team, generate viral TikTok ad hooks and creative specs for Sunnyeora 2-piece suits">
           <div class="tp-pb-icon">🎬</div>
           <div class="tp-pb-body">
-            <div class="tp-pb-title">Generate Viral Ad Hooks</div>
-            <div class="tp-pb-desc">Creates 3 high-converting script hooks for US/UK TikTok & Reels</div>
+            <div class="tp-pb-title">TikTok Viral Ad Launch Squad</div>
+            <div class="tp-pb-desc">4-desk relay: Riley trends audit, Gfx visual assets, Vid 15s reel script, Ada ad set schedule</div>
+            <div class="tp-squad-meta">
+              <span class="tp-squad-relay">RELAY: Riley ➔ Gfx ➔ Vid ➔ Ada</span>
+              <span class="tp-gates">
+                <span class="tp-gate-step">PLAN</span> ➔
+                <span class="tp-gate-step active">WORK</span> ➔
+                <span class="tp-gate-step">REVIEW</span> ➔
+                <span class="tp-gate-step">DISPATCH</span>
+              </span>
+            </div>
           </div>
-          <button class="tp-pb-btn" type="button">TRIGGER</button>
+          <button class="tp-pb-btn" type="button">RUN SQUAD</button>
         </div>
-        <div class="tp-pb-card" data-cmd="audit cross-border profit margins for the 31 live Shopify dropshipping products">
+
+        <div class="tp-pb-card" data-cmd="as a team, prospect boutique retailers and draft wholesale agreements for sunnyeora">
+          <div class="tp-pb-icon">🤝</div>
+          <div class="tp-pb-body">
+            <div class="tp-pb-title">Wholesale B2B Expansion Squad</div>
+            <div class="tp-pb-desc">4-desk relay: Pros sources Apollo leads, Enzo enriches data, Piper drafts quote, Lexi signs off</div>
+            <div class="tp-squad-meta">
+              <span class="tp-squad-relay">RELAY: Pros ➔ Enzo ➔ Piper ➔ Lexi</span>
+              <span class="tp-gates">
+                <span class="tp-gate-step">PLAN</span> ➔
+                <span class="tp-gate-step">WORK</span> ➔
+                <span class="tp-gate-step">REVIEW</span> ➔
+                <span class="tp-gate-step active">DISPATCH</span>
+              </span>
+            </div>
+          </div>
+          <button class="tp-pb-btn" type="button">RUN SQUAD</button>
+        </div>
+
+        <div class="tp-pb-card" data-cmd="as a team, audit unit profit margins and supplier COGS for all 31 live Shopify products">
           <div class="tp-pb-icon">💰</div>
           <div class="tp-pb-body">
-            <div class="tp-pb-title">Audit Unit Profit Margins</div>
-            <div class="tp-pb-desc">Validates supplier COGS vs ad CAC for 40%+ net margins</div>
+            <div class="tp-pb-title">Unit Profit Margin Audit Squad</div>
+            <div class="tp-pb-desc">3-desk relay: Alead margin targets, Invo supplier COGS check, Recon net settlement validation</div>
+            <div class="tp-squad-meta">
+              <span class="tp-squad-relay">RELAY: Alead ➔ Invo ➔ Recon</span>
+              <span class="tp-gates">
+                <span class="tp-gate-step">PLAN</span> ➔
+                <span class="tp-gate-step">WORK</span> ➔
+                <span class="tp-gate-step active">REVIEW</span> ➔
+                <span class="tp-gate-step">DISPATCH</span>
+              </span>
+            </div>
           </div>
-          <button class="tp-pb-btn" type="button">TRIGGER</button>
+          <button class="tp-pb-btn" type="button">RUN SQUAD</button>
+        </div>
+      </div>
+
+      <!-- 3. Persistent Agent Memory Feed (Inspired by akitaonrails/ai-memory) -->
+      <div class="tp-section-head" style="margin-top:14px;">
+        <span>PERSISTENT AGENT MEMORY</span>
+        <span class="tp-sh-tag">MEMORY OF RECORD</span>
+      </div>
+      <div class="tp-memory-feed">
+        <div class="tp-mem-item">
+          <div class="tp-mem-top">
+            <span class="tp-mem-agent">🟡 Prospector</span>
+            <span class="tp-mem-cat">CUSTOMERS</span>
+          </div>
+          <div class="tp-mem-fact">Boutique apparel stockists in California & Texas convert 2.4x higher on wholesale 2-piece set inquiries.</div>
+          <div class="tp-mem-src">
+            <span>Apollo Lead Enrichment Run</span>
+            <span class="tp-mem-verified">✓ VERIFIED FACT</span>
+          </div>
+        </div>
+
+        <div class="tp-mem-item">
+          <div class="tp-mem-top">
+            <span class="tp-mem-agent">🔴 Meta Ads</span>
+            <span class="tp-mem-cat">ADVERTISING</span>
+          </div>
+          <div class="tp-mem-fact">Reel creatives with price overlays in first 2s achieve $1.42 lower CPC on Instagram.</div>
+          <div class="tp-mem-src">
+            <span>Meta Ads Manager Attribution</span>
+            <span class="tp-mem-verified">✓ VERIFIED FACT</span>
+          </div>
+        </div>
+
+        <div class="tp-mem-item">
+          <div class="tp-mem-top">
+            <span class="tp-mem-agent">🟡 Follow Ups</span>
+            <span class="tp-mem-cat">RETENTION</span>
+          </div>
+          <div class="tp-mem-fact">Abandoned cart SMS sent at 45m mark with 10% code "SUNNY10" yields a 19.4% recovery rate.</div>
+          <div class="tp-mem-src">
+            <span>Loops / iMessage Recovery Funnel</span>
+            <span class="tp-mem-verified">✓ VERIFIED FACT</span>
+          </div>
+        </div>
+
+        <div class="tp-mem-item">
+          <div class="tp-mem-top">
+            <span class="tp-mem-agent">🔵 Delivery Lead</span>
+            <span class="tp-mem-cat">LOGISTICS</span>
+          </div>
+          <div class="tp-mem-fact">CJ Dropshipping line hauls to USPS Chicago hub currently running at 6.2 day average delivery time.</div>
+          <div class="tp-mem-src">
+            <span>CJ Tracking API Telemetry</span>
+            <span class="tp-mem-verified">✓ VERIFIED FACT</span>
+          </div>
+        </div>
+
+        <div class="tp-mem-item">
+          <div class="tp-mem-top">
+            <span class="tp-mem-agent">🟣 Reconciliation</span>
+            <span class="tp-mem-cat">FINANCE</span>
+          </div>
+          <div class="tp-mem-fact">Shopify Payments blended fee is 2.9% + 30¢; USD payouts settle in 48 hours.</div>
+          <div class="tp-mem-src">
+            <span>Stripe Settlement Log</span>
+            <span class="tp-mem-verified">✓ VERIFIED FACT</span>
+          </div>
         </div>
       </div>
     `;
     
-    // 3. Live Storefront KPI Summary
+    // 4. Live Storefront KPI Summary
     html += `
       <div class="tp-store-card">
         <div class="tp-sc-head">
