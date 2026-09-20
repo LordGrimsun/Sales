@@ -1,10 +1,10 @@
 {
   "sections": {
-    "main": {
-      "type": "sunnyeora-collection-template"
+    "main_catalog_grid": {
+      "type": "sunnyeora-store-catalog"
     }
   },
   "order": [
-    "main"
+    "main_catalog_grid"
   ]
 }
