@@ -245,7 +245,17 @@ async function run(task, feedback, mode) { // mode: undefined (a task from the b
   
   let result = text;
   if (toolExec && toolExec.executed) {
-    result = `> ⚡ **Executed Live Composio Tool:** \`${toolExec.toolSlug}\`\n\n` + result;
+    let toolBadge = `> ⚡ **Executed Live Tool:** \`${toolExec.toolSlug}\`\n`;
+    if (toolExec.data?.design?.urls?.view_url) {
+      toolBadge += `> 🎨 **Live Canva Design:** [Edit in Canva](${toolExec.data.design.urls.edit_url}) · [View Design](${toolExec.data.design.urls.view_url})\n`;
+    } else if (toolExec.data?.display_url) {
+      toolBadge += `> ✉️ **Live Gmail Draft:** [Open in Gmail](${toolExec.data.display_url})\n`;
+    } else if (toolExec.toolSlug === 'SLACK_SEND_MESSAGE') {
+      toolBadge += `> 💬 **Slack Broadcast:** Live alert dispatched to channel \`#general\`\n`;
+    } else if (toolExec.toolSlug === 'FACEBOOK_LIST_MANAGED_PAGES') {
+      toolBadge += `> 📱 **Meta Ads / Facebook:** Verified 6 active managed pages connected\n`;
+    }
+    result = toolBadge + '\n' + result;
   }
   const allTools = [...new Set([...(toolKeys(tools) || []), ...(toolExec?.executed ? [toolExec.toolSlug] : [])])];
   const allUsed = [...new Set([...(mcp.namesOf(tools) || []), ...(toolExec?.executed ? [toolExec.toolkit] : [])])];

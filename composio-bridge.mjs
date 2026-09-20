@@ -21,20 +21,29 @@ const USER_ID = process.env.COMPOSIO_USER_ID || 'sunnyeora_store_owner';
 // Complete 13 platform triggers mapping
 export const ALL_CONNECTED_PLATFORMS = [
   {
+    name: 'Facebook / Meta Ads',
+    slug: 'facebook',
+    keywords: ['meta', 'facebook', 'fb', 'fb ads', 'meta ads', 'ad set', 'ad campaign', 'roas', 'page', 'social campaign'],
+    depts: ['marketing', 'sales', 'delivery'],
+    sampleTool: 'FACEBOOK_LIST_MANAGED_PAGES',
+    icon: '📱',
+    roleSummary: 'Autonomous Meta & Facebook Ads management, campaigns, and page feeds'
+  },
+  {
     name: 'Gmail',
     slug: 'gmail',
     keywords: ['email', 'emails', 'inbox', 'unread', 'mail', 'cmail', 'imail', 'vmail', 'kmail', 'gmail', 'elead', 'customer care'],
     depts: ['emails', 'sales', 'ops', 'fin'],
-    sampleTool: 'GMAIL_LIST_MESSAGES',
+    sampleTool: 'GMAIL_CREATE_EMAIL_DRAFT',
     icon: '✉️',
     roleSummary: 'Customer replies, tracking queries, order status triage'
   },
   {
     name: 'Canva',
     slug: 'canva',
-    keywords: ['canva', 'design', 'banner', 'graphic', 'poster', 'creative', 'visual', 'ad set', 'vid', 'thumbnail'],
-    depts: ['marketing', 'delivery'],
-    sampleTool: 'CANVA_CREATE_DESIGN',
+    keywords: ['canva', 'design', 'banner', 'graphic', 'poster', 'creative', 'visual', 'ad set', 'vid', 'thumbnail', 'tiktok', 'reels', 'hook'],
+    depts: ['marketing', 'delivery', 'sales'],
+    sampleTool: 'CANVA_POST_DESIGNS',
     icon: '🎨',
     roleSummary: 'Dynamic TikTok, Reels, ad creatives, and store hero banners'
   },
@@ -43,7 +52,7 @@ export const ALL_CONNECTED_PLATFORMS = [
     slug: 'canva_mcp',
     keywords: ['canva mcp', 'template design', 'design template', 'batch graphic'],
     depts: ['marketing', 'delivery'],
-    sampleTool: 'CANVA_CREATE_DESIGN',
+    sampleTool: 'CANVA_POST_DESIGNS',
     icon: '🖌️',
     roleSummary: 'Direct MCP template generation for catalog banners'
   },
@@ -52,7 +61,7 @@ export const ALL_CONNECTED_PLATFORMS = [
     slug: 'shopify',
     keywords: ['shopify', 'order', 'orders', 'product', 'products', 'inventory', 'storefront', 'sunnyeora', 'fulfill', 'checkout', 'sku'],
     depts: ['ops', 'delivery', 'sales', 'fin'],
-    sampleTool: 'SHOPIFY_GET_ALL_ORDERS',
+    sampleTool: 'SHOPIFY_QUERY_SHOP',
     icon: '🛍️',
     roleSummary: 'Live orders, products, inventory sync on sunnyeora.myshopify.com'
   },
@@ -61,7 +70,7 @@ export const ALL_CONNECTED_PLATFORMS = [
     slug: 'slack',
     keywords: ['slack', 'channel', 'broadcast', 'alert', 'team ping', 'notify squad', 'squad message'],
     depts: ['emails', 'sales', 'marketing', 'ops', 'fin', 'delivery'],
-    sampleTool: 'SLACK_CHAT_POST_MESSAGE',
+    sampleTool: 'SLACK_SEND_MESSAGE',
     icon: '💬',
     roleSummary: 'Squad alerts, order notifications, executive briefings'
   },
@@ -159,7 +168,7 @@ export async function getComposioSession() {
 }
 
 /**
- * Execute real Composio tool if task requests or matches one of the 13 connected apps
+ * Execute real Composio tool if task requests or matches one of the connected apps
  */
 export async function executeComposioTool(taskText, dept, agent) {
   const apiKey = process.env.COMPOSIO_API_KEY;
@@ -186,17 +195,32 @@ export async function executeComposioTool(taskText, dept, agent) {
   }
 
   try {
-    // 1. Search for matching tool in Composio
-    const searchQuery = matchedTrigger ? `${matchedTrigger.slug} ${taskText}` : taskText;
-    const searchRes = await session.execute('COMPOSIO_SEARCH_TOOLS', {
-      query: searchQuery
-    }).catch(e => ({ data: [] }));
-
     let toolToRun = null;
-    if (Array.isArray(searchRes?.data) && searchRes.data.length > 0) {
-      toolToRun = searchRes.data[0]?.slug || searchRes.data[0]?.name;
-    } else if (matchedTrigger?.sampleTool) {
-      toolToRun = matchedTrigger.sampleTool;
+
+    // Direct platform mappings for verified high-priority tools
+    if (textLower.includes('canva') || textLower.includes('design') || textLower.includes('creative') || textLower.includes('banner') || textLower.includes('poster')) {
+      toolToRun = 'CANVA_POST_DESIGNS';
+    } else if (textLower.includes('slack') || textLower.includes('broadcast') || textLower.includes('alert')) {
+      toolToRun = 'SLACK_SEND_MESSAGE';
+    } else if (textLower.includes('email') || textLower.includes('mail') || textLower.includes('inbox') || textLower.includes('draft')) {
+      if (textLower.includes('check') || textLower.includes('read') || textLower.includes('fetch') || textLower.includes('inbox')) {
+        toolToRun = 'GMAIL_FETCH_EMAILS';
+      } else {
+        toolToRun = 'GMAIL_CREATE_EMAIL_DRAFT';
+      }
+    } else if (textLower.includes('facebook') || textLower.includes('meta') || textLower.includes('ad set') || textLower.includes('roas')) {
+      toolToRun = 'FACEBOOK_LIST_MANAGED_PAGES';
+    } else if (textLower.includes('shopify') || textLower.includes('store') || textLower.includes('shop')) {
+      toolToRun = 'SHOPIFY_QUERY_SHOP';
+    }
+
+    // Dynamic search fallback
+    if (!toolToRun) {
+      const searchQuery = matchedTrigger ? `${matchedTrigger.slug} ${taskText}` : taskText;
+      const searchRes = await session.execute('COMPOSIO_SEARCH_TOOLS', { query: searchQuery }).catch(() => ({ data: {} }));
+      const primary = searchRes?.data?.results?.[0]?.primary_tool_slugs || [];
+      const related = searchRes?.data?.results?.[0]?.related_tool_slugs || [];
+      toolToRun = primary[0] || related[0] || matchedTrigger?.sampleTool;
     }
 
     if (!toolToRun) {
@@ -209,16 +233,32 @@ export async function executeComposioTool(taskText, dept, agent) {
 
     console.log(`[Composio Bridge] Calling live tool: ${toolToRun} for task "${taskText.slice(0, 50)}..."`);
 
-    // 2. Prepare safe parameters for execution
+    // 2. Prepare verified parameter payloads
     let args = {};
-    if (toolToRun.includes('LIST') || toolToRun.includes('GET_ALL') || toolToRun.includes('SEARCH')) {
-      args = { maxResults: 5, query: taskText };
-    } else if (toolToRun.includes('CREATE_DESIGN')) {
-      args = { title: `Sunnyeora: ${taskText.slice(0, 40)}`, type: 'social_media' };
-    } else if (toolToRun.includes('POST_MESSAGE')) {
-      args = { text: `[Sunnyeora Agent Alert - ${agent?.name || dept}]: ${taskText}` };
-    } else if (toolToRun.includes('GEOCODE')) {
-      args = { address: taskText.slice(0, 50) };
+    if (toolToRun === 'CANVA_POST_DESIGNS') {
+      const cleanTitle = (taskText || 'Sunnyeora Ad Creative').replace(/[^\w\s-]/gi, '').slice(0, 40).trim() || 'Sunnyeora Promo';
+      args = {
+        design_type: { type: 'custom', width: 1080, height: 1080 },
+        title: cleanTitle
+      };
+    } else if (toolToRun === 'GMAIL_CREATE_EMAIL_DRAFT') {
+      const cleanSubject = (taskText || 'Sunnyeora Customer & Marketing Update').slice(0, 50).trim();
+      args = {
+        recipient_email: 'sunnyeora.store@gmail.com',
+        subject: `[Sunnyeora] ${cleanSubject}`,
+        body: `Hello,\n\n${taskText}\n\nBest regards,\n${agent?.name || 'Sales Lead'} | Sunnyeora E-commerce Team`
+      };
+    } else if (toolToRun === 'GMAIL_FETCH_EMAILS' || toolToRun === 'GMAIL_LIST_THREADS') {
+      args = { max_results: 5 };
+    } else if (toolToRun === 'SLACK_SEND_MESSAGE') {
+      args = {
+        channel: 'C0C2ZM5FTT7',
+        markdown_text: `*[Sunnyeora ${agent?.name || dept.toUpperCase()} Alert]*:\n${taskText}`
+      };
+    } else if (toolToRun === 'FACEBOOK_LIST_MANAGED_PAGES' || toolToRun === 'SHOPIFY_QUERY_SHOP') {
+      args = {};
+    } else if (toolToRun.includes('LIST') || toolToRun.includes('GET') || toolToRun.includes('FETCH')) {
+      args = { max_results: 5, query: taskText };
     }
 
     // 3. Execute tool

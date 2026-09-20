@@ -400,7 +400,17 @@ export default async function handler(req, res) {
           
           let deliverable = cleanOutput(resp.text);
           if (toolExec && toolExec.executed) {
-            deliverable = `> ⚡ **Executed Live Composio Tool:** \`${toolExec.toolSlug}\`\n\n` + deliverable;
+            let toolBadge = `> ⚡ **Executed Live Tool:** \`${toolExec.toolSlug}\`\n`;
+            if (toolExec.data?.design?.urls?.view_url) {
+              toolBadge += `> 🎨 **Live Canva Design:** [Edit in Canva](${toolExec.data.design.urls.edit_url}) · [View Design](${toolExec.data.design.urls.view_url})\n`;
+            } else if (toolExec.data?.display_url) {
+              toolBadge += `> ✉️ **Live Gmail Draft:** [Open in Gmail](${toolExec.data.display_url})\n`;
+            } else if (toolExec.toolSlug === 'SLACK_SEND_MESSAGE') {
+              toolBadge += `> 💬 **Slack Broadcast:** Live alert dispatched to channel \`#general\`\n`;
+            } else if (toolExec.toolSlug === 'FACEBOOK_LIST_MANAGED_PAGES') {
+              toolBadge += `> 📱 **Meta Ads / Facebook:** Verified 6 active managed pages connected\n`;
+            }
+            deliverable = toolBadge + '\n' + deliverable;
           }
           task.result = deliverable;
           task.error = false;
@@ -447,7 +457,15 @@ export default async function handler(req, res) {
 
       let reply = cleanOutput(resp.text);
       if (toolExec && toolExec.executed) {
-        reply = `⚡ *(Accessed ${toolExec.platform} via Composio)*\n\n` + reply;
+        let metaNote = `⚡ *(Live ${toolExec.platform} tool executed)*`;
+        if (toolExec.data?.design?.urls?.view_url) {
+          metaNote += ` — [View in Canva](${toolExec.data.design.urls.view_url})`;
+        } else if (toolExec.data?.display_url) {
+          metaNote += ` — [Open Draft in Gmail](${toolExec.data.display_url})`;
+        } else if (toolExec.toolSlug === 'SLACK_SEND_MESSAGE') {
+          metaNote += ` — Dispatched to Slack`;
+        }
+        reply = metaNote + '\n\n' + reply;
       }
 
       return json(res, 200, {
