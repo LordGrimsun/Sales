@@ -3,6 +3,7 @@ import path from 'node:path';
 import fs from 'node:fs';
 import os from 'node:os';
 import { askLLM, detectProvider, getProviderInfo } from '../llm.mjs';
+import { executeComposioTool } from '../composio-bridge.mjs';
 import { DEPTS, DEPT_KEYS } from '../src/data.js';
 import { normModel, modelName, MODEL_KEYS, DEFAULT_MODEL, EFFORT_KEYS } from '../src/models.js';
 
@@ -353,17 +354,37 @@ export default async function handler(req, res) {
         saveTasks(list);
 
         try {
+          let toolContext = '';
+          let toolExec = null;
+          try {
+            toolExec = await executeComposioTool(task.text, task.dept, agent);
+            if (toolExec && toolExec.executed) {
+              task.tools = [toolExec.toolSlug];
+              task.toolData = toolExec.data;
+              toolContext = `\n\n[LIVE DATA RETRIEVED VIA REAL TOOL: ${toolExec.toolSlug}]:\n` +
+                JSON.stringify(toolExec.data, null, 2).slice(0, 3000) +
+                `\nSynthesize and present this live information directly in your deliverable.`;
+            }
+          } catch (tErr) {
+            console.warn('Composio execution notice:', tErr.message);
+          }
+
           const sys = `You are ${agent.name}, ${agent.role} in the ${task.dept.toUpperCase()} department at ${baseCfg.name || 'Sunnyeora'} (eCommerce store: sunnyeora.myshopify.com).\n` +
             `${agent.does || ''}\n` +
             (agent.brief ? `Standing instructions: ${agent.brief}\n` : '') +
             `Produce the finished, professional, publication-ready deliverable directly in clean markdown. Be concise, actionable, and thorough. Output ONLY the deliverable content itself. Never output role recaps, persona bullet points, or thinking steps.`;
-          const userPrompt = `Task: ${task.title}\nRequest details: ${task.text}` +
+          const userPrompt = `Task: ${task.title}\nRequest details: ${task.text}${toolContext}` +
             (feedback ? `\n\nOwner requested revision: "${feedback}"\nPrevious version:\n${task.result || ''}` : '');
 
           const resp = await askLLM(sys, userPrompt, { maxTokens: 2500 });
           task.state = 'done';
           task.doneAt = Date.now();
-          task.result = resp.text;
+          
+          let deliverable = resp.text;
+          if (toolExec && toolExec.executed) {
+            deliverable = `> ⚡ **Executed Live Composio Tool:** \`${toolExec.toolSlug}\`\n\n` + deliverable;
+          }
+          task.result = deliverable;
           task.error = false;
           task.modelUsed = resp.modelId;
         } catch (e) {

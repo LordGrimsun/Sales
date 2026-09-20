@@ -53,6 +53,7 @@ import * as teams from './teams.mjs';
 import { normModel, modelFor, modelArgs, modelId, modelName, MODEL_KEYS, DEFAULT_MODEL, normEffort, effortFor, effortName, EFFORT_KEYS } from './src/models.js';
 import { parseWhen, describe, valid as validWhen, untilText } from './src/when.js';
 import { askLLM, detectProvider, getProviderInfo } from './llm.mjs';
+import { executeComposioTool } from './composio-bridge.mjs';
 
 const cfg = loadConfig();
 const HTML = path.join(ROOT, 'dist', 'command-centre-v2.html'); // built by build.mjs; shipped so npm start works without a build
@@ -219,15 +220,37 @@ async function run(task, feedback, mode) { // mode: undefined (a task from the b
   const index = vaultIndex();
   const read = relevantNotes(index, a.department, task.title + ' ' + task.text);
   const system = agentSystem(a, index, read);
+  
+  let toolContext = '';
+  let toolExec = null;
+  try {
+    toolExec = await executeComposioTool(task.text, a.department, a);
+    if (toolExec && toolExec.executed) {
+      toolContext = `\n\n[LIVE DATA RETRIEVED VIA REAL TOOL: ${toolExec.toolSlug}]:\n` +
+        JSON.stringify(toolExec.data, null, 2).slice(0, 3000) +
+        `\nSynthesize and present this live information directly in your deliverable.`;
+    }
+  } catch (tErr) {
+    console.warn('Composio execution notice in local runner:', tErr.message);
+  }
+
   const routineLine = task.routine ? `\nThis is a routine (${task.when}): it runs on the office's own clock and the owner is not at the keyboard. It is now ${new Date().toLocaleString([], { weekday: 'long', day: 'numeric', month: 'long', hour: '2-digit', minute: '2-digit' })}${task.late ? `; this run is late, it was due ${new Date(task.due).toLocaleString([], { weekday: 'short', hour: '2-digit', minute: '2-digit' })}` : ''}. Do the work for now.`
     : task.dueAt ? `\nThis task was scheduled in advance for ${new Date(task.dueAt).toLocaleString([], { weekday: 'long', day: 'numeric', month: 'long', hour: '2-digit', minute: '2-digit' })} and is running now; the owner is not at the keyboard${task.late ? ' and this run is late' : ''}. Do the work for now.` : '';
   const modeLine = modeLineFor(mode, task);
-  const user = `Task: ${task.title}\nOwner's request: ${task.text}` + (task.plan?.length ? `\nAgreed plan: ${task.plan.join(' → ')}` : '') + routineLine + modeLine +
+  const user = `Task: ${task.title}\nOwner's request: ${task.text}${toolContext}` + (task.plan?.length ? `\nAgreed plan: ${task.plan.join(' → ')}` : '') + routineLine + modeLine +
     (feedback && mode !== 'approve' ? `\n\nThe owner reviewed your previous version and asked for changes: "${feedback}"\nPrevious version:\n${task.result}` : '');
   const { pick, eff } = pickFor(task, a);
   const { text, tools, modelId: ran } = await askX(system, user, { model: pick.model, effort: eff.effort });
   if (!text) throw new Error('Claude returned nothing');
-  return { result: text, read, tools: toolKeys(tools), used: mcp.namesOf(tools), skills: skills.names(a), modelUsed: pick.model, modelFrom: pick.from, modelId: ran, effortUsed: eff.effort || '', effortFrom: eff.from };
+  
+  let result = text;
+  if (toolExec && toolExec.executed) {
+    result = `> ⚡ **Executed Live Composio Tool:** \`${toolExec.toolSlug}\`\n\n` + result;
+  }
+  const allTools = [...new Set([...(toolKeys(tools) || []), ...(toolExec?.executed ? [toolExec.toolSlug] : [])])];
+  const allUsed = [...new Set([...(mcp.namesOf(tools) || []), ...(toolExec?.executed ? [toolExec.toolkit] : [])])];
+
+  return { result, read, tools: allTools, used: allUsed, skills: skills.names(a), modelUsed: pick.model, modelFrom: pick.from, modelId: ran, effortUsed: eff.effort || '', effortFrom: eff.from };
 }
 
 /* ---------- V3.2 (16 Sep) Agent Teams: the lead plans, the desks work at once, the lead writes the final ---------- */

@@ -299,7 +299,7 @@ export function initTasks(ctx) {
   // V3.7: the box grows with the text (one line at rest, six at most) and the big editor mirrors it
   const big = document.getElementById('tpBig');
   const B_ = { in: big.querySelector('.tb-in'), dept: big.querySelector('.tb-dept'), dot: big.querySelector('.tb-head .dot'), hint: big.querySelector('.tb-hint'), add: big.querySelector('.tb-add'), close: big.querySelector('.tb-close') };
-  function grow() { P_.input.style.height = '30px'; P_.input.style.height = Math.min(118, Math.max(30, P_.input.scrollHeight)) + 'px'; }
+  function grow() { P_.input.style.height = '30px'; if (P_.input.value) P_.input.style.height = Math.min(118, Math.max(30, P_.input.scrollHeight)) + 'px'; }
   function openBig() { B_.in.value = P_.input.value; B_.in.placeholder = P_.input.placeholder; big.classList.add('on'); mirrorHint(); B_.in.focus(); B_.in.setSelectionRange(B_.in.value.length, B_.in.value.length); }
   function closeBig() { if (!big.classList.contains('on')) return; big.classList.remove('on'); grow(); if (P_.input.value) P_.input.focus(); }
   function mirrorHint() { B_.hint.innerHTML = P_.hint.innerHTML; B_.hint.className = P_.hint.className.replace('tp-hint', 'tp-hint tb-hint'); }

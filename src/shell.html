@@ -734,13 +734,15 @@
   .tb-foot .tp-hint { flex: 1; padding: 0 4px; min-height: 0; }
   .tb-foot .kb { font-size: 9.5px; letter-spacing: .08em; color: var(--grey); white-space: nowrap; }
   .tb-foot .kb b { font-weight: 600; color: var(--ink); }
-  .tp-in::placeholder { color: var(--grey); }
   .tp-add {
     flex: none; border: 1px solid var(--ink); background: var(--ink); color: var(--cream); cursor: pointer;
-    font-family: var(--ui); font-size: 10px; letter-spacing: .14em; font-weight: 600;
-    border-radius: 99px; padding: 7px 13px; transition: background .3s var(--ease);
+    font-family: var(--ui); font-size: 11px; letter-spacing: .08em; font-weight: 700;
+    border-radius: 8px; padding: 5px 12px; transition: all .2s var(--ease);
+    display: inline-flex; align-items: center; justify-content: center; height: 28px; margin-top: 1px;
   }
-  .tp-add:hover { background: #000; }
+  .tp-add:hover { background: #000; transform: translateY(-1px); }
+  body.dark .tp-add { background: #eab308; color: #000; border: 1px solid #eab308; font-weight: 800; }
+  body.dark .tp-add:hover { background: #fde047; border-color: #fde047; box-shadow: 0 0 12px rgba(234,179,8,0.4); }
   .tp-hint {
     display: flex; align-items: center; gap: 6px; min-height: 18px; padding: 0 12px;
     font-size: 11px; color: var(--grey); opacity: 0; transition: opacity .3s var(--ease);
@@ -835,7 +837,6 @@
   .tp-effort.set { color: var(--ink); }
   .tp-model.set { color: var(--ink); }
   .tp-cmd .tp-rep { font-size: 10px; padding: 5px 9px; font-weight: 700; }
-  .tp-cmd .tp-add { padding: 6px 14px; font-size: 11px; font-weight: 700; }
   /* V3.2 (16 Sep) Agent Teams: the TEAM toggle beside REPEAT, the TEAM / PIECE chips, ↳ on a piece row */
   .tp-team { font-family: var(--ui); font-size: 10px; letter-spacing: .10em; font-weight: 700; background: none; border: 1px solid var(--hairline); color: var(--grey);
     border-radius: 99px; padding: 5px 8px; cursor: pointer; white-space: nowrap; transition: all .3s var(--ease); }
@@ -1447,14 +1448,13 @@
       <div class="tp-menu"></div>
       <textarea class="tp-in" rows="1" placeholder="Type a task…" autocomplete="off" spellcheck="false"></textarea>
       <button class="tp-big-btn" title="open the big editor (⌘⇧E)">⤢</button>
+      <button class="tp-add" title="Add task (Enter)">ADD</button>
     </div>
     <div class="tp-r2">
       <select class="tp-model" title="which model runs this (the office default unless you change it)"></select>
       <select class="tp-effort" title="how hard it thinks: Auto is the model's own level (Opus runs at high); Low to Max as Claude Code names them"></select>
       <button class="tp-rep" title="repeat on a schedule (or just say when: every weekday at 8am, …)">REPEAT</button>
       <button class="tp-team" title="a team: the department lead splits the task across its desks, they work at the same time, the lead writes the final (or just say “as a team”)">TEAM</button>
-      <span class="sp"></span>
-      <button class="tp-add">ADD</button>
     </div>
   </div>
   <div class="tp-rep-row" hidden>
