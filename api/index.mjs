@@ -403,6 +403,8 @@ export default async function handler(req, res) {
             let toolBadge = `> ⚡ **Executed Live Tool:** \`${toolExec.toolSlug}\`\n`;
             if (toolExec.data?.design?.urls?.view_url) {
               toolBadge += `> 🎨 **Live Canva Design:** [Edit in Canva](${toolExec.data.design.urls.edit_url}) · [View Design](${toolExec.data.design.urls.view_url})\n`;
+            } else if (toolExec.toolSlug === 'GMAIL_SEND_EMAIL') {
+              toolBadge += `> ✉️ **Dispatched Live Email:** Sent directly via Gmail API (Message ID: \`${toolExec.data?.id || 'delivered'}\`)\n`;
             } else if (toolExec.data?.display_url) {
               toolBadge += `> ✉️ **Live Gmail Draft:** [Open in Gmail](${toolExec.data.display_url})\n`;
             } else if (toolExec.toolSlug === 'SLACK_SEND_MESSAGE') {

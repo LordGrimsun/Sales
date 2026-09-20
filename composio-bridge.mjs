@@ -200,15 +200,11 @@ export async function executeComposioTool(taskText, dept, agent) {
     // Direct platform mappings with department-aware intent priority
     if (textLower.includes('slack') || textLower.includes('broadcast') || textLower.includes('squad') || textLower.includes('alert') || textLower.includes('briefing')) {
       toolToRun = 'SLACK_SEND_MESSAGE';
-    } else if (dept === 'emails') {
+    } else if (dept === 'emails' || /\b(email|emails|mail|draft|inbox)\b/i.test(taskText)) {
       if (/\b(check\s+inbox|check\s+emails?|read\s+emails?|fetch\s+emails?|unread)\b/i.test(taskText)) {
         toolToRun = 'GMAIL_FETCH_EMAILS';
-      } else {
-        toolToRun = 'GMAIL_CREATE_EMAIL_DRAFT';
-      }
-    } else if (/\b(email|emails|mail|draft|inbox)\b/i.test(taskText)) {
-      if (/\b(check\s+inbox|check\s+emails?|read\s+emails?|fetch\s+emails?)\b/i.test(taskText)) {
-        toolToRun = 'GMAIL_FETCH_EMAILS';
+      } else if (/\b(send\s+draft|send\s+email|dispatch\s+email|send\s+out|mail\s+to|send\s+to|send\s+now)\b/i.test(taskText)) {
+        toolToRun = 'GMAIL_SEND_EMAIL';
       } else {
         toolToRun = 'GMAIL_CREATE_EMAIL_DRAFT';
       }
@@ -247,7 +243,7 @@ export async function executeComposioTool(taskText, dept, agent) {
         design_type: { type: 'custom', width: 1080, height: 1080 },
         title: cleanTitle
       };
-    } else if (toolToRun === 'GMAIL_CREATE_EMAIL_DRAFT') {
+    } else if (toolToRun === 'GMAIL_CREATE_EMAIL_DRAFT' || toolToRun === 'GMAIL_SEND_EMAIL') {
       let subject = '🍂 Early VIP Access: Take 20% Off Sunnyeora Autumn Trends';
       if (taskText.includes('Subject:')) {
         const subMatch = taskText.match(/Subject:\s*([^\n\r]+)/i);
@@ -256,6 +252,11 @@ export async function executeComposioTool(taskText, dept, agent) {
         const firstLine = taskText.split('\n')[0].replace(/[^\w\s-]/gi, '').slice(0, 50).trim();
         if (firstLine) subject = firstLine;
       }
+
+      // Extract recipient email if specified in task prompt
+      let recipientEmail = 'sunnyeora.store@gmail.com';
+      const emailMatch = taskText.match(/([a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})/);
+      if (emailMatch) recipientEmail = emailMatch[1];
 
       // Format customer-facing HTML layout
       const cleanContent = taskText.replace(/^Subject:\s*[^\n\r]+\n*/i, '').trim();
@@ -312,7 +313,7 @@ export async function executeComposioTool(taskText, dept, agent) {
 </div>`;
 
       args = {
-        recipient_email: 'sunnyeora.store@gmail.com',
+        recipient_email: recipientEmail,
         subject: subject,
         body: htmlBody,
         is_html: true
