@@ -1313,8 +1313,8 @@ function tickLOD() {
   const z = view.zoom;
   const detail = smooth(1.75, 2.5, z);
   const pillA = smooth(1.45, 1.85, z); // pills stay on at near — they name the agents
-  // billboards persist at every zoom (v1 rule) — slightly larger when far, compact when near
-  const badgeScale = 1.02 - 0.3 * smooth(1.2, 2.6, z);
+  // billboards persist at every zoom (v1 rule) — sleek and compact so office desks remain visible
+  const badgeScale = 0.84 - 0.22 * smooth(1.2, 2.6, z);
   for (const [k, d] of Object.entries(deptRT)) {
     if (focused === k && k !== 'brain') continue; // this billboard is docked in the rail
     let [sx, sy] = toScreen(d.badgeAnchor);
