@@ -796,205 +796,16 @@ export function initTasks(ctx) {
   }
   function renderAllEmptyState() {
     const rts = scopedRoutines().sort(byNext);
-    let html = '';
-    
-    // 1. Live Autonomous Routines
     if (rts.length > 0) {
-      html += `
+      return `
         <div class="tp-section-head">
-          <span>AUTONOMOUS STORE ROUTINES</span>
+          <span>SCHEDULED ROUTINES</span>
           <span class="tp-sh-tag">${rts.length} ACTIVE</span>
         </div>
         <div class="tp-routines-box">${rts.map(rowHTMLr).join('')}</div>
       `;
     }
-    
-    // 2. Multi-Agent Squad Playbooks (Inspired by bradygaster/squad & Squad-IRL)
-    html += `
-      <div class="tp-section-head" style="margin-top:14px;">
-        <span>MULTI-AGENT SQUAD PLAYBOOKS</span>
-        <span class="tp-sh-tag">SQUAD RELAY</span>
-      </div>
-      <div class="tp-playbooks">
-        <div class="tp-pb-card" data-cmd="as a team, recover stalled checkouts and generate recovery outreach for sunnyeora">
-          <div class="tp-pb-icon">⚡</div>
-          <div class="tp-pb-body">
-            <div class="tp-pb-title">Abandoned Checkout Recovery Squad</div>
-            <div class="tp-pb-desc">3-desk relay: Lexi segments carts, Inb enriches data, Folo drafts SMS & Email with 10% off</div>
-            <div class="tp-squad-meta">
-              <span class="tp-squad-relay">RELAY: Lexi ➔ Inb ➔ Folo</span>
-              <span class="tp-gates">
-                <span class="tp-gate-step">PLAN</span> ➔
-                <span class="tp-gate-step">WORK</span> ➔
-                <span class="tp-gate-step active">REVIEW</span> ➔
-                <span class="tp-gate-step">DISPATCH</span>
-              </span>
-            </div>
-          </div>
-          <button class="tp-pb-btn" type="button">RUN SQUAD</button>
-        </div>
-
-        <div class="tp-pb-card" data-cmd="as a team, generate viral TikTok ad hooks and creative specs for Sunnyeora 2-piece suits">
-          <div class="tp-pb-icon">🎬</div>
-          <div class="tp-pb-body">
-            <div class="tp-pb-title">TikTok Viral Ad Launch Squad</div>
-            <div class="tp-pb-desc">4-desk relay: Riley trends audit, Gfx visual assets, Vid 15s reel script, Ada ad set schedule</div>
-            <div class="tp-squad-meta">
-              <span class="tp-squad-relay">RELAY: Riley ➔ Gfx ➔ Vid ➔ Ada</span>
-              <span class="tp-gates">
-                <span class="tp-gate-step">PLAN</span> ➔
-                <span class="tp-gate-step active">WORK</span> ➔
-                <span class="tp-gate-step">REVIEW</span> ➔
-                <span class="tp-gate-step">DISPATCH</span>
-              </span>
-            </div>
-          </div>
-          <button class="tp-pb-btn" type="button">RUN SQUAD</button>
-        </div>
-
-        <div class="tp-pb-card" data-cmd="as a team, prospect boutique retailers and draft wholesale agreements for sunnyeora">
-          <div class="tp-pb-icon">🤝</div>
-          <div class="tp-pb-body">
-            <div class="tp-pb-title">Wholesale B2B Expansion Squad</div>
-            <div class="tp-pb-desc">4-desk relay: Pros sources Apollo leads, Enzo enriches data, Piper drafts quote, Lexi signs off</div>
-            <div class="tp-squad-meta">
-              <span class="tp-squad-relay">RELAY: Pros ➔ Enzo ➔ Piper ➔ Lexi</span>
-              <span class="tp-gates">
-                <span class="tp-gate-step">PLAN</span> ➔
-                <span class="tp-gate-step">WORK</span> ➔
-                <span class="tp-gate-step">REVIEW</span> ➔
-                <span class="tp-gate-step active">DISPATCH</span>
-              </span>
-            </div>
-          </div>
-          <button class="tp-pb-btn" type="button">RUN SQUAD</button>
-        </div>
-
-        <div class="tp-pb-card" data-cmd="as a team, audit unit profit margins and supplier COGS for all 31 live Shopify products">
-          <div class="tp-pb-icon">💰</div>
-          <div class="tp-pb-body">
-            <div class="tp-pb-title">Unit Profit Margin Audit Squad</div>
-            <div class="tp-pb-desc">3-desk relay: Alead margin targets, Invo supplier COGS check, Recon net settlement validation</div>
-            <div class="tp-squad-meta">
-              <span class="tp-squad-relay">RELAY: Alead ➔ Invo ➔ Recon</span>
-              <span class="tp-gates">
-                <span class="tp-gate-step">PLAN</span> ➔
-                <span class="tp-gate-step">WORK</span> ➔
-                <span class="tp-gate-step active">REVIEW</span> ➔
-                <span class="tp-gate-step">DISPATCH</span>
-              </span>
-            </div>
-          </div>
-          <button class="tp-pb-btn" type="button">RUN SQUAD</button>
-        </div>
-      </div>
-
-      <!-- 3. Persistent Agent Memory Feed (Inspired by akitaonrails/ai-memory) -->
-      <div class="tp-section-head" style="margin-top:14px;">
-        <span>PERSISTENT AGENT MEMORY</span>
-        <span class="tp-sh-tag">MEMORY OF RECORD</span>
-      </div>
-      <div class="tp-memory-feed">
-        <div class="tp-mem-item">
-          <div class="tp-mem-top">
-            <span class="tp-mem-agent">🟡 Prospector</span>
-            <span class="tp-mem-cat">CUSTOMERS</span>
-          </div>
-          <div class="tp-mem-fact">Boutique apparel stockists in California & Texas convert 2.4x higher on wholesale 2-piece set inquiries.</div>
-          <div class="tp-mem-src">
-            <span>Apollo Lead Enrichment Run</span>
-            <span class="tp-mem-verified">✓ VERIFIED FACT</span>
-          </div>
-        </div>
-
-        <div class="tp-mem-item">
-          <div class="tp-mem-top">
-            <span class="tp-mem-agent">🔴 Meta Ads</span>
-            <span class="tp-mem-cat">ADVERTISING</span>
-          </div>
-          <div class="tp-mem-fact">Reel creatives with price overlays in first 2s achieve $1.42 lower CPC on Instagram.</div>
-          <div class="tp-mem-src">
-            <span>Meta Ads Manager Attribution</span>
-            <span class="tp-mem-verified">✓ VERIFIED FACT</span>
-          </div>
-        </div>
-
-        <div class="tp-mem-item">
-          <div class="tp-mem-top">
-            <span class="tp-mem-agent">🟡 Follow Ups</span>
-            <span class="tp-mem-cat">RETENTION</span>
-          </div>
-          <div class="tp-mem-fact">Abandoned cart SMS sent at 45m mark with 10% code "SUNNY10" yields a 19.4% recovery rate.</div>
-          <div class="tp-mem-src">
-            <span>Loops / iMessage Recovery Funnel</span>
-            <span class="tp-mem-verified">✓ VERIFIED FACT</span>
-          </div>
-        </div>
-
-        <div class="tp-mem-item">
-          <div class="tp-mem-top">
-            <span class="tp-mem-agent">🔵 Delivery Lead</span>
-            <span class="tp-mem-cat">LOGISTICS</span>
-          </div>
-          <div class="tp-mem-fact">CJ Dropshipping line hauls to USPS Chicago hub currently running at 6.2 day average delivery time.</div>
-          <div class="tp-mem-src">
-            <span>CJ Tracking API Telemetry</span>
-            <span class="tp-mem-verified">✓ VERIFIED FACT</span>
-          </div>
-        </div>
-
-        <div class="tp-mem-item">
-          <div class="tp-mem-top">
-            <span class="tp-mem-agent">🟣 Reconciliation</span>
-            <span class="tp-mem-cat">FINANCE</span>
-          </div>
-          <div class="tp-mem-fact">Shopify Payments blended fee is 2.9% + 30¢; USD payouts settle in 48 hours.</div>
-          <div class="tp-mem-src">
-            <span>Stripe Settlement Log</span>
-            <span class="tp-mem-verified">✓ VERIFIED FACT</span>
-          </div>
-        </div>
-      </div>
-    `;
-    
-    // 4. Live Storefront KPI Summary
-    html += `
-      <div class="tp-store-card">
-        <div class="tp-sc-head">
-          <span class="tp-sc-title">🛍️ SUNNYEORA STOREFRONT</span>
-          <a href="https://sunnyeora.myshopify.com/" target="_blank" rel="noopener" class="tp-sc-link">OPEN STORE ↗</a>
-        </div>
-        <div class="tp-sc-grid">
-          <div class="tp-sc-item">
-            <span class="tp-sc-lbl">CATALOG</span>
-            <span class="tp-sc-val">31 Live SKUs</span>
-          </div>
-          <div class="tp-sc-item">
-            <span class="tp-sc-lbl">SHIPPING</span>
-            <span class="tp-sc-val">USPS 7-10d</span>
-          </div>
-          <div class="tp-sc-item">
-            <span class="tp-sc-lbl">TARGET MARGIN</span>
-            <span class="tp-sc-val">41.5% Net</span>
-          </div>
-          <div class="tp-sc-item">
-            <span class="tp-sc-lbl">PAYOUT</span>
-            <span class="tp-sc-val">USD ➔ INR</span>
-          </div>
-        </div>
-        <div class="tp-sc-ai-intel">
-          <div class="tp-sc-ai-tag">AI UNIT ECONOMICS & DEMAND AUDIT (CJ DROPSHIPPING)</div>
-          <div class="tp-sc-ai-metrics">
-            <span>Avg Retail: $58.00</span> · 
-            <span>Landed COGS: $19.50</span> · 
-            <span>Break-Even ROAS: 1.82x</span> · 
-            <span style="color:#16a34a;font-weight:700;">Demand: 🔥 86/100 (Viral Fit)</span>
-          </div>
-        </div>
-      </div>
-    `;
-    
-    return html;
+    return `<div class="tp-empty">No tasks right now. Type a task above or press REPEAT to schedule one.</div>`;
   }
 
   function render(structural) {
@@ -1009,16 +820,6 @@ export function initTasks(ctx) {
       : (list.map(rowHTMLp).join('') || (filter === 'all' ? renderAllEmptyState() : `<div class="tp-empty">Nothing here right now.</div>`));
     renderNext();
     P_.rows.querySelectorAll('.tp-act button').forEach(b => b.addEventListener('click', e => { e.stopPropagation(); const row = b.closest('.tp-row'); if (row.dataset.rid) rtAct(row.dataset.rid, b.dataset.act); else if (b.dataset.act === 'cancel') cancelScheduled(tasks.find(t => String(t.id) === row.dataset.id)); else if (b.dataset.act === 'calendar' && calendar) calendar.open(); }));
-    P_.rows.querySelectorAll('.tp-pb-card').forEach(card => {
-      card.addEventListener('click', () => {
-        const cmd = card.dataset.cmd;
-        if (cmd && P_.in) {
-          P_.in.value = cmd;
-          P_.in.dispatchEvent(new Event('input', { bubbles: true }));
-          if (P_.add) P_.add.click();
-        }
-      });
-    });
     P_.rows.querySelectorAll('.tp-row.waiting').forEach(n => n.addEventListener('click', () => zoomToApproval(n.dataset.dept)));
     P_.rows.querySelectorAll('.tp-row.live.done').forEach(n => n.addEventListener('click', () => openAgent && openAgent(n.dataset.agent, 'chat')));
     if (!structural) flip(before);
