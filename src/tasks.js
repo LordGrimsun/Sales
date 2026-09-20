@@ -982,6 +982,15 @@ export function initTasks(ctx) {
             <span class="tp-sc-val">USD ➔ INR</span>
           </div>
         </div>
+        <div class="tp-sc-ai-intel">
+          <div class="tp-sc-ai-tag">AI UNIT ECONOMICS & DEMAND AUDIT (CJ DROPSHIPPING)</div>
+          <div class="tp-sc-ai-metrics">
+            <span>Avg Retail: $58.00</span> · 
+            <span>Landed COGS: $19.50</span> · 
+            <span>Break-Even ROAS: 1.82x</span> · 
+            <span style="color:#16a34a;font-weight:700;">Demand: 🔥 86/100 (Viral Fit)</span>
+          </div>
+        </div>
       </div>
     `;
     

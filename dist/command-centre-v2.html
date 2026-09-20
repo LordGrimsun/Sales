@@ -1370,6 +1370,19 @@
     display: block; font-size: 12.5px; font-weight: 800; color: var(--ink);
     margin-top: 1px;
   }
+  .tp-sc-ai-intel {
+    margin-top: 9px; padding-top: 8px; border-top: 1px dashed rgba(13,92,58,0.22);
+  }
+  body.dark .tp-sc-ai-intel { border-color: rgba(34,197,94,0.25); }
+  .tp-sc-ai-tag {
+    font-size: 8.5px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase;
+    color: #16a34a; margin-bottom: 2px;
+  }
+  body.dark .tp-sc-ai-tag { color: #4ade80; }
+  .tp-sc-ai-metrics {
+    font-size: 10.5px; color: var(--ink); line-height: 1.4; display: flex; flex-wrap: wrap; gap: 4px; align-items: center;
+  }
+  body.dark .tp-sc-ai-metrics { color: #e2e8f0; }
 
   /* Responsive Viewports */
   @media (max-width: 1200px) {
@@ -6621,6 +6634,15 @@ open items (1)
           <div class="tp-sc-item">
             <span class="tp-sc-lbl">PAYOUT</span>
             <span class="tp-sc-val">USD \u2794 INR</span>
+          </div>
+        </div>
+        <div class="tp-sc-ai-intel">
+          <div class="tp-sc-ai-tag">AI UNIT ECONOMICS & DEMAND AUDIT (CJ DROPSHIPPING)</div>
+          <div class="tp-sc-ai-metrics">
+            <span>Avg Retail: $58.00</span> \xB7 
+            <span>Landed COGS: $19.50</span> \xB7 
+            <span>Break-Even ROAS: 1.82x</span> \xB7 
+            <span style="color:#16a34a;font-weight:700;">Demand: \u{1F525} 86/100 (Viral Fit)</span>
           </div>
         </div>
       </div>
