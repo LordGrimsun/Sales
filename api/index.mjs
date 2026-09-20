@@ -20,7 +20,10 @@ function readJSON(p, fallback = {}) {
 }
 
 function loadTasks() {
-  return readJSON(TASKS_FILE, []);
+  const tmpList = readJSON(TASKS_FILE, null);
+  if (Array.isArray(tmpList) && tmpList.length > 0) return tmpList;
+  const rootList = readJSON(path.join(ROOT, 'data', 'tasks.json'), []);
+  return Array.isArray(rootList) ? rootList : [];
 }
 
 function saveTasks(list) {
@@ -28,8 +31,13 @@ function saveTasks(list) {
     fs.mkdirSync(DATA_DIR, { recursive: true });
     fs.writeFileSync(TASKS_FILE, JSON.stringify(list, null, 2));
   } catch (e) {
-    console.warn('saveTasks error:', e.message);
+    console.warn('saveTasks tmp error:', e.message);
   }
+  try {
+    const rootDataDir = path.join(ROOT, 'data');
+    fs.mkdirSync(rootDataDir, { recursive: true });
+    fs.writeFileSync(path.join(rootDataDir, 'tasks.json'), JSON.stringify(list, null, 2));
+  } catch (e) {}
 }
 
 const baseCfg = readJSON(path.join(ROOT, 'office.config.json'), { name: 'Sales', model: 'sonnet' });
