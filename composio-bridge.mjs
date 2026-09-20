@@ -1,60 +1,141 @@
 // composio-bridge.mjs — Real tool execution bridge for Sunnyeora Command Centre
-// Connects 35 autonomous agents to 13 active Composio integrations:
-// Gmail, Canva, Shopify, Slack, Notion, GitHub, Google Drive/Docs/Sheets/Calendar/Maps, Beehiiv
+// Covers all 13 active Composio integrations across all 35 agents:
+// 1. GitHub
+// 2. Gmail
+// 3. Google Calendar
+// 4. Google Drive
+// 5. Google Docs
+// 6. Google Sheets
+// 7. Google Maps
+// 8. Slack
+// 9. Notion
+// 10. Canva
+// 11. Canva MCP
+// 12. Shopify
+// 13. Beehiiv
 
 let composioInstance = null;
 let activeSession = null;
 const USER_ID = process.env.COMPOSIO_USER_ID || 'sunnyeora_store_owner';
 
-// Toolkit mapping by intent keywords and departments
-const TOOLKIT_TRIGGERS = [
+// Complete 13 platform triggers mapping
+export const ALL_CONNECTED_PLATFORMS = [
   {
+    name: 'Gmail',
     slug: 'gmail',
-    keywords: ['email', 'emails', 'inbox', 'unread', 'mail', 'cmail', 'imail', 'vmail', 'kmail', 'gmail', 'elead'],
-    depts: ['emails'],
-    sampleTool: 'GMAIL_LIST_MESSAGES'
+    keywords: ['email', 'emails', 'inbox', 'unread', 'mail', 'cmail', 'imail', 'vmail', 'kmail', 'gmail', 'elead', 'customer care'],
+    depts: ['emails', 'sales', 'ops', 'fin'],
+    sampleTool: 'GMAIL_LIST_MESSAGES',
+    icon: '✉️',
+    roleSummary: 'Customer replies, tracking queries, order status triage'
   },
   {
+    name: 'Canva',
     slug: 'canva',
-    keywords: ['canva', 'design', 'banner', 'graphic', 'poster', 'creative', 'visual', 'ad set', 'vid'],
-    depts: ['marketing'],
-    sampleTool: 'CANVA_CREATE_DESIGN'
+    keywords: ['canva', 'design', 'banner', 'graphic', 'poster', 'creative', 'visual', 'ad set', 'vid', 'thumbnail'],
+    depts: ['marketing', 'delivery'],
+    sampleTool: 'CANVA_CREATE_DESIGN',
+    icon: '🎨',
+    roleSummary: 'Dynamic TikTok, Reels, ad creatives, and store hero banners'
   },
   {
+    name: 'Canva MCP',
+    slug: 'canva_mcp',
+    keywords: ['canva mcp', 'template design', 'design template', 'batch graphic'],
+    depts: ['marketing', 'delivery'],
+    sampleTool: 'CANVA_CREATE_DESIGN',
+    icon: '🖌️',
+    roleSummary: 'Direct MCP template generation for catalog banners'
+  },
+  {
+    name: 'Shopify',
     slug: 'shopify',
-    keywords: ['shopify', 'order', 'orders', 'product', 'products', 'inventory', 'storefront', 'sunnyeora', 'fulfill'],
+    keywords: ['shopify', 'order', 'orders', 'product', 'products', 'inventory', 'storefront', 'sunnyeora', 'fulfill', 'checkout', 'sku'],
     depts: ['ops', 'delivery', 'sales', 'fin'],
-    sampleTool: 'SHOPIFY_GET_ALL_ORDERS'
+    sampleTool: 'SHOPIFY_GET_ALL_ORDERS',
+    icon: '🛍️',
+    roleSummary: 'Live orders, products, inventory sync on sunnyeora.myshopify.com'
   },
   {
+    name: 'Slack',
     slug: 'slack',
-    keywords: ['slack', 'channel', 'broadcast', 'alert', 'team ping', 'notify squad'],
+    keywords: ['slack', 'channel', 'broadcast', 'alert', 'team ping', 'notify squad', 'squad message'],
     depts: ['emails', 'sales', 'marketing', 'ops', 'fin', 'delivery'],
-    sampleTool: 'SLACK_CHAT_POST_MESSAGE'
+    sampleTool: 'SLACK_CHAT_POST_MESSAGE',
+    icon: '💬',
+    roleSummary: 'Squad alerts, order notifications, executive briefings'
   },
   {
+    name: 'Notion',
     slug: 'notion',
-    keywords: ['notion', 'sop', 'knowledge base', 'wiki', 'notes database', 'playbook'],
+    keywords: ['notion', 'sop', 'knowledge base', 'wiki', 'notes database', 'playbook', 'supplier directory'],
     depts: ['emails', 'sales', 'marketing', 'ops', 'fin', 'delivery'],
-    sampleTool: 'NOTION_SEARCH_NOTION_PAGE'
+    sampleTool: 'NOTION_SEARCH_NOTION_PAGE',
+    icon: '📑',
+    roleSummary: 'Persistent memory, winning product swipe file, SOPs'
   },
   {
+    name: 'GitHub',
     slug: 'github',
-    keywords: ['github', 'repo', 'issue', 'issues', 'pr', 'pull request', 'commit', 'branch'],
+    keywords: ['github', 'repo', 'issue', 'issues', 'pr', 'pull request', 'commit', 'branch', 'codebase', 'repository'],
     depts: ['ops', 'delivery'],
-    sampleTool: 'GITHUB_LIST_REPOSITORY_ISSUES'
+    sampleTool: 'GITHUB_LIST_REPOSITORY_ISSUES',
+    icon: '🐙',
+    roleSummary: 'Platform automations, code tracking, deployment commits'
   },
   {
-    slug: 'googlesheets',
-    keywords: ['sheet', 'sheets', 'spreadsheet', 'ledger', 'row', 'cells', 'p&l', 'reconciliation'],
-    depts: ['fin', 'ops'],
-    sampleTool: 'GOOGLESHEETS_GET_SPREADSHEET_VALUES'
+    name: 'Google Calendar',
+    slug: 'googlecalendar',
+    keywords: ['calendar', 'gcal', 'meeting', 'event', 'appointment', 'schedule call', 'supplier meeting', 'call'],
+    depts: ['emails', 'sales', 'delivery'],
+    sampleTool: 'GOOGLECALENDAR_LIST_EVENTS',
+    icon: '📅',
+    roleSummary: 'Wholesale client calls, supplier check-ins, routine scheduling'
   },
   {
+    name: 'Google Drive',
     slug: 'googledrive',
-    keywords: ['drive', 'folder', 'upload file', 'shared drive', 'backup'],
+    keywords: ['drive', 'gdrive', 'folder', 'upload file', 'shared drive', 'cloud drive', 'backup assets'],
     depts: ['ops', 'delivery', 'fin'],
-    sampleTool: 'GOOGLEDRIVE_LIST_FILES'
+    sampleTool: 'GOOGLEDRIVE_LIST_FILES',
+    icon: '📁',
+    roleSummary: 'Asset cloud storage, product photography backups, supplier catalogs'
+  },
+  {
+    name: 'Google Docs',
+    slug: 'googledocs',
+    keywords: ['doc', 'docs', 'google doc', 'document', 'proposal doc', 'contract document'],
+    depts: ['ops', 'sales', 'delivery'],
+    sampleTool: 'GOOGLEDOCS_GET_DOCUMENT',
+    icon: '📄',
+    roleSummary: 'Live contract drafting, vendor agreements, buyer pitch docs'
+  },
+  {
+    name: 'Google Sheets',
+    slug: 'googlesheets',
+    keywords: ['sheet', 'sheets', 'spreadsheet', 'google sheets', 'ledger', 'p&l', 'reconciliation', 'row', 'cells'],
+    depts: ['fin', 'ops'],
+    sampleTool: 'GOOGLESHEETS_GET_SPREADSHEET_VALUES',
+    icon: '📊',
+    roleSummary: 'Cash ledger, CJ supplier costs, profit margin tracking'
+  },
+  {
+    name: 'Google Maps',
+    slug: 'googlemaps',
+    keywords: ['maps', 'google maps', 'route', 'shipping route', 'distance', 'delivery zone', 'courier location', 'transit address'],
+    depts: ['delivery', 'ops'],
+    sampleTool: 'GOOGLEMAPS_GEOCODE',
+    icon: '🗺️',
+    roleSummary: 'Fulfillment routing, international carrier zone checks'
+  },
+  {
+    name: 'Beehiiv',
+    slug: 'beehiiv',
+    keywords: ['beehiiv', 'newsletter', 'subscribers', 'publication', 'broadcast', 'email campaign', 'subscriber list'],
+    depts: ['marketing'],
+    sampleTool: 'BEEHIIV_GET_ALL_PUBLICATIONS',
+    icon: '🐝',
+    roleSummary: 'Sunnyeora weekly VIP newsletter & dropshipping subscriber blasts'
   }
 ];
 
@@ -78,7 +159,7 @@ export async function getComposioSession() {
 }
 
 /**
- * Execute real Composio tool if task requests or matches one of the connected apps
+ * Execute real Composio tool if task requests or matches one of the 13 connected apps
  */
 export async function executeComposioTool(taskText, dept, agent) {
   const apiKey = process.env.COMPOSIO_API_KEY;
@@ -91,7 +172,7 @@ export async function executeComposioTool(taskText, dept, agent) {
   }
 
   const textLower = String(taskText || '').toLowerCase();
-  const matchedTrigger = TOOLKIT_TRIGGERS.find(t =>
+  const matchedTrigger = ALL_CONNECTED_PLATFORMS.find(t =>
     t.keywords.some(k => textLower.includes(k)) || (t.depts.includes(dept) && textLower.includes(t.slug))
   );
 
@@ -126,7 +207,7 @@ export async function executeComposioTool(taskText, dept, agent) {
       };
     }
 
-    console.log(`[Composio Bridge] Calling real tool: ${toolToRun} for task "${taskText.slice(0, 50)}..."`);
+    console.log(`[Composio Bridge] Calling live tool: ${toolToRun} for task "${taskText.slice(0, 50)}..."`);
 
     // 2. Prepare safe parameters for execution
     let args = {};
@@ -136,6 +217,8 @@ export async function executeComposioTool(taskText, dept, agent) {
       args = { title: `Sunnyeora: ${taskText.slice(0, 40)}`, type: 'social_media' };
     } else if (toolToRun.includes('POST_MESSAGE')) {
       args = { text: `[Sunnyeora Agent Alert - ${agent?.name || dept}]: ${taskText}` };
+    } else if (toolToRun.includes('GEOCODE')) {
+      args = { address: taskText.slice(0, 50) };
     }
 
     // 3. Execute tool
@@ -144,6 +227,8 @@ export async function executeComposioTool(taskText, dept, agent) {
     return {
       executed: true,
       toolSlug: toolToRun,
+      platform: matchedTrigger?.name || 'Composio Tool',
+      icon: matchedTrigger?.icon || '⚡',
       toolkit: matchedTrigger?.slug || 'composio',
       data: execResult?.data || execResult,
       logId: execResult?.logId,
