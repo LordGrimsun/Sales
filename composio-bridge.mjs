@@ -248,11 +248,48 @@ export async function executeComposioTool(taskText, dept, agent) {
         title: cleanTitle
       };
     } else if (toolToRun === 'GMAIL_CREATE_EMAIL_DRAFT') {
-      const cleanSubject = (taskText || 'Sunnyeora Customer & Marketing Update').slice(0, 50).trim();
+      let subject = '🍂 Early VIP Access: Take 20% Off Sunnyeora Autumn Trends';
+      if (taskText.includes('Subject:')) {
+        const subMatch = taskText.match(/Subject:\s*([^\n\r]+)/i);
+        if (subMatch) subject = subMatch[1].trim();
+      } else {
+        const firstLine = taskText.split('\n')[0].replace(/[^\w\s-]/gi, '').slice(0, 50).trim();
+        if (firstLine) subject = firstLine;
+      }
+
+      // Format customer-facing HTML layout
+      const cleanContent = taskText.replace(/^Subject:\s*[^\n\r]+\n*/i, '').trim();
+      const htmlBody = `
+<div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; max-width: 600px; margin: 0 auto; color: #222; line-height: 1.6; border: 1px solid #eee; border-radius: 12px; overflow: hidden;">
+  <div style="background-color: #b85d19; padding: 24px 20px; text-align: center;">
+    <h1 style="color: #ffffff; margin: 0; font-size: 24px; letter-spacing: 2px; text-transform: uppercase;">SUNNYEORA</h1>
+    <p style="color: #fcefe6; margin: 4px 0 0; font-size: 13px; letter-spacing: 1px;">AUTUMN FLASH SALE &bull; LIMITED TIME ONLY</p>
+  </div>
+  <div style="padding: 28px 24px; background-color: #ffffff;">
+    <p style="font-size: 16px; margin-top: 0;">Hey there,</p>
+    <p style="font-size: 15px; color: #444;">${cleanContent.replace(/\n\n/g, '</p><p style="font-size: 15px; color: #444;">')}</p>
+    <div style="background-color: #faf6f0; border: 2px dashed #d97736; padding: 18px; text-align: center; margin: 24px 0; border-radius: 8px;">
+      <div style="font-size: 12px; text-transform: uppercase; letter-spacing: 1.5px; color: #888; margin-bottom: 4px;">Exclusive Promo Code</div>
+      <div style="font-size: 26px; font-weight: 800; color: #b85d19; letter-spacing: 4px;">AUTUMN20</div>
+      <div style="font-size: 13px; color: #666; margin-top: 4px;">20% OFF storewide at checkout</div>
+    </div>
+    <div style="text-align: center; margin: 28px 0;">
+      <a href="https://sunnyeora.myshopify.com/collections/all" style="background-color: #111111; color: #ffffff; padding: 14px 32px; text-decoration: none; border-radius: 6px; font-weight: 700; font-size: 15px; display: inline-block;">Shop Autumn Collection &rarr;</a>
+    </div>
+    <p style="font-size: 14px; color: #666;">Claim your favorites while supplies last.</p>
+    <p style="font-size: 15px; margin-bottom: 0;">Warm regards,<br/><strong>The Sunnyeora Team</strong></p>
+  </div>
+  <div style="background-color: #f9f9f9; padding: 16px 20px; text-align: center; font-size: 12px; color: #888; border-top: 1px solid #eee;">
+    <p style="margin: 0 0 4px;">Free shipping available &bull; Secure checkout via Shopify</p>
+    <p style="margin: 0;"><a href="https://sunnyeora.myshopify.com" style="color: #b85d19; text-decoration: none;">sunnyeora.myshopify.com</a></p>
+  </div>
+</div>`;
+
       args = {
         recipient_email: 'sunnyeora.store@gmail.com',
-        subject: `[Sunnyeora] ${cleanSubject}`,
-        body: `Hello,\n\n${taskText}\n\nBest regards,\n${agent?.name || 'Sales Lead'} | Sunnyeora E-commerce Team`
+        subject: subject,
+        body: htmlBody,
+        is_html: true
       };
     } else if (toolToRun === 'GMAIL_FETCH_EMAILS' || toolToRun === 'GMAIL_LIST_THREADS') {
       args = { max_results: 5 };
