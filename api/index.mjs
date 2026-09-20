@@ -84,6 +84,16 @@ function parseJSON(text) {
   return {};
 }
 
+function cleanOutput(text) {
+  if (!text) return '';
+  let s = String(text);
+  // Strip XML/bracket think blocks
+  s = s.replace(/<think>[\s\S]*?<\/think>/gi, '');
+  // Strip leaked agent self-reflection and reasoning bullets
+  s = s.replace(/(?:^|\n)\*+\s*(?:Role|Tone Check|Scope|Context|Direct response|Proactive addition|Action steps|Specific Actions|Call to action|Self-Correction|User Input|Since the user said|Header|KPI Section|Folo Section|KPIs):?[\s\S]*?(?=\n\n|\n[A-Z]|$)/gi, '');
+  return s.trim();
+}
+
 export default async function handler(req, res) {
   // enable CORS
   res.setHeader('Access-Control-Allow-Credentials', 'true');
@@ -388,7 +398,7 @@ export default async function handler(req, res) {
           task.state = 'done';
           task.doneAt = Date.now();
           
-          let deliverable = resp.text;
+          let deliverable = cleanOutput(resp.text);
           if (toolExec && toolExec.executed) {
             deliverable = `> ⚡ **Executed Live Composio Tool:** \`${toolExec.toolSlug}\`\n\n` + deliverable;
           }
@@ -435,7 +445,7 @@ export default async function handler(req, res) {
       const messages = history.map(m => `${m.who === 'user' ? 'User' : agent.name}: ${m.text}`).join('\n') + `\nUser: ${text}`;
       const resp = await askLLM(sys, messages, { maxTokens: 1000 });
 
-      let reply = resp.text;
+      let reply = cleanOutput(resp.text);
       if (toolExec && toolExec.executed) {
         reply = `⚡ *(Accessed ${toolExec.platform} via Composio)*\n\n` + reply;
       }
