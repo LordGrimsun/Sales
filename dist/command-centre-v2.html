@@ -684,6 +684,7 @@
   .tp-r1 { display: flex; align-items: flex-start; gap: 4px; }
   .tp-r2 { display: flex; align-items: center; gap: 6px; padding: 0 2px 0 4px; }
   .tp-r2 .sp { flex: 1; }
+  .tp-dd-wrap { position: relative; display: flex; align-items: center; flex: none; }
   .tp-dd {
     display: flex; align-items: center; gap: 6px; border: 0; background: none; cursor: pointer; flex: none;
     font-family: var(--ui); font-size: 11.5px; letter-spacing: .12em; font-weight: 700; color: var(--ink);
@@ -692,9 +693,9 @@
   .tp-dd .dot { width: 9px; height: 9px; border-radius: 50%; display: inline-block; }
   .tp-dd::after { content: '\25BE'; color: var(--grey); font-size: 11px; margin-left: 2px; }
   .tp-menu {
-    position: absolute; left: 6px; top: calc(100% + 6px); z-index: 3; display: none; min-width: 200px;
+    position: absolute; left: 0; top: calc(100% + 4px); z-index: 50; display: none; min-width: 190px;
     background: #fff; border: 1px solid var(--hairline); border-radius: 14px; padding: 6px;
-    box-shadow: 0 16px 40px rgba(21,20,20,.16);
+    box-shadow: 0 16px 40px rgba(0,0,0,.35);
   }
   .tp-menu.on { display: block; }
   .tp-menu button {
@@ -1337,7 +1338,7 @@
 <div id="hud"></div>
 <div id="topbar">
   <div class="top-brand-wrap">
-    <span class="brand">SUNNYEORA</span>
+    <span class="brand">SUNNYEORA <span class="ver" style="opacity:0.45; font-size:9.5px; font-weight:600; letter-spacing:.12em; margin-left:4px;">AGENTS OFFICE</span></span>
   </div>
   <div class="top-dropdown-wrap" id="topOpsDropdown">
     <button class="top-drop-trigger" id="topDropBtn" title="35 Online · Storefront · Catalog · Integrations">
@@ -1444,8 +1445,10 @@
 <div id="tpanel">
   <div class="tp-cmd">
     <div class="tp-r1">
-      <button class="tp-dd" title="department"><span class="dot"></span><span class="tp-ddn">MARKETING</span></button>
-      <div class="tp-menu"></div>
+      <div class="tp-dd-wrap">
+        <button class="tp-dd" title="department"><span class="dot"></span><span class="tp-ddn">MARKETING</span></button>
+        <div class="tp-menu"></div>
+      </div>
       <textarea class="tp-in" rows="1" placeholder="Type a task…" autocomplete="off" spellcheck="false"></textarea>
       <button class="tp-big-btn" title="open the big editor (⌘⇧E)">⤢</button>
       <button class="tp-add" title="Add task (Enter)">ADD</button>
